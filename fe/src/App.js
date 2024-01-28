@@ -1,13 +1,12 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import Button from "./componentes/Button";
-import { Link } from "react-router-dom";
+import LogModal from "./routes/Login";
+
 function App() {
   return (
     <div className="App">
       <h1>Hi This is Meari!!</h1>
-      <Link to="/login">
-        <Button usage={"로그인"} />
-      </Link>
+      <LogModal />
     </div>
   );
 }
