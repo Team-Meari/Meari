@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import { useState } from "react";
 import Button from "../componentes/Button";
+import Input from "../componentes/Input";
 
 const customStyles = {
   content: {
@@ -22,6 +23,7 @@ const useModal = () => {
 
   function closeModal() {
     setIsModalOpen(false);
+    return { isModalOpen };
   }
 
   return { openModal, closeModal, isModalOpen };
@@ -38,6 +40,10 @@ function Login({ closeModal, isModalOpen }) {
         contentLabel="Login"
       >
         <h1>Hi It's Login</h1>
+        <form style={{ display: "flex", flexDirection: "column" }}>
+          <Input placeholder={"id"} />
+          <Input placeholder={"password"} />
+        </form>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
     </div>
@@ -54,6 +60,7 @@ function Logout({ closeModal, isModalOpen }) {
         contentLabel="Logout"
       >
         <h1>Hi It's Logout</h1>
+        <Button usage={"LogOut"} onClick={closeModal}></Button>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
     </div>
