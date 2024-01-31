@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import { useState } from "react";
 import Button from "../componentes/Button";
 import Input from "../componentes/Input";
+import { useInput } from "../hooks/useInput";
 
 const customStyles = {
   content: {
@@ -30,7 +31,13 @@ const useModal = () => {
 };
 
 // modal 방식으로 구현예정
-function Login({ closeModal, isModalOpen }) {
+function Login({ closeModal, isModalOpen, setisLogin }) {
+  const id = useInput(null);
+  const password = useInput(null);
+  const onClick = () => {
+    setisLogin(true);
+    closeModal();
+  };
   return (
     <div>
       <Modal
@@ -41,8 +48,9 @@ function Login({ closeModal, isModalOpen }) {
       >
         <h1>Hi It's Login</h1>
         <form style={{ display: "flex", flexDirection: "column" }}>
-          <Input placeholder={"id"} />
-          <Input placeholder={"password"} />
+          <Input placeholder={"id"} {...id} />
+          <Input placeholder={"password"} {...password} />
+          <Button usage={"로그인"} onClick={onClick} />
         </form>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
@@ -50,7 +58,11 @@ function Login({ closeModal, isModalOpen }) {
   );
 }
 
-function Logout({ closeModal, isModalOpen }) {
+function Logout({ closeModal, isModalOpen, setisLogin }) {
+  const onClick = () => {
+    setisLogin(false);
+    closeModal();
+  };
   return (
     <div>
       <Modal
@@ -60,7 +72,7 @@ function Logout({ closeModal, isModalOpen }) {
         contentLabel="Logout"
       >
         <h1>Hi It's Logout</h1>
-        <Button usage={"LogOut"} onClick={closeModal}></Button>
+        <Button usage={"LogOut"} onClick={onClick}></Button>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
     </div>
@@ -73,11 +85,19 @@ function LogModal() {
 
   return (
     <div>
-      <Button onClick={openModal} usage={"로그인"} />
+      <Button onClick={openModal} usage={isLogin ? "로그아웃" : "로그인"} />
       {isLogin ? (
-        <Logout closeModal={closeModal} isModalOpen={isModalOpen} />
+        <Logout
+          closeModal={closeModal}
+          isModalOpen={isModalOpen}
+          setisLogin={setisLogin}
+        />
       ) : (
-        <Login closeModal={closeModal} isModalOpen={isModalOpen} />
+        <Login
+          closeModal={closeModal}
+          isModalOpen={isModalOpen}
+          setisLogin={setisLogin}
+        />
       )}
     </div>
   );
