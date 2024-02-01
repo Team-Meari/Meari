@@ -1,8 +1,9 @@
-function ListContent({ mvalue }) {
+function ListContent({ value, author }) {
   return (
-    <li>
-      <h3>{mvalue}</h3>
-    </li>
+    <>
+      <h2>{value}</h2>
+      <h4>{author}</h4>
+    </>
   );
 }
 

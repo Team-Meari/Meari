@@ -12,12 +12,14 @@ const { kakao } = window;
 
 function App() {
   const { map } = useMap();
-  const input = useInput(null);
+  const input = useInput("");
 
   const [mvalue, setMvalue] = useState(null);
   const onSubmitMeari = () => {
+    // 메아리 외치기를 했을 때
+    // 메아리가 서버로 전송되는 로직이 필요함.
     setMvalue(input.value);
-    console.log(input.value);
+    input.textClear();
   };
   return (
     <div className={styles.container}>
@@ -32,8 +34,12 @@ function App() {
         </Link>
 
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-        <MeariList mvalue={mvalue} />
-        <Input placeholder={"메아리를 외쳐보세요!!"} {...input} />
+        <MeariList value={mvalue} />
+        <Input
+          name={"mearivalue"}
+          placeholder={"메아리를 외쳐보세요!!"}
+          {...input}
+        />
         <Button usage={"확인"} onClick={onSubmitMeari} />
       </div>
       <div className={styles.map} id="map"></div>

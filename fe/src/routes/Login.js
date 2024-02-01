@@ -32,10 +32,14 @@ const useModal = () => {
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen, setisLogin }) {
-  const id = useInput(null);
-  const password = useInput(null);
-  const onClick = () => {
+  const id = useInput("");
+  const password = useInput("");
+  const onSubmit = () => {
     setisLogin(true);
+    console.log(id.value, password.value);
+    // 이제 로그인 클릭시
+    // 1. 로그인 API 통신 로직 필요
+    // 2. 로그인 정보 저장하는 로직 필요
     closeModal();
   };
   return (
@@ -50,7 +54,7 @@ function Login({ closeModal, isModalOpen, setisLogin }) {
         <form style={{ display: "flex", flexDirection: "column" }}>
           <Input placeholder={"id"} {...id} />
           <Input placeholder={"password"} {...password} />
-          <Button usage={"로그인"} onClick={onClick} />
+          <Button usage={"로그인"} onClick={onSubmit} />
         </form>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
@@ -61,6 +65,7 @@ function Login({ closeModal, isModalOpen, setisLogin }) {
 function Logout({ closeModal, isModalOpen, setisLogin }) {
   const onClick = () => {
     setisLogin(false);
+    // 로그아웃하는 로직 추가 필요
     closeModal();
   };
   return (
