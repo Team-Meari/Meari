@@ -15,7 +15,7 @@ export const useList = (mvalue) => {
     }
 
     console.log(mearilist);
-  }, [mvalue]);
+  }, [mvalue]); // 여기 의존성배열도 손 봐야함. 지금은 같은메아리는 연속 전송 불가임
 
   return { mearilist };
 };
