@@ -11,7 +11,7 @@ import { useInput } from "./hooks/useInput";
 const { kakao } = window;
 
 function App() {
-  const { map } = useMap();
+  const { map, makeMeari } = useMap();
   const input = useInput("");
 
   const [mvalue, setMvalue] = useState(null);
@@ -19,8 +19,10 @@ function App() {
     // 메아리 외치기를 했을 때
     // 메아리가 서버로 전송되는 로직이 필요함.
     setMvalue(input.value);
+    makeMeari(map, input.value);
     input.textClear();
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.menulist}>
