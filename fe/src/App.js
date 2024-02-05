@@ -33,6 +33,11 @@ function App() {
           <Button usage={"마이페이지"} />
         </Link>
 
+        {/* 회원가입으로 이동하는 버튼 */}
+        <Link to="/signup">
+          <Button usage={"회원가입"} />
+        </Link>
+
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
         <MeariList value={mvalue} />
         <Input
