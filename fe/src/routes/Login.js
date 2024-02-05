@@ -89,7 +89,7 @@ function LogModal() {
   const { openModal, closeModal, isModalOpen } = useModal();
 
   return (
-    <div>
+    <>
       <Button onClick={openModal} usage={isLogin ? "로그아웃" : "로그인"} />
       {isLogin ? (
         <Logout
@@ -104,7 +104,7 @@ function LogModal() {
           setisLogin={setisLogin}
         />
       )}
-    </div>
+    </>
   );
 }
 
