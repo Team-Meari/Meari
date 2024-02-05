@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
+    password:
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create
+      profiles:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
