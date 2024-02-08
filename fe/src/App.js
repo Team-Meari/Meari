@@ -7,12 +7,29 @@ import MeariList from "./routes/MeariList";
 import styles from "../src/css/App.module.css";
 import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
+import { useGetAxios } from "./hooks/useAxios";
+import axios from "axios";
 
 const { kakao } = window;
+
+axios.interceptors.response.use(
+  (response) => {
+    // 서버 응답이 JSON 형식이 아니면 에러로 처리
+    return response.headers["content-type"] === "application/json"
+      ? console.log(response)
+      : console.log("json 아님");
+  },
+  (error) => Promise.reject(error)
+);
 
 function App() {
   const { map, makeMeari } = useMap();
   const input = useInput("");
+
+  const { data, setRefetch, refetch, loading } = useGetAxios({
+    url: "https://1973-211-108-235-4.ngrok-free.app/members/find-all",
+    method: "GET",
+  });
 
   const [mvalue, setMvalue] = useState(null);
   const onSubmitMeari = () => {
@@ -21,6 +38,11 @@ function App() {
     setMvalue(input.value);
     makeMeari(map, input.value);
     input.textClear();
+  };
+
+  const onMemberTest = () => {
+    setRefetch(!refetch);
+    // if (loading === false) console.log(data);
   };
 
   return (
@@ -48,6 +70,8 @@ function App() {
           {...input}
         />
         <Button usage={"확인"} onClick={onSubmitMeari} />
+
+        <Button usage={"멤버 읽기"} onClick={onMemberTest} />
       </div>
       <div className={styles.map} id="map"></div>
     </div>
