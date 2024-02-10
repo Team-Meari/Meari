@@ -12,22 +12,14 @@ import axios from "axios";
 
 const { kakao } = window;
 
-axios.interceptors.response.use(
-  (response) => {
-    // 서버 응답이 JSON 형식이 아니면 에러로 처리
-    return response.headers["content-type"] === "application/json"
-      ? console.log(response)
-      : console.log("json 아님");
-  },
-  (error) => Promise.reject(error)
-);
+const apiurl = process.env.REACT_APP_URL;
 
 function App() {
   const { map, makeMeari } = useMap();
   const input = useInput("");
 
-  const { data, setRefetch, refetch, loading } = useGetAxios({
-    url: "https://1973-211-108-235-4.ngrok-free.app/members/find-all",
+  const { data, userFetch, loading } = useGetAxios({
+    url: apiurl + "members/1",
     method: "GET",
   });
 
@@ -41,7 +33,7 @@ function App() {
   };
 
   const onMemberTest = () => {
-    setRefetch(!refetch);
+    userFetch();
     // if (loading === false) console.log(data);
   };
 

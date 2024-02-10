@@ -5,13 +5,15 @@ import Button from "../componentes/Button";
 import styles from "../css/SignUp.module.css";
 import { useInput } from "../hooks/useInput";
 
+const apiurl = process.env.REACT_APP_URL;
+
 function SignUp() {
   const email = useInput("");
   const nickname = useInput("");
   const password = useInput("");
 
   const { error, loading, sendPost } = usePostAxios({
-    url: "https://1973-211-108-235-4.ngrok-free.app/members",
+    url: apiurl + "members",
     method: "POST",
     data: {
       email: email.value,

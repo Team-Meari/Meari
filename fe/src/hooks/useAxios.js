@@ -8,8 +8,7 @@ export const useGetAxios = (config, axiosInstance = defaultAxios) => {
     loading: true,
   });
 
-  const [refetch, setRefetch] = useState(false);
-  useEffect(() => {
+  const userFetch = () => {
     axiosInstance({
       method: config.method,
       url: config.url,
@@ -29,9 +28,9 @@ export const useGetAxios = (config, axiosInstance = defaultAxios) => {
           loading: false,
         });
       });
-  }, [refetch]);
+  };
 
-  return { ...state, setRefetch, refetch };
+  return { ...state, userFetch };
 };
 
 export const usePostAxios = (config, axiosInstance = defaultAxios) => {
