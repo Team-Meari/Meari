@@ -19,7 +19,7 @@ function App() {
   const input = useInput("");
 
   const { data, userFetch, loading } = useGetAxios({
-    url: apiurl + "members/1",
+    url: apiurl + "members/find-all",
     method: "GET",
   });
 

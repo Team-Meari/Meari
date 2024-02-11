@@ -12,14 +12,17 @@ export const useGetAxios = (config, axiosInstance = defaultAxios) => {
     axiosInstance({
       method: config.method,
       url: config.url,
+      headers: {
+        "ngrok-skip-browser-warning": "any",
+      },
     })
       .then((response) => {
-        // setState({
-        //   data: response,
-        //   error: null,
-        //   loading: false,
-        // });
-        console.log(response);
+        setState({
+          data: response.data,
+          error: null,
+          loading: false,
+        });
+        console.log(response.data);
       })
       .catch((error) => {
         setState({
