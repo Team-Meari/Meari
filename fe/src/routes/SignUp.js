@@ -1,11 +1,27 @@
-import { useState } from "react";
 import { usePostAxios } from "../hooks/useAxios";
 import Input from "../componentes/Input";
 import Button from "../componentes/Button";
-import styles from "../css/SignUp.module.css";
+import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
 
 const apiurl = process.env.REACT_APP_URL;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100dvh;
+  position: relative;
+  background-color: beige;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  transform: (-50%, -50%);
+`;
 
 function SignUp() {
   const email = useInput("");
@@ -29,9 +45,9 @@ function SignUp() {
   };
 
   return (
-    <div className={styles.container}>
+    <Wrapper>
       <h1>Here is Sign up</h1>
-      <form className={styles.form}>
+      <Form>
         이메일
         <Input name={"email"} {...email} />
         아이디
@@ -39,8 +55,8 @@ function SignUp() {
         비밀번호
         <Input name={"password"} {...password} />
         <Button usage={"확인"} onClick={onSubmit} />
-      </form>
-    </div>
+      </Form>
+    </Wrapper>
   );
 }
 

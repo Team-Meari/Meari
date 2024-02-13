@@ -1,5 +1,5 @@
 import defaultAxios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const useGetAxios = (config, axiosInstance = defaultAxios) => {
   const [state, setState] = useState({

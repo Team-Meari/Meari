@@ -1,18 +1,36 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import { useMap } from "./hooks/useMap";
 import MeariList from "./routes/MeariList";
-import styles from "../src/css/App.module.css";
 import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
-import axios from "axios";
+import styled from "styled-components";
 
 const { kakao } = window;
 
 const apiurl = process.env.REACT_APP_URL;
+
+const Wrapper = styled.div`
+  display: flex;
+  background-color: blue;
+  z-index: 5;
+`;
+
+const Map = styled.div`
+  z-index: 0;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+`;
+
+const RedButton = styled(Button)`
+  &:hover {
+    background-color: red;
+  }
+`;
 
 function App() {
   const { map, makeMeari } = useMap();
@@ -38,8 +56,8 @@ function App() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.menulist}>
+    <Wrapper>
+      <div>
         <h1>Hi This is Meari!!</h1>
         {/* 로그인 모달 컴포넌트 LogModal */}
         <LogModal />
@@ -56,6 +74,7 @@ function App() {
 
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
         <MeariList value={mvalue} />
+
         <Input
           name={"mearivalue"}
           placeholder={"메아리를 외쳐보세요!!"}
@@ -63,10 +82,10 @@ function App() {
         />
         <Button usage={"확인"} onClick={onSubmitMeari} />
 
-        <Button usage={"멤버 읽기"} onClick={onMemberTest} />
+        <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
       </div>
-      <div className={styles.map} id="map"></div>
-    </div>
+      <Map id="map"></Map>
+    </Wrapper>
   );
 }
 
