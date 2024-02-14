@@ -1,6 +1,11 @@
-function Button({ usage, onClick }) {
+function Button({ usage, onClick, className }) {
   return (
-    <button type="button" onClick={onClick} style={{ margin: "10px" }}>
+    <button
+      className={className}
+      type="button"
+      onClick={onClick}
+      style={{ margin: "10px" }}
+    >
       {usage}
     </button>
   );
