@@ -1,68 +1,65 @@
 import defaultAxios from "axios";
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAxios = (config, axiosInstance = defaultAxios) => {
-  const [state, setState] = useState({
-    data: null,
-    error: null,
-    loading: true,
-  });
+  const queryClient = useQueryClient();
 
-  const userFetch = () => {
-    axiosInstance({
-      method: config.method,
-      url: config.url,
-      headers: {
-        "ngrok-skip-browser-warning": "any",
-      },
-    })
-      .then((response) => {
-        setState({
-          data: response.data,
-          error: null,
-          loading: false,
-        });
-        console.log(response.data);
-      })
-      .catch((error) => {
-        setState({
-          data: null,
-          error: error,
-          loading: false,
-        });
+  const userFetch = async () => {
+    try {
+      const response = await axiosInstance({
+        method: config.method,
+        url: config.url,
+        headers: {
+          "ngrok-skip-browser-warning": "any",
+        },
       });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
-  return { ...state, userFetch };
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["userdata"],
+    queryFn: userFetch,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
+
+  return { data, error, isLoading, refetch };
 };
 
-export const usePostAxios = (config, axiosInstance = defaultAxios) => {
-  const [state, setState] = useState({
-    error: null,
-    loading: true,
-  });
+export const useSignUpAxios = (config, axiosInstance = defaultAxios) => {
+  const queryClient = useQueryClient();
 
-  const sendPost = () => {
-    axiosInstance({
-      method: config.method,
-      url: config.url,
-      data: {
-        email: config.data.email,
-        password: config.data.password,
-        nickname: config.data.nickname,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        setState({
-          error: error,
-          loading: false,
-        });
-        console.log(error);
+  const sendPost = async () => {
+    try {
+      const request = await axiosInstance({
+        method: config.method,
+        url: config.url,
+        data: {
+          email: config.data.email,
+          password: config.data.password,
+          nickname: config.data.nickname,
+        },
       });
+      return request;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
-  return { ...state, sendPost };
+  const mutation = useMutation({
+    mutationKey: ["postdata"],
+    mutationFn: sendPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userdata"] });
+    },
+  });
+
+  return { mutation };
 };

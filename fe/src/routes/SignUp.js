@@ -1,4 +1,4 @@
-import { usePostAxios } from "../hooks/useAxios";
+import { useSignUpAxios } from "../hooks/useAxios";
 import Input from "../componentes/Input";
 import Button from "../componentes/Button";
 import styled from "styled-components";
@@ -8,7 +8,6 @@ const apiurl = process.env.REACT_APP_URL;
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   min-height: 100dvh;
@@ -21,6 +20,7 @@ const Form = styled.form`
   flex-direction: column;
   top: 50%;
   transform: (-50%, -50%);
+  margin-top: 200px;
 `;
 
 function SignUp() {
@@ -28,7 +28,7 @@ function SignUp() {
   const nickname = useInput("");
   const password = useInput("");
 
-  const { error, loading, sendPost } = usePostAxios({
+  const { mutation } = useSignUpAxios({
     url: apiurl + "members",
     method: "POST",
     data: {
@@ -39,15 +39,23 @@ function SignUp() {
   });
 
   const onSubmit = () => {
-    sendPost();
+    mutation.mutate({
+      url: apiurl + "members",
+      method: "POST",
+      data: {
+        email: email.value,
+        password: password.value,
+        nickname: nickname.value,
+      },
+    });
     console.log(email.value, password.value, nickname.value);
     console.log("회원가입 완료");
   };
 
   return (
     <Wrapper>
-      <h1>Here is Sign up</h1>
       <Form>
+        <h1>Here is Sign up</h1>
         이메일
         <Input name={"email"} {...email} />
         아이디

@@ -8,6 +8,7 @@ import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import styled from "styled-components";
+import { useQueryClient } from "@tanstack/react-query";
 
 const { kakao } = window;
 
@@ -32,11 +33,23 @@ const RedButton = styled(Button)`
   }
 `;
 
+const Menu = styled.div`
+  display: flex;
+  justify-content: right;
+`;
+
+const Title = styled.h1`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 function App() {
+  const queryClient = useQueryClient();
   const { map, makeMeari } = useMap();
   const input = useInput("");
 
-  const { data, userFetch, loading } = useGetAxios({
+  const { data, isLoading, refetch, error } = useGetAxios({
     url: apiurl + "members/find-all",
     method: "GET",
   });
@@ -51,26 +64,28 @@ function App() {
   };
 
   const onMemberTest = () => {
-    userFetch();
-    // if (loading === false) console.log(data);
+    refetch();
+    console.log(data);
   };
 
   return (
     <Wrapper>
       <div>
-        <h1>Hi This is Meari!!</h1>
-        {/* 로그인 모달 컴포넌트 LogModal */}
-        <LogModal />
+        <Title>Hi This is Meari!!</Title>
+        <Menu>
+          {/* 로그인 모달 컴포넌트 LogModal */}
+          <LogModal />
 
-        {/* mypage로 이동하는 버튼 */}
-        <Link to="/mypage">
-          <Button usage={"마이페이지"} />
-        </Link>
+          {/* mypage로 이동하는 버튼 */}
+          <Link to="/mypage">
+            <Button usage={"마이페이지"} />
+          </Link>
 
-        {/* 회원가입으로 이동하는 버튼 */}
-        <Link to="/signup">
-          <Button usage={"회원가입"} />
-        </Link>
+          {/* 회원가입으로 이동하는 버튼 */}
+          <Link to="/signup">
+            <Button usage={"회원가입"} />
+          </Link>
+        </Menu>
 
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
         <MeariList value={mvalue} />
