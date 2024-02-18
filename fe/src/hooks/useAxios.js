@@ -1,5 +1,4 @@
 import defaultAxios from "axios";
-import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAxios = (config, axiosInstance = defaultAxios) => {
@@ -40,11 +39,7 @@ export const useSignUpAxios = (config, axiosInstance = defaultAxios) => {
       const request = await axiosInstance({
         method: config.method,
         url: config.url,
-        data: {
-          email: config.data.email,
-          password: config.data.password,
-          nickname: config.data.nickname,
-        },
+        data: config.data, // 2024-02-16 일반 데이터 형식으로 표현
       });
       return request;
     } catch (error) {

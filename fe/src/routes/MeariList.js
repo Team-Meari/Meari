@@ -1,4 +1,3 @@
-import ListContent from "../componentes/ListContent";
 import { useList } from "../hooks/useList";
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -14,8 +13,12 @@ const ListWrapper = styled.div`
 `;
 
 function MeariList({ value }) {
-  const { mearilist } = useList(value);
+  const { mearilist, listfetch } = useList();
   const containerRef = useRef();
+
+  useEffect(() => {
+    listfetch(value);
+  }, [value]);
 
   useEffect(() => {
     containerRef.current.scrollTop = containerRef.current.scrollHeight;

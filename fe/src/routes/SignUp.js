@@ -3,6 +3,7 @@ import Input from "../componentes/Input";
 import Button from "../componentes/Button";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -11,6 +12,7 @@ const Wrapper = styled.div`
   align-items: center;
   flex-direction: column;
   min-height: 100dvh;
+  min-width: 100vw;
   position: relative;
   background-color: beige;
 `;
@@ -24,6 +26,8 @@ const Form = styled.form`
 `;
 
 function SignUp() {
+  const [isOutLet, setIsOutLet] = useOutletContext();
+  const navigate = useNavigate();
   const email = useInput("");
   const nickname = useInput("");
   const password = useInput("");
@@ -64,6 +68,13 @@ function SignUp() {
         <Input name={"password"} {...password} />
         <Button usage={"확인"} onClick={onSubmit} />
       </Form>
+      <Button
+        usage={"되돌아가기"}
+        onClick={() => {
+          navigate(-1);
+          setIsOutLet(true);
+        }}
+      />
     </Wrapper>
   );
 }

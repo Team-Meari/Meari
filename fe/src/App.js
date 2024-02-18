@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import { useMap } from "./hooks/useMap";
@@ -17,7 +17,6 @@ const apiurl = process.env.REACT_APP_URL;
 const Wrapper = styled.div`
   display: flex;
   background-color: blue;
-  z-index: 5;
 `;
 
 const Map = styled.div`
@@ -25,6 +24,15 @@ const Map = styled.div`
   height: 100vh;
   width: 100vw;
   position: relative;
+`;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+`;
+const Container = styled.div`
+  display: flex;
 `;
 
 const RedButton = styled(Button)`
@@ -46,7 +54,11 @@ const Title = styled.h1`
 
 function App() {
   const queryClient = useQueryClient();
-  const { map, makeMeari } = useMap();
+
+  const [mvalue, setMvalue] = useState(null);
+  const [isOutLet, setIsOutLet] = useState(true);
+
+  const { map, makeMeari, reset } = useMap();
   const input = useInput("");
 
   const { data, isLoading, refetch, error } = useGetAxios({
@@ -54,7 +66,6 @@ function App() {
     method: "GET",
   });
 
-  const [mvalue, setMvalue] = useState(null);
   const onSubmitMeari = () => {
     // 메아리 외치기를 했을 때
     // 메아리가 서버로 전송되는 로직이 필요함.
@@ -68,38 +79,51 @@ function App() {
     console.log(data);
   };
 
+  const onSignUpClick = () => {
+    setIsOutLet(false);
+  };
+
+  useEffect(() => {
+    reset();
+  }, [isOutLet]);
+
   return (
     <Wrapper>
-      <div>
-        <Title>Hi This is Meari!!</Title>
-        <Menu>
-          {/* 로그인 모달 컴포넌트 LogModal */}
-          <LogModal />
+      {isOutLet ? (
+        <Container>
+          <Section>
+            <Title>Hi This is Meari!!</Title>
+            <Menu>
+              {/* 로그인 모달 컴포넌트 LogModal */}
+              <LogModal />
 
-          {/* mypage로 이동하는 버튼 */}
-          <Link to="/mypage">
-            <Button usage={"마이페이지"} />
-          </Link>
+              {/* mypage로 이동하는 버튼 */}
+              <Link to="/mypage">
+                <Button usage={"마이페이지"} />
+              </Link>
 
-          {/* 회원가입으로 이동하는 버튼 */}
-          <Link to="/signup">
-            <Button usage={"회원가입"} />
-          </Link>
-        </Menu>
+              {/* 회원가입으로 이동하는 버튼 */}
+              <Link to="/signup">
+                <Button usage={"회원가입"} onClick={onSignUpClick} />
+              </Link>
+            </Menu>
 
-        {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-        <MeariList value={mvalue} />
+            {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
+            <MeariList value={mvalue} />
 
-        <Input
-          name={"mearivalue"}
-          placeholder={"메아리를 외쳐보세요!!"}
-          {...input}
-        />
-        <Button usage={"확인"} onClick={onSubmitMeari} />
-
-        <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
-      </div>
-      <Map id="map"></Map>
+            <Input
+              name={"mearivalue"}
+              placeholder={"메아리를 외쳐보세요!!"}
+              {...input}
+            />
+            <Button usage={"확인"} onClick={onSubmitMeari} />
+            <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
+          </Section>
+          <Map id="map"></Map>
+        </Container>
+      ) : (
+        <Outlet context={[isOutLet, setIsOutLet]} />
+      )}
     </Wrapper>
   );
 }
