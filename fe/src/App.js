@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import { useMap } from "./hooks/useMap";
@@ -7,6 +7,7 @@ import MeariList from "./routes/MeariList";
 import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
+import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -54,76 +55,92 @@ const Title = styled.h1`
 
 function App() {
   const queryClient = useQueryClient();
-
   const [mvalue, setMvalue] = useState(null);
-  const [isOutLet, setIsOutLet] = useState(true);
-
-  const { map, makeMeari, reset } = useMap();
+  const { map, makeMeari, myposition } = useMap();
   const input = useInput("");
 
-  const { data, isLoading, refetch, error } = useGetAxios({
-    url: apiurl + "members/find-all",
-    method: "GET",
-  });
+  const userdata = useGetAxios(
+    {
+      url: apiurl + "members/find-all",
+      method: "GET",
+    },
+    "userdata"
+  );
+
+  const mearidata = useGetAxios(
+    {
+      url: apiurl + "chats/find-all?size=100",
+      method: "GET",
+    },
+    "mearidata"
+  );
+
+  const { mutation } = usePostAxios("mearidata");
 
   const onSubmitMeari = () => {
     // 메아리 외치기를 했을 때
     // 메아리가 서버로 전송되는 로직이 필요함.
     setMvalue(input.value);
-    makeMeari(map, input.value);
+    //makeMeari(map, input.value, myposition);
+    mutation.mutate({
+      url: apiurl + "chats",
+      method: "POST",
+      data: {
+        content: input.value,
+        latitude: myposition.latitude,
+        longitude: myposition.longitude,
+      },
+    });
     input.textClear();
   };
 
   const onMemberTest = () => {
-    refetch();
-    console.log(data);
-  };
-
-  const onSignUpClick = () => {
-    setIsOutLet(false);
+    userdata.refetch();
+    console.log(userdata.data);
   };
 
   useEffect(() => {
-    reset();
-  }, [isOutLet]);
+    mearidata.data?.map((item, index) => {
+      makeMeari(map, item?.content, item?.latitude, item?.longitude);
+    });
+  }, [mearidata.data]);
 
+  useEffect(() => {
+    console.log(mearidata);
+  }, []);
   return (
     <Wrapper>
-      {isOutLet ? (
-        <Container>
-          <Section>
-            <Title>Hi This is Meari!!</Title>
-            <Menu>
-              {/* 로그인 모달 컴포넌트 LogModal */}
-              <LogModal />
+      <Container>
+        <Section>
+          <Title>Hi This is Meari!!</Title>
+          <Menu>
+            {/* 로그인 모달 컴포넌트 LogModal */}
+            <LogModal />
 
-              {/* mypage로 이동하는 버튼 */}
-              <Link to="/mypage">
-                <Button usage={"마이페이지"} />
-              </Link>
+            {/* mypage로 이동하는 버튼 */}
+            <Link to="/mypage">
+              <Button usage={"마이페이지"} />
+            </Link>
 
-              {/* 회원가입으로 이동하는 버튼 */}
-              <Link to="/signup">
-                <Button usage={"회원가입"} onClick={onSignUpClick} />
-              </Link>
-            </Menu>
+            {/* 회원가입으로 이동하는 버튼 */}
+            <Link to="/signup">
+              <Button usage={"회원가입"} />
+            </Link>
+          </Menu>
 
-            {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-            <MeariList value={mvalue} />
+          {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
+          <MeariList value={mvalue} data={mearidata.data} />
 
-            <Input
-              name={"mearivalue"}
-              placeholder={"메아리를 외쳐보세요!!"}
-              {...input}
-            />
-            <Button usage={"확인"} onClick={onSubmitMeari} />
-            <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
-          </Section>
-          <Map id="map"></Map>
-        </Container>
-      ) : (
-        <Outlet context={[isOutLet, setIsOutLet]} />
-      )}
+          <Input
+            name={"mearivalue"}
+            placeholder={"메아리를 외쳐보세요!!"}
+            {...input}
+          />
+          <Button usage={"확인"} onClick={onSubmitMeari} />
+          <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
+        </Section>
+        <Map id="map"></Map>
+      </Container>
     </Wrapper>
   );
 }

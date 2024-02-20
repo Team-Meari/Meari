@@ -1,9 +1,9 @@
-import { useSignUpAxios } from "../hooks/useAxios";
+import { usePostAxios } from "../hooks/useAxios";
 import Input from "../componentes/Input";
 import Button from "../componentes/Button";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -26,21 +26,12 @@ const Form = styled.form`
 `;
 
 function SignUp() {
-  const [isOutLet, setIsOutLet] = useOutletContext();
   const navigate = useNavigate();
   const email = useInput("");
   const nickname = useInput("");
   const password = useInput("");
 
-  const { mutation } = useSignUpAxios({
-    url: apiurl + "members",
-    method: "POST",
-    data: {
-      email: email.value,
-      password: password.value,
-      nickname: nickname.value,
-    },
-  });
+  const { mutation } = usePostAxios("userdata");
 
   const onSubmit = () => {
     mutation.mutate({
@@ -72,7 +63,6 @@ function SignUp() {
         usage={"되돌아가기"}
         onClick={() => {
           navigate(-1);
-          setIsOutLet(true);
         }}
       />
     </Wrapper>

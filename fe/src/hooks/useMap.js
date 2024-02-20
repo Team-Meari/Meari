@@ -45,12 +45,9 @@ export const useMap = () => {
   그리고 이 내용을 주기적으로 받아서 refetch 시켜줌
   이걸 통해서 지도에 실시간 통신하는것 처럼 보여줌
   */
-  const makeMeari = (map, comment) => {
+  const makeMeari = (map, comment, latitude, longitude) => {
     // 커스텀 오버레이가 표시될 위치입니다
-    var position = new kakao.maps.LatLng(
-      myposition.latitude,
-      myposition.longitude
-    );
+    var position = new kakao.maps.LatLng(latitude, longitude);
     var content = `<div class=${styles.label}><span class=${styles.left}></span><span class=${styles.center}>${comment}</span><span class=${styles.right}></span></div>`;
     // 커스텀 오버레이를 생성합니다
     var customOverlay = new kakao.maps.CustomOverlay({
@@ -64,9 +61,5 @@ export const useMap = () => {
     customOverlay.setMap(map);
   };
 
-  const makeAfterMeari = (map) => {};
-  const reset = () => {
-    setMap(map);
-  };
-  return { map, makeMeari, reset };
+  return { map, makeMeari, myposition };
 };
