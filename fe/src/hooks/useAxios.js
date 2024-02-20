@@ -2,8 +2,6 @@ import defaultAxios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
-  const queryClient = useQueryClient();
-
   const dataFetch = async () => {
     try {
       const response = await axiosInstance({
