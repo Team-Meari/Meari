@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @AllArgsConstructor @NoArgsConstructor
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
     private String email;
     private String password;
     private String nickname;
