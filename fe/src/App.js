@@ -96,6 +96,8 @@ function App() {
     mearidata.data?.map((item, index) => {
       return makeMeari(map, item?.content, item?.latitude, item?.longitude);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [[], mearidata.data]);
 
   return (
