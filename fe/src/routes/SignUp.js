@@ -35,7 +35,7 @@ function SignUp() {
 
   const onSubmit = () => {
     mutation.mutate({
-      url: apiurl + "members",
+      url: "members",
       method: "POST",
       data: {
         email: email.value,

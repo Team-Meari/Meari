@@ -10,8 +10,6 @@ import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
 
-const apiurl = process.env.REACT_APP_URL;
-
 const Wrapper = styled.div`
   display: flex;
   background-color: blue;
@@ -56,7 +54,7 @@ function App() {
 
   const userdata = useGetAxios(
     {
-      url: apiurl + "members/find-all",
+      url: "members/find-all",
       method: "GET",
     },
     "userdata"
@@ -64,7 +62,7 @@ function App() {
 
   const mearidata = useGetAxios(
     {
-      url: apiurl + "chats/find-all?size=100",
+      url: "chats/find-all?size=100",
       method: "GET",
     },
     "mearidata"
@@ -76,7 +74,7 @@ function App() {
     // 메아리 외치기를 했을 때
     // 메아리가 서버로 전송되는 로직이 필요함.
     mutation.mutate({
-      url: apiurl + "chats",
+      url: "chats",
       method: "POST",
       data: {
         content: input.value,
