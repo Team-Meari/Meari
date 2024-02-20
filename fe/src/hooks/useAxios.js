@@ -14,7 +14,6 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
         },
       });
       console.log(response.data.data);
-      //console.log("요청 완료");
       return response.data.data;
     } catch (error) {
       console.log(error);

@@ -11,8 +11,6 @@ import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
 
-const { kakao } = window;
-
 const apiurl = process.env.REACT_APP_URL;
 
 const Wrapper = styled.div`
@@ -103,11 +101,8 @@ function App() {
     mearidata.data?.map((item, index) => {
       makeMeari(map, item?.content, item?.latitude, item?.longitude);
     });
-  }, [mearidata.data]);
+  }, [[], mearidata.data]);
 
-  useEffect(() => {
-    console.log(mearidata);
-  }, []);
   return (
     <Wrapper>
       <Container>
@@ -129,7 +124,7 @@ function App() {
           </Menu>
 
           {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-          <MeariList value={mvalue} data={mearidata.data} />
+          <MeariList data={mearidata.data} />
 
           <Input
             name={"mearivalue"}

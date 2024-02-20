@@ -13,8 +13,8 @@ const ListWrapper = styled.div`
   background-color: beige;
 `;
 
-function MeariList({ value, data }) {
-  const { mearilist } = useList(value, data);
+function MeariList({ data }) {
+  const { mearilist } = useList(data);
   const containerRef = useRef();
 
   useEffect(() => {

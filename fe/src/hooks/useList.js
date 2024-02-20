@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useList = (mvalue, data) => {
+export const useList = (data) => {
   const [mearilist, setMeariList] = useState([]);
 
   useEffect(() => {
