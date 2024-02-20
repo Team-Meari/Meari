@@ -14,7 +14,7 @@ public class MemberResDto {
     private String memberStatus;
 
     public MemberResDto(Member member) {
-        this.memberId = member.getId();
+        this.memberId = member.getMemberId();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
         this.memberStatus = member.getMemberStatus().getStatus();
