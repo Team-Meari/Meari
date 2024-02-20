@@ -43,7 +43,7 @@ function Login({ closeModal, isModalOpen, setisLogin }) {
     closeModal();
   };
   return (
-    <div>
+    <>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -58,7 +58,7 @@ function Login({ closeModal, isModalOpen, setisLogin }) {
         </form>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
-    </div>
+    </>
   );
 }
 
@@ -69,7 +69,7 @@ function Logout({ closeModal, isModalOpen, setisLogin }) {
     closeModal();
   };
   return (
-    <div>
+    <>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -80,7 +80,7 @@ function Logout({ closeModal, isModalOpen, setisLogin }) {
         <Button usage={"LogOut"} onClick={onClick}></Button>
         <Button usage={"CLOSE"} onClick={closeModal}></Button>
       </Modal>
-    </div>
+    </>
   );
 }
 

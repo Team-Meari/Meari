@@ -1,6 +1,6 @@
-import ListContent from "../componentes/ListContent";
 import { useList } from "../hooks/useList";
 import { useEffect, useRef } from "react";
+import ListContent from "../componentes/ListContent";
 import styled from "styled-components";
 
 const ListWrapper = styled.div`
@@ -13,18 +13,25 @@ const ListWrapper = styled.div`
   background-color: beige;
 `;
 
-function MeariList({ value }) {
-  const { mearilist } = useList(value);
+function MeariList({ data }) {
+  const { mearilist } = useList(data);
   const containerRef = useRef();
 
   useEffect(() => {
     containerRef.current.scrollTop = containerRef.current.scrollHeight;
   }, [mearilist]);
+
   return (
     <ListWrapper ref={containerRef}>
-      {mearilist.map((item, index) => (
-        <div key={index}>{item.content}</div>
-      ))}
+      {mearilist
+        ? mearilist.map((item, index) => (
+            <ListContent
+              key={index}
+              value={item?.content}
+              author={item?.chatId}
+            />
+          ))
+        : null}
     </ListWrapper>
   );
 }

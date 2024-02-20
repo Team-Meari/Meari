@@ -1,68 +1,64 @@
 import defaultAxios from "axios";
-import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useGetAxios = (config, axiosInstance = defaultAxios) => {
-  const [state, setState] = useState({
-    data: null,
-    error: null,
-    loading: true,
-  });
+export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
+  const queryClient = useQueryClient();
 
-  const userFetch = () => {
-    axiosInstance({
-      method: config.method,
-      url: config.url,
-      headers: {
-        "ngrok-skip-browser-warning": "any",
-      },
-    })
-      .then((response) => {
-        setState({
-          data: response.data,
-          error: null,
-          loading: false,
-        });
-        console.log(response.data);
-      })
-      .catch((error) => {
-        setState({
-          data: null,
-          error: error,
-          loading: false,
-        });
+  const dataFetch = async () => {
+    try {
+      const response = await axiosInstance({
+        method: config.method,
+        url: config.url,
+        headers: {
+          "ngrok-skip-browser-warning": "any",
+        },
       });
+      console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
-  return { ...state, userFetch };
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: [type],
+    queryFn: dataFetch,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    enabled: true,
+    refetchInterval: type === "userdata" ? null : 3000,
+  });
+
+  return { data, error, isLoading, refetch };
 };
 
-export const usePostAxios = (config, axiosInstance = defaultAxios) => {
-  const [state, setState] = useState({
-    error: null,
-    loading: true,
+export const usePostAxios = (type, axiosInstance = defaultAxios) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ["postdata"],
+    mutationFn: async (config) => {
+      try {
+        const request = await axiosInstance({
+          method: config.method,
+          url: config.url,
+          data: config.data, // 2024-02-16 일반 데이터 형식으로 표현
+        });
+        return request;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      if (type === "userdata")
+        queryClient.invalidateQueries({ queryKey: ["userdata"] });
+      else if (type === "mearidata")
+        queryClient.invalidateQueries({ queryKey: ["mearidata"] });
+    },
   });
 
-  const sendPost = () => {
-    axiosInstance({
-      method: config.method,
-      url: config.url,
-      data: {
-        email: config.data.email,
-        password: config.data.password,
-        nickname: config.data.nickname,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        setState({
-          error: error,
-          loading: false,
-        });
-        console.log(error);
-      });
-  };
-
-  return { ...state, sendPost };
+  return { mutation };
 };
