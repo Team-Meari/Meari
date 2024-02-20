@@ -94,8 +94,10 @@ function App() {
 
   useEffect(() => {
     mearidata.data?.map((item, index) => {
-      makeMeari(map, item?.content, item?.latitude, item?.longitude);
+      return makeMeari(map, item?.content, item?.latitude, item?.longitude);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [[], mearidata.data]);
 
   return (
