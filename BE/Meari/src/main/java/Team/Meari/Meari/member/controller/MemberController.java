@@ -32,7 +32,7 @@ public class MemberController {
     public ResponseEntity<SingleResDto<Long>> postMember(@RequestBody MemberPostReqDto memberPostReqDto) {
         Member savedMember = memberService.createMember(memberPostReqDto.toEntity());
 
-        return new ResponseEntity<>(new SingleResDto<>(savedMember.getId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResDto<>(savedMember.getMemberId()), HttpStatus.CREATED);
     }
 
     /**
