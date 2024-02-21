@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
@@ -9,7 +9,6 @@ import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
-import { useQueryClient } from "@tanstack/react-query";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -52,8 +51,6 @@ const Title = styled.h1`
 `;
 
 function App() {
-  const queryClient = useQueryClient();
-  const [mvalue, setMvalue] = useState(null);
   const { map, makeMeari, myposition } = useMap();
   const input = useInput("");
 
@@ -78,8 +75,6 @@ function App() {
   const onSubmitMeari = () => {
     // 메아리 외치기를 했을 때
     // 메아리가 서버로 전송되는 로직이 필요함.
-    setMvalue(input.value);
-    //makeMeari(map, input.value, myposition);
     mutation.mutate({
       url: apiurl + "chats",
       method: "POST",
@@ -99,8 +94,10 @@ function App() {
 
   useEffect(() => {
     mearidata.data?.map((item, index) => {
-      makeMeari(map, item?.content, item?.latitude, item?.longitude);
+      return makeMeari(map, item?.content, item?.latitude, item?.longitude);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [[], mearidata.data]);
 
   return (
