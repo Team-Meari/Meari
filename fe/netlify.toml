@@ -1,0 +1,10 @@
+[[redirects]]
+  from = "/proxy/*"
+  to = "https://e76d-211-108-235-4.ngrok-free.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

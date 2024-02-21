@@ -28,7 +28,7 @@ export const useMap = () => {
         level: 3,
       };
     } else {
-      var options = {
+      options = {
         center: new kakao.maps.LatLng(lat, lon),
         level: 3,
       };
