@@ -1,8 +1,12 @@
 import Modal from "react-modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../componentes/Button";
 import Input from "../componentes/Input";
 import { useInput } from "../hooks/useInput";
+import { usePostAxios } from "../hooks/useAxios";
+import AuthContext from "../contexts/AuthProvider";
+
+const apiurl = process.env.REACT_APP_URL;
 
 const customStyles = {
   content: {
@@ -31,15 +35,24 @@ const useModal = () => {
 };
 
 // modal 방식으로 구현예정
-function Login({ closeModal, isModalOpen, setisLogin }) {
+function Login({ closeModal, isModalOpen }) {
   const id = useInput("");
   const password = useInput("");
+
+  const { mutation } = usePostAxios("auth");
+
   const onSubmit = () => {
-    setisLogin(true);
-    console.log(id.value, password.value);
-    // 이제 로그인 클릭시
-    // 1. 로그인 API 통신 로직 필요
-    // 2. 로그인 정보 저장하는 로직 필요
+    //console.log(id.value, password.value);
+    mutation.mutate({
+      url: apiurl + "auth/login",
+      method: "POST",
+      data: {
+        email: id.value,
+        password: password.value,
+      },
+    });
+    id.textClear();
+    password.textClear();
     closeModal();
   };
   return (
@@ -62,10 +75,11 @@ function Login({ closeModal, isModalOpen, setisLogin }) {
   );
 }
 
-function Logout({ closeModal, isModalOpen, setisLogin }) {
+function Logout({ closeModal, isModalOpen, setAuth }) {
   const onClick = () => {
-    setisLogin(false);
     // 로그아웃하는 로직 추가 필요
+    window.localStorage.removeItem("accessToken");
+    setAuth(false);
     closeModal();
   };
   return (
@@ -85,24 +99,20 @@ function Logout({ closeModal, isModalOpen, setisLogin }) {
 }
 
 function LogModal() {
-  const [isLogin, setisLogin] = useState(false);
+  const { auth, setAuth } = useContext(AuthContext);
   const { openModal, closeModal, isModalOpen } = useModal();
 
   return (
     <>
-      <Button onClick={openModal} usage={isLogin ? "로그아웃" : "로그인"} />
-      {isLogin ? (
+      <Button onClick={openModal} usage={auth ? "로그아웃" : "로그인"} />
+      {auth ? (
         <Logout
           closeModal={closeModal}
           isModalOpen={isModalOpen}
-          setisLogin={setisLogin}
+          setAuth={setAuth}
         />
       ) : (
-        <Login
-          closeModal={closeModal}
-          isModalOpen={isModalOpen}
-          setisLogin={setisLogin}
-        />
+        <Login closeModal={closeModal} isModalOpen={isModalOpen} />
       )}
     </>
   );
