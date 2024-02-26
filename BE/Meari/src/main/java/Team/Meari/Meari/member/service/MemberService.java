@@ -7,6 +7,7 @@ import Team.Meari.Meari.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원 생성
@@ -25,6 +27,8 @@ public class MemberService {
     @Transactional
     public Member createMember(Member member){
         verifyNotExistEmail(member.getEmail());
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
         return memberRepository.save(member);
     }
 
