@@ -77,7 +77,6 @@ function Login({ closeModal, isModalOpen }) {
 
 function Logout({ closeModal, isModalOpen, setAuth }) {
   const onClick = () => {
-    // 로그아웃하는 로직 추가 필요
     window.localStorage.removeItem("accessToken");
     setAuth(false);
     closeModal();
