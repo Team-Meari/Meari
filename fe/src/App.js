@@ -14,7 +14,7 @@ const apiurl = process.env.REACT_APP_URL;
 
 const Wrapper = styled.div`
   display: flex;
-  background-color: blue;
+  background-color: #028a0f;
 `;
 
 const Map = styled.div`
@@ -39,6 +39,8 @@ const RedButton = styled(Button)`
   }
 `;
 
+const CommonBtn = styled(Button)``;
+
 const Menu = styled.div`
   display: flex;
   justify-content: right;
@@ -48,6 +50,9 @@ const Title = styled.h1`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Protest Riot", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 `;
 
 function App() {
@@ -104,7 +109,7 @@ function App() {
     <Wrapper>
       <Container>
         <Section>
-          <Title>Hi This is Meari!!</Title>
+          <Title>Show Your Meari!!!</Title>
           <Menu>
             {/* 로그인 모달 컴포넌트 LogModal */}
             <LogModal />
