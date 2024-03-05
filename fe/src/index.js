@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/mypage",
+    path: "/mypage/:nickname",
     element: <MyPage />,
   },
   {

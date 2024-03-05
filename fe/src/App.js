@@ -115,7 +115,7 @@ function App() {
             <LogModal />
 
             {/* mypage로 이동하는 버튼 */}
-            <Link to="/mypage">
+            <Link to={`/mypage/${"nickname"}`}>
               <Button usage={"마이페이지"} />
             </Link>
 
