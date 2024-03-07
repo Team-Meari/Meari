@@ -29,7 +29,7 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     enabled: true,
-    refetchInterval: type === "userdata" ? null : 3000,
+    refetchInterval: (type === "userdata") | (type === "mydata") ? null : 3000,
   });
 
   return { data, error, isLoading, refetch };
