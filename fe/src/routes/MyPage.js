@@ -36,7 +36,7 @@ const Item = styled.div`
 const apiurl = process.env.REACT_APP_URL;
 
 function MyPage() {
-  const { nickname } = useParams();
+  const { nickname, memberId } = useParams();
 
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, error, isLoading } = useGetAxios(
@@ -50,10 +50,16 @@ function MyPage() {
 
   // 회원탈퇴 버튼 클릭 시 회원탈퇴하는 로직
   const onClick = () => {
-    mutation.mutate({
-      url: apiurl + `members/${"nickname"}`,
-      method: "DELETE",
-    });
+    let result = window.confirm("정말 회원탈퇴 하시겠습니까???");
+    if (result) {
+      mutation.mutate({
+        url: apiurl + `members/${memberId}`,
+        method: "DELETE",
+      });
+      console.log("회원탈퇴 되었습니다.");
+    } else {
+      console.log("회원탈퇴 취소되었습니다.");
+    }
   };
   return (
     <Wrapper>

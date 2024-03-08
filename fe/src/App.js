@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
@@ -9,6 +9,7 @@ import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
+import userContext from "./contexts/UserProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -57,6 +58,7 @@ const Title = styled.h1`
 
 function App() {
   const { map, makeMeari, myposition } = useMap();
+  const { nickname, memberId } = useContext(userContext);
   const input = useInput("");
 
   const userdata = useGetAxios(
@@ -115,7 +117,7 @@ function App() {
             <LogModal />
 
             {/* mypage로 이동하는 버튼 */}
-            <Link to={`/mypage/${"nickname"}`}>
+            <Link to={`/mypage/${nickname}/${memberId}`}>
               <Button usage={"마이페이지"} />
             </Link>
 

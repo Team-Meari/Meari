@@ -44,7 +44,7 @@ function Login({ closeModal, isModalOpen }) {
   const onSubmit = () => {
     //console.log(id.value, password.value);
     mutation.mutate({
-      url: apiurl + "auth/login",
+      url: apiurl + "members/login",
       method: "POST",
       data: {
         email: id.value,
