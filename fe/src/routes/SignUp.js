@@ -44,6 +44,7 @@ function SignUp() {
       },
     });
     console.log(email.value, password.value, nickname.value);
+    navigate(-1);
     console.log("회원가입 완료");
   };
 

@@ -10,6 +10,7 @@ import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
 import userContext from "./contexts/UserProvider";
+import AuthContext from "./contexts/AuthProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -40,8 +41,6 @@ const RedButton = styled(Button)`
   }
 `;
 
-const CommonBtn = styled(Button)``;
-
 const Menu = styled.div`
   display: flex;
   justify-content: right;
@@ -59,6 +58,7 @@ const Title = styled.h1`
 function App() {
   const { map, makeMeari, myposition } = useMap();
   const { nickname, memberId } = useContext(userContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const input = useInput("");
 
   const userdata = useGetAxios(
@@ -117,14 +117,18 @@ function App() {
             <LogModal />
 
             {/* mypage로 이동하는 버튼 */}
-            <Link to={`/mypage/${nickname}/${memberId}`}>
-              <Button usage={"마이페이지"} />
-            </Link>
+            {auth ? (
+              <Link to={`/mypage/${nickname}/${memberId}`}>
+                <Button usage={"마이페이지"} />
+              </Link>
+            ) : null}
 
             {/* 회원가입으로 이동하는 버튼 */}
-            <Link to="/signup">
-              <Button usage={"회원가입"} />
-            </Link>
+            {!auth ? (
+              <Link to="/signup">
+                <Button usage={"회원가입"} />
+              </Link>
+            ) : null}
           </Menu>
 
           {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}

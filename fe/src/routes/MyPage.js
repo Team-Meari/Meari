@@ -1,7 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetAxios, usePostAxios } from "../hooks/useAxios";
 import styled from "styled-components";
 import Button from "../componentes/Button";
+import { useContext } from "react";
+import AuthContext from "../contexts/AuthProvider";
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,6 +39,8 @@ const apiurl = process.env.REACT_APP_URL;
 
 function MyPage() {
   const { nickname, memberId } = useParams();
+  const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, error, isLoading } = useGetAxios(
@@ -56,6 +60,8 @@ function MyPage() {
         url: apiurl + `members/${memberId}`,
         method: "DELETE",
       });
+      setAuth(false);
+      navigate(-1);
       console.log("회원탈퇴 되었습니다.");
     } else {
       console.log("회원탈퇴 취소되었습니다.");
