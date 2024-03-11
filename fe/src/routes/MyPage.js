@@ -19,7 +19,7 @@ const Title = styled.h1`
   margin-left: 30px;
   margin-bottom: 100px;
 `;
-const Nickname = styled.text`
+const Nickname = styled.div`
   font-size: 50px;
 `;
 const Grid = styled.div`
@@ -31,7 +31,7 @@ const Grid = styled.div`
 `;
 const Item = styled.div`
   border-radius: 10px;
-  background-color: ${(props) => props.inputColor || "black"};
+  background-color: ${(props) => props.inputcolor || "black"};
   margin-right: 10px;
 `;
 
@@ -45,11 +45,12 @@ function MyPage() {
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, error, isLoading } = useGetAxios(
     {
-      url: apiurl + "chats/1",
+      url: apiurl + `chats/myPage`,
       method: "GET",
     },
     "mydata"
   );
+
   const { mutation } = usePostAxios("userdata");
 
   // 회원탈퇴 버튼 클릭 시 회원탈퇴하는 로직
@@ -75,46 +76,46 @@ function MyPage() {
       </Title>
 
       <Grid count="5">
-        <Item inputColor="green"></Item>
-        <Item inputColor="orange"></Item>
-        <Item inputColor="white"></Item>
-        <Item inputColor="blue"></Item>
-        <Item inputColor="purple"></Item>
-        <Item inputColor="black"></Item>
-        <Item inputColor="gray"></Item>
-        <Item inputColor="red"></Item>
-        <Item inputColor="yellow"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="orange"></Item>
-        <Item inputColor="white"></Item>
-        <Item inputColor="blue"></Item>
-        <Item inputColor="purple"></Item>
-        <Item inputColor="black"></Item>
-        <Item inputColor="gray"></Item>
-        <Item inputColor="red"></Item>
-        <Item inputColor="yellow"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="orange"></Item>
-        <Item inputColor="white"></Item>
-        <Item inputColor="blue"></Item>
-        <Item inputColor="purple"></Item>
-        <Item inputColor="black"></Item>
-        <Item inputColor="gray"></Item>
-        <Item inputColor="red"></Item>
-        <Item inputColor="yellow"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="green"></Item>
-        <Item inputColor="orange"></Item>
-        <Item inputColor="white"></Item>
-        <Item inputColor="blue"></Item>
-        <Item inputColor="purple"></Item>
-        <Item inputColor="black"></Item>
-        <Item inputColor="gray"></Item>
-        <Item inputColor="red"></Item>
-        <Item inputColor="yellow"></Item>
-        <Item inputColor="green"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="orange"></Item>
+        <Item inputcolor="white"></Item>
+        <Item inputcolor="blue"></Item>
+        <Item inputcolor="purple"></Item>
+        <Item inputcolor="black"></Item>
+        <Item inputcolor="gray"></Item>
+        <Item inputcolor="red"></Item>
+        <Item inputcolor="yellow"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="orange"></Item>
+        <Item inputcolor="white"></Item>
+        <Item inputcolor="blue"></Item>
+        <Item inputcolor="purple"></Item>
+        <Item inputcolor="black"></Item>
+        <Item inputcolor="gray"></Item>
+        <Item inputcolor="red"></Item>
+        <Item inputcolor="yellow"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="orange"></Item>
+        <Item inputcolor="white"></Item>
+        <Item inputcolor="blue"></Item>
+        <Item inputcolor="purple"></Item>
+        <Item inputcolor="black"></Item>
+        <Item inputcolor="gray"></Item>
+        <Item inputcolor="red"></Item>
+        <Item inputcolor="yellow"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="green"></Item>
+        <Item inputcolor="orange"></Item>
+        <Item inputcolor="white"></Item>
+        <Item inputcolor="blue"></Item>
+        <Item inputcolor="purple"></Item>
+        <Item inputcolor="black"></Item>
+        <Item inputcolor="gray"></Item>
+        <Item inputcolor="red"></Item>
+        <Item inputcolor="yellow"></Item>
+        <Item inputcolor="green"></Item>
       </Grid>
     </Wrapper>
   );

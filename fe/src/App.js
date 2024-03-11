@@ -16,23 +16,21 @@ const apiurl = process.env.REACT_APP_URL;
 
 const Wrapper = styled.div`
   display: flex;
-  background-color: #028a0f;
 `;
 
 const Map = styled.div`
   z-index: 0;
   height: 100vh;
   width: 100vw;
-  position: relative;
+  position: absolute;
 `;
 
 const Section = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 5;
-`;
-const Container = styled.div`
-  display: flex;
+  background-color: #028a0f;
+  height: 100vw;
 `;
 
 const RedButton = styled(Button)`
@@ -55,10 +53,27 @@ const Title = styled.h1`
   font-style: normal;
 `;
 
+const MeariInput = styled(Input)`
+  height: 50px;
+  width: 700px;
+  position: fixed;
+  left: 850px;
+  top: 800px;
+  border-radius: 20px;
+`;
+
+const MeariSubmit = styled(Button)`
+  height: 40px;
+  width: 40px;
+  position: fixed;
+  left: 1490px;
+  top: 800px;
+`;
+
 function App() {
   const { map, makeMeari, myposition } = useMap();
   const { nickname, memberId } = useContext(userContext);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const input = useInput("");
 
   const userdata = useGetAxios(
@@ -109,41 +124,39 @@ function App() {
 
   return (
     <Wrapper>
-      <Container>
-        <Section>
-          <Title>Show Your Meari!!!</Title>
-          <Menu>
-            {/* 로그인 모달 컴포넌트 LogModal */}
-            <LogModal />
+      <Section>
+        <Title>Show Your Meari!!!</Title>
+        <Menu>
+          {/* 로그인 모달 컴포넌트 LogModal */}
+          <LogModal />
 
-            {/* mypage로 이동하는 버튼 */}
-            {auth ? (
-              <Link to={`/mypage/${nickname}/${memberId}`}>
-                <Button usage={"마이페이지"} />
-              </Link>
-            ) : null}
+          {/* mypage로 이동하는 버튼 */}
+          {auth ? (
+            <Link to={`/mypage/${nickname}/${memberId}`}>
+              <Button usage={"마이페이지"} />
+            </Link>
+          ) : null}
 
-            {/* 회원가입으로 이동하는 버튼 */}
-            {!auth ? (
-              <Link to="/signup">
-                <Button usage={"회원가입"} />
-              </Link>
-            ) : null}
-          </Menu>
+          {/* 회원가입으로 이동하는 버튼 */}
+          {!auth ? (
+            <Link to="/signup">
+              <Button usage={"회원가입"} />
+            </Link>
+          ) : null}
+        </Menu>
 
-          {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-          <MeariList data={mearidata.data} />
+        {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
+        <MeariList data={mearidata.data} />
 
-          <Input
-            name={"mearivalue"}
-            placeholder={"메아리를 외쳐보세요!!"}
-            {...input}
-          />
-          <Button usage={"확인"} onClick={onSubmitMeari} />
-          <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
-        </Section>
-        <Map id="map"></Map>
-      </Container>
+        <RedButton usage={"멤버 읽기"} onClick={onMemberTest} />
+      </Section>
+      <Map id="map"></Map>
+      <MeariInput
+        name={"mearivalue"}
+        placeholder={"메아리를 외쳐보세요!!"}
+        {...input}
+      ></MeariInput>
+      <MeariSubmit usage={"확인"} onClick={onSubmitMeari} />
     </Wrapper>
   );
 }

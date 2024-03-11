@@ -4,7 +4,7 @@ function Button({ usage, onClick, className }) {
       className={className}
       type="button"
       onClick={onClick}
-      style={{ margin: "10px" }}
+      style={{ margin: "10px", zIndex: 5 }}
     >
       {usage}
     </button>

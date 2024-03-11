@@ -12,10 +12,10 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
         url: config.url,
         headers: {
           "ngrok-skip-browser-warning": "any",
-          Authorization: localStorage.getItem("accessToken"),
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      //console.log(response);
+      console.log(response);
       return response.data.data;
     } catch (error) {
       console.log(error);
@@ -53,6 +53,7 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
             Authorization: "Bearer " + localStorage.getItem("accessToken"),
           },
         });
+        console.log(response);
         return response;
       } catch (error) {
         console.log(error);
@@ -68,10 +69,6 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
         window.localStorage.setItem(
           "accessToken",
           response.data.tokenDto.accessToken
-        );
-        window.localStorage.setItem(
-          "refreshToken",
-          response.data.tokenDto.refreshToken
         );
         setAuth(true);
         setNickname(response.data.memberResDto.nickname);

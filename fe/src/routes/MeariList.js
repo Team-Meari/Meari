@@ -4,10 +4,10 @@ import ListContent from "../componentes/ListContent";
 import styled from "styled-components";
 
 const ListWrapper = styled.div`
-  height: 500px;
-  width: 400px;
-  max-height: 500px;
-  max-width: 400px;
+  height: 700px;
+  width: 450px;
+  max-height: 700px;
+  max-width: 450px;
   overflow-y: scroll;
   overflow-x: visible;
   background-color: beige;
