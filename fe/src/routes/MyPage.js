@@ -90,32 +90,6 @@ function MyPage() {
         <Item inputcolor="orange"></Item>
         <Item inputcolor="white"></Item>
         <Item inputcolor="blue"></Item>
-        <Item inputcolor="purple"></Item>
-        <Item inputcolor="black"></Item>
-        <Item inputcolor="gray"></Item>
-        <Item inputcolor="red"></Item>
-        <Item inputcolor="yellow"></Item>
-        <Item inputcolor="green"></Item>
-        <Item inputcolor="green"></Item>
-        <Item inputcolor="orange"></Item>
-        <Item inputcolor="white"></Item>
-        <Item inputcolor="blue"></Item>
-        <Item inputcolor="purple"></Item>
-        <Item inputcolor="black"></Item>
-        <Item inputcolor="gray"></Item>
-        <Item inputcolor="red"></Item>
-        <Item inputcolor="yellow"></Item>
-        <Item inputcolor="green"></Item>
-        <Item inputcolor="green"></Item>
-        <Item inputcolor="orange"></Item>
-        <Item inputcolor="white"></Item>
-        <Item inputcolor="blue"></Item>
-        <Item inputcolor="purple"></Item>
-        <Item inputcolor="black"></Item>
-        <Item inputcolor="gray"></Item>
-        <Item inputcolor="red"></Item>
-        <Item inputcolor="yellow"></Item>
-        <Item inputcolor="green"></Item>
       </Grid>
     </Wrapper>
   );

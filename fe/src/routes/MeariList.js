@@ -4,13 +4,26 @@ import ListContent from "../componentes/ListContent";
 import styled from "styled-components";
 
 const ListWrapper = styled.div`
-  height: 700px;
-  width: 450px;
-  max-height: 700px;
-  max-width: 450px;
+  position: absolute;
+  width: 400px;
+  height: 619px;
+  left: 30px;
+  top: 152px;
   overflow-y: scroll;
-  overflow-x: visible;
-  background-color: beige;
+
+  background: #f8f8f8;
+  border-radius: 16px;
+
+  &::-webkit-scrollbar {
+    position: absolute;
+    width: 6px;
+    height: 284px;
+    left: 422px;
+    top: 172px;
+
+    background: #ebebeb;
+    border-radius: 360px;
+  }
 `;
 
 function MeariList({ data }) {

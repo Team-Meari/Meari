@@ -38,13 +38,6 @@ export const useMap = () => {
     setMap(map);
   };
 
-  /*
-  현재 아이디어.
-  메아리가 생성될때 해당 메아리를 서버로 보냄
-  보낼 때 작성자, 내용 뿐만 아니라 위치정보까지 함께 보냄 -> 위치 정보로 지도에 디스플레이
-  그리고 이 내용을 주기적으로 받아서 refetch 시켜줌
-  이걸 통해서 지도에 실시간 통신하는것 처럼 보여줌
-  */
   const makeMeari = (map, comment, latitude, longitude) => {
     // 커스텀 오버레이가 표시될 위치입니다
     var position = new kakao.maps.LatLng(latitude, longitude);

@@ -1,4 +1,4 @@
-function Button({ usage, onClick, className }) {
+function Button({ usage, onClick, className, children }) {
   return (
     <button
       className={className}
@@ -6,7 +6,7 @@ function Button({ usage, onClick, className }) {
       onClick={onClick}
       style={{ margin: "10px", zIndex: 5 }}
     >
-      {usage}
+      {usage ? usage : children}
     </button>
   );
 }
