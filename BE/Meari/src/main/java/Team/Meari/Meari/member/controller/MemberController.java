@@ -1,7 +1,14 @@
 package Team.Meari.Meari.member.controller;
 
+import Team.Meari.Meari.chat.dto.ChatResDto;
+import Team.Meari.Meari.chat.entity.Chat;
+import Team.Meari.Meari.chat.service.ChatService;
+import Team.Meari.Meari.global.security.dto.CustomMultiResDto;
 import Team.Meari.Meari.global.dto.MultiResDto;
 import Team.Meari.Meari.global.dto.SingleResDto;
+import Team.Meari.Meari.global.security.dto.LoginDto;
+import Team.Meari.Meari.global.security.dto.TokenDto;
+import Team.Meari.Meari.global.security.utils.SecurityUtils;
 import Team.Meari.Meari.member.dto.MemberPatchReqDto;
 import Team.Meari.Meari.member.dto.MemberPostReqDto;
 import Team.Meari.Meari.member.dto.MemberResDto;
@@ -22,6 +29,30 @@ import java.util.stream.Collectors;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
+    private final ChatService chatService;
+
+//    @PostMapping("/login")
+//    public TokenDto login(@RequestBody LoginDto loginDto) {
+//        String email = loginDto.getEmail();
+//        String password = loginDto.getPassword();
+//        TokenDto tokenDto = memberService.login(email, password);
+//        return tokenDto;
+//    }
+
+    /**
+     * 로그인
+     * @param loginDto
+     * @return
+     */
+    @PostMapping("/login")
+    public ResponseEntity<CustomMultiResDto> login(@RequestBody LoginDto loginDto) {
+        String email = loginDto.getEmail();
+        String password = loginDto.getPassword();
+        TokenDto tokenDto = memberService.login(email, password);
+        Member member = memberService.findMember(loginDto.getEmail());
+        MemberResDto memberResDto = new MemberResDto(member);
+        return new ResponseEntity<>(new CustomMultiResDto(tokenDto, memberResDto), HttpStatus.OK);
+    }
 
     /**
      * Post 요청
@@ -63,12 +94,12 @@ public class MemberController {
 
     /**
      * 단일 회원 조회
-     * @param memberId
+     * @param email
      * @return
      */
-    @GetMapping("/{member-id}")
-    public ResponseEntity<SingleResDto<MemberResDto>> getMember(@PathVariable(value = "member-id") Long memberId) {
-        Member member = memberService.findMember(memberId);
+    @GetMapping("/{email}")
+    public ResponseEntity<SingleResDto<MemberResDto>> getMember(@PathVariable(value = "email") String email) {
+        Member member = memberService.findMember(email);
         MemberResDto response = new MemberResDto(member);
 
         return new ResponseEntity<>(new SingleResDto<>(response), HttpStatus.OK);
