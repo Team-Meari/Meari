@@ -1,7 +1,6 @@
 package Team.Meari.Meari.global.security.config;
 
 import Team.Meari.Meari.global.security.filter.JwtAuthenticationFilter;
-import Team.Meari.Meari.global.security.filter.JwtVerificationFilter;
 import Team.Meari.Meari.global.security.handler.CustomAccessDeniedHandler;
 import Team.Meari.Meari.global.security.handler.CustomAuthenticationEntryPoint;
 import Team.Meari.Meari.global.security.handler.LoginFailureHandler;
@@ -20,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,7 +35,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
-    private final MemberService memberService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,15 +52,21 @@ public class SecurityConfiguration {
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .accessDeniedHandler(new CustomAccessDeniedHandler())
-
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(new AntPathRequestMatcher("/members")).permitAll()
+                .antMatchers("/members/login").permitAll()
+                .antMatchers("/members/**").permitAll()
+                .antMatchers("/chats/find-all").permitAll()
+                .antMatchers("/chats/**").permitAll()
+                .antMatchers("/chats").hasAuthority("USER")
+
                 .anyRequest().authenticated()
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll()); 모든 api 허용함
                 .and()
-                .apply(new CustomFilterConfigurer());
+
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().permitAll()) //모든 api 허용함
+
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenizer), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -82,27 +87,6 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-        @Override
-        public void configure(HttpSecurity builder) throws Exception {
-            log.info("SecurityConfiguration.CustomFilterConfigurer.configure excute");
-            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberService);
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer);
-
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
-
-            builder
-                    .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-                }
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() { return web -> web.debug(true); }
 
 // 순환 참조 방지를 위해 따로 클래스를 생성
 //    @Bean

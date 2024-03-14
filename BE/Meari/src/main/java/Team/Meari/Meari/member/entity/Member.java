@@ -2,10 +2,7 @@ package Team.Meari.Meari.member.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +15,12 @@ public class Member {
     private String password;
     private String nickname;
     private MemberStatus memberStatus;
-    private String role;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    public List<String> roles = new ArrayList<>();
 
 
-    @NoArgsConstructor
-    public enum MemberRole{
-        USER("사용자"),
-        ADMIN("관리자");
-
-        @Getter
-        private String role;
-        MemberRole(String role){
-            this.role = role;
-        }
-    }
     @NoArgsConstructor
     public enum MemberStatus{
         MEMBER_ACTIVE("활성 계정"),

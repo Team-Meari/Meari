@@ -2,61 +2,41 @@ package Team.Meari.Meari.global.security.userDetails;
 
 import Team.Meari.Meari.global.security.utils.CustomAuthorityUtils;
 import Team.Meari.Meari.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-@ToString
+@ToString()
 public class CustomUserDetails extends Member implements UserDetails {
-    private Long memberId;
-    private String email;
-    private String role;
-    private String password;
-
-    private CustomUserDetails(Member member) {
-        this.memberId = member.getMemberId();
-        this.email = member.getEmail();
-        this.password = member.getPassword();
-        this.role = member.getRole();
-    }
-
-    private CustomUserDetails(String email, String role) {
-        this.email = email;
-        this.role = role;
-    }
-
-    private CustomUserDetails(String email, String password, String role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public static CustomUserDetails of(Member member) {
-        return new CustomUserDetails(member);
-    }
-
-    public static CustomUserDetails of(String email, String role) {
-        return new CustomUserDetails(email, role);
-    }
-
-    public static CustomUserDetails of(String email, String password, String role) {
-        return new CustomUserDetails(email, password, role);
+    CustomUserDetails(Member member){
+        setMemberId(member.getMemberId());
+        setEmail(member.getEmail());
+        setNickname(member.getNickname());
+        setMemberStatus(member.getMemberStatus());
+        setPassword(member.getPassword());
+        setRoles(member.getRoles());
     }
 
     @Override
-    public List<GrantedAuthority> getAuthorities() {
-        return CustomAuthorityUtils.createAuthorities(role);
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return getEmail();
     }
 
     @Override
