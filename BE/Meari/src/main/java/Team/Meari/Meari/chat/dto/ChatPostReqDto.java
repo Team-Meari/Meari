@@ -1,6 +1,7 @@
 package Team.Meari.Meari.chat.dto;
 
 import Team.Meari.Meari.chat.entity.Chat;
+import Team.Meari.Meari.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +11,12 @@ public class ChatPostReqDto {
     private double latitude;
     private double longitude;
 
-    public Chat toEntity() {
-        Chat chat = new Chat().builder()
+    public Chat toChat(Member member) {
+        Chat chat = Chat.builder()
                 .content(this.content)
                 .latitude(this.latitude)
                 .longitude(this.longitude)
+                .member(member)
                 .build();
         return chat;
     }

@@ -4,6 +4,7 @@ import Team.Meari.Meari.chat.entity.Chat;
 import Team.Meari.Meari.chat.repository.ChatRepository;
 import Team.Meari.Meari.global.exception.dto.BusinessLogicException;
 import Team.Meari.Meari.global.exception.exception.ExceptionCode;
+import Team.Meari.Meari.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,11 @@ public class ChatService {
     @Transactional
     public Page<Chat> findChats(Pageable pageable){
         return chatRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Page<Chat> findMyChats(Pageable pageable, Member member) {
+        return chatRepository.findAllByMember(pageable, member);
     }
 
 }
