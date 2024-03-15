@@ -27,7 +27,7 @@ const Section = styled.div`
   z-index: 5;
   position: absolute;
   width: 460px;
-  height: 800px;
+  height: 850px;
   left: 40px;
   top: 40px;
 
