@@ -41,7 +41,7 @@ function MeariList({ data }) {
             <ListContent
               key={index}
               value={item?.content}
-              author={item?.chatId}
+              author={item?.nickName}
             />
           ))
         : null}

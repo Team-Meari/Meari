@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import BasicMap from "./componentes/Map";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
-import { useMap } from "./hooks/useMap";
 import MeariList from "./routes/MeariList";
 import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
@@ -21,13 +21,6 @@ const Wrapper = styled.div`
   width: 1920px;
   height: 960px;
   background: #ffffff;
-`;
-
-const Map = styled.div`
-  z-index: 0;
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
 `;
 
 const Section = styled.div`
@@ -60,7 +53,7 @@ const Menu = styled.div`
 `;
 
 const MainLink = styled(Link)`
-  width: 56px;
+  width: auto;
   height: 16px;
 
   font-family: "Pretendard";
@@ -184,18 +177,10 @@ const Svg = styled.svg`
 `;
 
 function App() {
-  const { map, makeMeari, myposition } = useMap();
+  const [myposition, setPosition] = useState(null);
   const { nickname, memberId } = useContext(userContext);
   const { auth } = useContext(AuthContext);
   const input = useInput("");
-
-  // const userdata = useGetAxios(
-  //   {
-  //     url: apiurl + "members/find-all",
-  //     method: "GET",
-  //   },
-  //   "userdata"
-  // );
 
   const mearidata = useGetAxios(
     {
@@ -204,6 +189,17 @@ function App() {
     },
     "mearidata"
   );
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setPosition(position.coords);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, []);
 
   const { mutation } = usePostAxios("mearidata");
 
@@ -222,19 +218,6 @@ function App() {
     input.textClear();
   };
 
-  // const onMemberTest = () => {
-  //   userdata.refetch();
-  //   console.log(userdata.data);
-  // };
-
-  useEffect(() => {
-    mearidata.data?.map((item, index) => {
-      return makeMeari(map, item?.content, item?.latitude, item?.longitude);
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [[], mearidata.data]);
-
   return (
     <Wrapper>
       <Section>
@@ -246,7 +229,7 @@ function App() {
           {/* mypage로 이동하는 버튼 */}
           {auth ? (
             <MainLink to={`/mypage/${nickname}/${memberId}`}>
-              <text>마이페이지</text>
+              마이페이지
             </MainLink>
           ) : null}
           {/* 회원가입으로 이동하는 버튼 */}
@@ -254,11 +237,16 @@ function App() {
         </Menu>
 
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-        <MeariList data={mearidata.data} />
+        <MeariList data={mearidata.data?.data} />
 
         {/* <RedButton usage={"멤버 읽기"} onClick={onMemberTest} /> */}
       </Section>
-      <Map id="map"></Map>
+
+      <BasicMap
+        lat={myposition?.latitude}
+        lng={myposition?.longitude}
+        mearidata={mearidata}
+      />
       <InputContainer>
         <MeariInput
           name={"mearivalue"}

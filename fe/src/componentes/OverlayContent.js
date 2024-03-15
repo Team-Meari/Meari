@@ -1,8 +1,11 @@
-.wrapper {
+import styled from "styled-components";
+import { useState } from "react";
+
+const Wrapper = styled.div`
   /* Frame 22 */
 
   box-sizing: border-box;
-
+  z-index: ${(props) => (props.$isClicked ? "auto" : "10")};
   /* Auto layout */
   display: flex;
   flex-direction: column;
@@ -11,15 +14,20 @@
   gap: 10px;
 
   position: absolute;
-  width: 210px;
-  height: 116px;
+  width: auto;
+  height: ${(props) => (props.$isClicked ? "auto" : "116px")};
+  transition: height 1ms ease;
 
   background: #ffffff;
   border: 1px solid #f4f4f4;
   border-radius: 16px;
-}
 
-.wrapper .content {
+  &:hover {
+    z-index: 10;
+  }
+`;
+
+const Content = styled.div`
   /* Frame 23 */
 
   /* Auto layout */
@@ -29,20 +37,20 @@
   padding: 0px;
   gap: 10px;
 
-  width: 170px;
-  height: 76px;
+  width: auto;
+  height: auto;
 
   /* Inside auto layout */
   flex: none;
   order: 0;
   flex-grow: 0;
-}
+`;
 
-.content .text {
+const Text = styled.text`
   /* 모든 국민은 법률이 정하는 바에 의하여 국... */
 
-  width: 170px;
-  height: 50px;
+  width: ${(props) => (props.$isClicked ? "330px" : "220px")};
+  height: auto;
 
   font-family: "Pretendard";
   font-style: normal;
@@ -53,19 +61,21 @@
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: ${(props) =>
+    props.$isClicked ? "horizontal" : "vertical"};
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
   white-space: normal;
+
   color: #1d1d1d;
 
   /* Inside auto layout */
   flex: none;
   order: 0;
   flex-grow: 0;
-}
+`;
 
-.content .subtext {
+const Subtext = styled.text`
   /* Frame 33 */
 
   /* Auto layout */
@@ -75,17 +85,17 @@
   padding: 0px;
   gap: 10px;
 
-  width: 170px;
-  height: 16px;
+  width: auto;
+  height: auto;
 
   /* Inside auto layout */
   flex: none;
   order: 1;
   align-self: stretch;
   flex-grow: 0;
-}
+`;
 
-.subtext .date {
+const Date = styled.text`
   /* 24.03.11 */
 
   width: 80px;
@@ -104,9 +114,9 @@
   flex: none;
   order: 0;
   flex-grow: 1;
-}
+`;
 
-.subtext .minute {
+const Minute = styled.text`
   /* 3분전 */
 
   width: 80px;
@@ -126,4 +136,22 @@
   flex: none;
   order: 1;
   flex-grow: 1;
+`;
+
+export default function OverlayContent({ content }) {
+  const [isClicked, setIsClicked] = useState(false);
+  const onClick = (e) => {
+    setIsClicked(!isClicked);
+  };
+  return (
+    <Wrapper onClick={onClick} $isClicked={isClicked}>
+      <Content>
+        <Text $isClicked={isClicked}>{content}</Text>
+        <Subtext>
+          <Date>23.03.15</Date>
+          <Minute>3분전</Minute>
+        </Subtext>
+      </Content>
+    </Wrapper>
+  );
 }

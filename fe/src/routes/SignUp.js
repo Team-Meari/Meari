@@ -303,7 +303,7 @@ const SubMitText = styled.text`
 `;
 
 const SignUpButton = styled.text`
-  width: 70px;
+  width: auto;
   height: 16px;
 
   font-family: "Pretendard";
