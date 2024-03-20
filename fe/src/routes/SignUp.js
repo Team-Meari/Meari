@@ -20,9 +20,9 @@ const customStyles = {
   },
   content: {
     position: "absolute",
-    width: "589px",
+    width: "549px",
     height: "800px",
-    left: "calc(50% - 589px/2 + 0.5px)",
+    left: "calc(50% - 549px/2 + 0.5px)",
     top: "calc(50% - 800px/2 + 0.5px)",
 
     background: " #FFFFFF",
@@ -38,7 +38,6 @@ const Form = styled.form`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 10px;
 
   position: absolute;
   width: 529px;
@@ -90,6 +89,7 @@ const EmailInput = styled.div`
 
   width: 529px;
   height: 99px;
+  gap: 10px;
 
   /* Inside auto layout */
   flex: none;
@@ -97,17 +97,19 @@ const EmailInput = styled.div`
   flex-grow: 0;
 `;
 
-const IdInput = styled(EmailInput)`
+const IdInput = styled.div`
   height: 105px;
   order: 1;
 `;
 
 const PwInput = styled.div`
+  ${EmailInput};
   height: 105px;
   order: 2;
 `;
 
 const PwConfirm = styled.div`
+  ${EmailInput};
   height: 105px;
   order: 3;
 `;
@@ -148,7 +150,8 @@ const ExText = styled.text`
   order: 0;
   flex-grow: 0;
 `;
-const Star = styled.svg`
+
+const Star = styled.text`
   /* * */
 
   width: 9px;
@@ -176,13 +179,50 @@ const CustomInput = styled(Input)`
 
   /* position: absolute; */
   width: 529px;
-  height: 45px;
+  height: 55px;
   left: 0px;
   top: 28px;
 
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+`;
+
+const CustomIdInput = styled(CustomInput)`
+  width: 386px;
+`;
+
+const IdConfirm = styled(Button)`
+  /* Frame 44 */
+
+  position: absolute;
+  width: 133px;
+  height: 55px;
+  left: 396px;
+
+  background: #0cb46c;
+  border-radius: 16px;
+  border: none;
+`;
+
+const ConfirmText = styled.text`
+  /* 중복확인 */
+
+  position: absolute;
+  width: 63px;
+  height: 18px;
+  left: calc(50% - 63px / 2);
+  top: calc(50% - 18px / 2 - 0.5px);
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  /* identical to box height, or 18px */
+  text-align: center;
+
+  color: #ffffff;
 `;
 
 const HelperText = styled.div`
@@ -266,11 +306,156 @@ const Close = styled(Button)`
   border: none;
 `;
 
+const TermText = styled.text`
+  /* 약관동의 */
+
+  position: absolute;
+  width: 63px;
+  height: 18px;
+  left: 30px;
+  top: 597px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  /* identical to box height, or 18px */
+
+  color: #1d1d1d;
+`;
+const TermForm = styled.div`
+  /* Frame 47 */
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px;
+  gap: 12px;
+
+  position: absolute;
+  width: 500px;
+  height: 95px;
+  left: 30px;
+  top: 625px;
+
+  background: #f8f8f8;
+  border-radius: 16px;
+`;
+
+const TermWrapper1 = styled.div`
+  /* Frame 48 */
+
+  width: 497px;
+  height: 20px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+const TermWrapper2 = styled(TermWrapper1)`
+  /* Frame 52 */
+
+  width: 499px;
+  height: 18px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+`;
+const TermWrapper3 = styled(TermWrapper1)`
+  /* Frame 51 */
+
+  width: 498px;
+  height: 20px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+`;
+
+const TermSet = styled.div`
+  /* Frame 49 */
+
+  position: absolute;
+  width: 181px;
+  height: 25px;
+`;
+
+const CustomTerm = styled(Input)`
+  /* 약관 전체동의 */
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+
+  color: #1d1d1d;
+`;
+const Label1 = styled.label`
+  /* 약관 전체동의 */
+
+  position: absolute;
+  width: 107px;
+  height: 16px;
+  left: 45px;
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+
+  color: #1d1d1d;
+`;
+const Label2 = styled.label`
+  /* 이용약관 동의(필수) */
+
+  position: absolute;
+  width: 190px;
+  height: 16px;
+  left: 30px;
+  top: 2px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+
+  color: #666666;
+`;
+
+const Detail = styled.text`
+  /* 자세히보기 */
+
+  position: absolute;
+  width: 61px;
+  height: 14px;
+  right: 10px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  /* identical to box height, or 14px */
+  display: flex;
+  align-items: center;
+  text-decoration-line: underline;
+
+  color: #666666;
+`;
+
 const SubMitBtn = styled(Button)`
   /* btn-lg */
-  width: 559px;
-  top: 635px;
-
   position: absolute;
   height: 65px;
   left: 0px;
@@ -377,40 +562,22 @@ function SignUp() {
           <Form>
             <EmailInput>
               <Explain>
-                <ExText>이메일</ExText>
-                <Star
-                  width="8"
-                  height="8"
-                  viewBox="0 0 8 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                    fill="#FF2828"
-                  />
-                </Star>
+                <ExText $widths={"37px"}>이메일</ExText>
+                <Star>*</Star>
               </Explain>
               <CustomInput name={"email"} {...email} />
               <HelperText>HelperText</HelperText>
             </EmailInput>
+
             <IdInput>
               <Explain>
-                <ExText>아이디</ExText>
-                <Star
-                  width="8"
-                  height="8"
-                  viewBox="0 0 8 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                    fill="#FF2828"
-                  />
-                </Star>
+                <ExText $widths={"37px"}>아이디</ExText>
+                <Star>*</Star>
               </Explain>
-              <CustomInput name={"nickname"} {...nickname} />
+              <CustomIdInput name={"nickname"} {...nickname} />
+              <IdConfirm>
+                <ConfirmText>중복확인</ConfirmText>
+              </IdConfirm>
               <IdHelper>
                 <ErrorSvg>
                   <svg
@@ -431,21 +598,11 @@ function SignUp() {
                 </ErrorText>
               </IdHelper>
             </IdInput>
+
             <PwInput>
               <Explain>
-                <ExText $widths={"63px"}>비밀번호</ExText>
-                <Star
-                  width="8"
-                  height="8"
-                  viewBox="0 0 8 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                    fill="#FF2828"
-                  />
-                </Star>
+                <ExText $widths={"49px"}>비밀번호</ExText>
+                <Star>*</Star>
               </Explain>
               <CustomInput name={"password"} {...password} />
               <PwHelper>
@@ -466,21 +623,11 @@ function SignUp() {
                 <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
               </PwHelper>
             </PwInput>
+
             <PwConfirm>
               <Explain>
-                <ExText $widths={"98px"}>비밀번호 확인</ExText>
-                <Star
-                  width="8"
-                  height="8"
-                  viewBox="0 0 8 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                    fill="#FF2828"
-                  />
-                </Star>
+                <ExText $widths={"77px"}>비밀번호 확인</ExText>
+                <Star>*</Star>
               </Explain>
               <CustomInput name={"pwconfirm"} {...pwConfirm} />
               <ConfirmHelper>
@@ -501,28 +648,53 @@ function SignUp() {
                 <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
               </ConfirmHelper>
             </PwConfirm>
+          </Form>
 
-            <SubMitBtn
+          <TermText>약관동의</TermText>
+          <TermForm>
+            <TermWrapper1>
+              <CustomTerm id="option1" type="radio"></CustomTerm>
+              <Label1 for="option1">약관 전체동의</Label1>
+            </TermWrapper1>
+
+            <TermWrapper2>
+              <TermSet>
+                <CustomTerm id="option2" type="radio"></CustomTerm>
+                <Label2 for="option2">이용약관 동의(필수)</Label2>
+              </TermSet>
+
+              <Detail>자세히보기</Detail>
+            </TermWrapper2>
+
+            <TermWrapper3>
+              <TermSet>
+                <CustomTerm id="option3" type="radio"></CustomTerm>
+                <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
+              </TermSet>
+              <Detail>자세히보기</Detail>
+            </TermWrapper3>
+          </TermForm>
+
+          <SubMitBtn
+            $isfilled={
+              email.value !== "" &&
+              nickname.value !== "" &&
+              password.value !== "" &&
+              pwConfirm.value !== ""
+            }
+            onClick={onSubmit}
+          >
+            <SubMitText
               $isfilled={
                 email.value !== "" &&
                 nickname.value !== "" &&
                 password.value !== "" &&
                 pwConfirm.value !== ""
               }
-              onClick={onSubmit}
             >
-              <SubMitText
-                $isfilled={
-                  email.value !== "" &&
-                  nickname.value !== "" &&
-                  password.value !== "" &&
-                  pwConfirm.value !== ""
-                }
-              >
-                회원가입하기
-              </SubMitText>
-            </SubMitBtn>
-          </Form>
+              회원가입하기
+            </SubMitText>
+          </SubMitBtn>
 
           <Close onClick={closeModal}>
             <svg

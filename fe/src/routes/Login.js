@@ -1,15 +1,16 @@
 import Modal from "react-modal";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../componentes/Button";
 import Input from "../componentes/Input";
 import { useInput } from "../hooks/useInput";
 import { usePostAxios } from "../hooks/useAxios";
 import AuthContext from "../contexts/AuthProvider";
 import styled from "styled-components";
+import { Bar, LoginButton, Menu } from "../App";
 
 const apiurl = process.env.REACT_APP_URL;
 
-const customStyles = {
+const customLoginStyles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
     width: "100%",
@@ -22,7 +23,7 @@ const customStyles = {
   content: {
     position: "absolute",
     width: "559px",
-    height: "419px",
+    height: "400px",
     left: "calc(50% - 559px/2 + 0.5px)",
     top: "calc(50% - 419px/2 - 0.5px)",
 
@@ -31,24 +32,29 @@ const customStyles = {
   },
 };
 
-const LoginButton = styled.text`
-  width: auto;
-  height: 16px;
+const customLogOutStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    /* 마이페이지/탈퇴하기 */
 
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 100%;
-  /* identical to box height, or 16px */
+    position: "absolute",
+    width: "460px",
+    height: "196px",
+    left: "calc(50% - 460px/2)",
+    top: "calc(50% - 196px/2)",
 
-  color: #666666;
-
-  /* Inside auto layout */
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-`;
+    background: "#FFFFFF",
+    borderRadius: " 26px",
+  },
+};
 
 const Title = styled.text`
   /* 로그인해주세요 */
@@ -139,6 +145,18 @@ const LogText = styled.text`
   color: ${(props) => (props.$isfilled ? "#FFFFFF" : "#b6b6b6")};
 `;
 
+const FindMenu = styled(Menu)`
+  width: 178px;
+  height: 16px;
+  left: 28px;
+  top: 293px;
+`;
+const FindBar = styled(Bar)``;
+const FindId = styled(LoginButton)``;
+const FindPw = styled(LoginButton)`
+  order: 2;
+`;
+
 const Close = styled(Button)`
   position: absolute;
   height: 24px;
@@ -149,21 +167,6 @@ const Close = styled(Button)`
   background-color: transparent;
   border: none;
 `;
-
-const useModal = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
-    return { isModalOpen };
-  }
-
-  return { openModal, closeModal, isModalOpen };
-};
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
@@ -191,7 +194,7 @@ function Login({ closeModal, isModalOpen }) {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={customLoginStyles}
         contentLabel="Login"
       >
         <Title>로그인해주세요</Title>
@@ -212,6 +215,11 @@ function Login({ closeModal, isModalOpen }) {
             </LogText>
           </LogButton>
         </form>
+        <FindMenu>
+          <FindId>아이디찾기</FindId>
+          <FindBar>|</FindBar>
+          <FindPw>비밀번호찾기</FindPw>
+        </FindMenu>
         <Close onClick={closeModal}>
           <svg
             width="24"
@@ -230,6 +238,88 @@ function Login({ closeModal, isModalOpen }) {
     </>
   );
 }
+
+export const LogOutText = styled.text`
+  /* 로그아웃하시겠습니까? */
+
+  position: absolute;
+  width: 460px;
+  height: 22px;
+  left: calc(50% - 460px / 2);
+  top: 81px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 100%;
+  /* identical to box height, or 22px */
+  text-align: center;
+
+  color: #000000;
+`;
+export const Cancle = styled(Button)`
+  /* btn-lg */
+
+  position: absolute;
+  height: 65px;
+  left: 0px;
+  right: 50%;
+  bottom: 0px;
+  border: none;
+
+  background: #ececec;
+`;
+export const CancleText = styled.text`
+  /* 로그인하기 */
+
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 23px;
+  bottom: 22px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  /* identical to box height, or 20px */
+  text-align: center;
+
+  color: #1d1d1d;
+`;
+export const SubmitOut = styled(Button)`
+  /* btn-lg */
+
+  position: absolute;
+  height: 65px;
+  left: 50%;
+  right: 0px;
+  bottom: 0px;
+  border: none;
+
+  background: #0cb46c;
+`;
+export const OutText = styled.text`
+  /* 로그아웃하기 */
+
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 23px;
+  bottom: 22px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  /* identical to box height, or 20px */
+  text-align: center;
+
+  color: #ffffff;
+`;
 
 function Logout({ closeModal, isModalOpen, setAuth }) {
   const onClick = () => {
@@ -237,53 +327,52 @@ function Logout({ closeModal, isModalOpen, setAuth }) {
     setAuth(false);
     closeModal();
   };
+
   return (
     <>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={customLogOutStyles}
         contentLabel="Logout"
       >
-        <Title>로그아웃 하시나요??</Title>
-        <Button usage={"LogOut"} onClick={onClick}></Button>
-        <Button usage={"CLOSE"} onClick={closeModal}></Button>
-        <Close onClick={closeModal}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
-              fill="black"
-            />
-          </svg>
-        </Close>
+        <LogOutText>로그아웃 하시나요??</LogOutText>
+        <Cancle onClick={closeModal}>
+          <CancleText>취소하기</CancleText>
+        </Cancle>
+        <SubmitOut onClick={onClick}>
+          <OutText>로그아웃</OutText>
+        </SubmitOut>
       </Modal>
     </>
   );
 }
 
-function LogModal() {
+function LogModal({ LoginOpen, setLoginOpen }) {
   const { auth, setAuth } = useContext(AuthContext);
-  const { openModal, closeModal, isModalOpen } = useModal();
+
+  const openModal = () => {
+    setLoginOpen(true);
+  };
+
+  const closeModal = () => {
+    setLoginOpen(false);
+  };
+  useEffect(() => {
+    openModal();
+    console.log("로그인 오픈");
+  }, []);
 
   return (
     <>
-      <LoginButton onClick={openModal}>
-        {auth ? "로그아웃" : "로그인"}
-      </LoginButton>
       {auth ? (
         <Logout
           closeModal={closeModal}
-          isModalOpen={isModalOpen}
+          isModalOpen={LoginOpen}
           setAuth={setAuth}
         />
       ) : (
-        <Login closeModal={closeModal} isModalOpen={isModalOpen} />
+        <Login closeModal={closeModal} isModalOpen={LoginOpen} />
       )}
     </>
   );

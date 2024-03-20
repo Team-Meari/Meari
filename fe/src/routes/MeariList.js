@@ -3,7 +3,6 @@ import { useState } from "react";
 import ListContent from "../componentes/ListContent";
 import styled from "styled-components";
 import Pagination from "rc-pagination";
-import Button from "../componentes/Button";
 
 const ListWrapper = styled.div`
   position: absolute;
@@ -12,6 +11,7 @@ const ListWrapper = styled.div`
   left: 30px;
   top: 152px;
   overflow-y: scroll;
+  overflow-x: hidden;
 
   background: #f8f8f8;
   border-radius: 16px;
@@ -28,9 +28,30 @@ const ListWrapper = styled.div`
     background-color: #ebebeb;
     border-radius: 10px;
   }
+
+  ${(props) =>
+    props.$custom
+      ? `
+    /* Frame 62 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    
+
+    position: absolute;
+    width: 1012px;
+    height: 596px;
+    left: 658px;
+    top: 224px;
+  `
+      : ` `}
 `;
 
-const StyledPagination = styled(Pagination)`
+export const StyledPagination = styled(Pagination)`
   /* Frame 24 */
   display: flex;
   align-items: center;
@@ -41,6 +62,18 @@ const StyledPagination = styled(Pagination)`
   height: 40px;
   left: calc(50% - 365px / 2);
   top: 770px;
+
+  ${(props) =>
+    props.$custom &&
+    `
+    /* Frame 29 */
+
+    position: absolute;
+    width: 302px;
+    height: 40px;
+    left: calc(50% - 302px/2 + 204px);
+    top: 840px;
+  `}
 
   a,
   a:hover,
@@ -172,7 +205,7 @@ const StyledPagination = styled(Pagination)`
   }
 `;
 
-function MeariList({ data }) {
+function MeariList({ data, $custom }) {
   const { mearilist } = useList(data);
   const [perPage, setPerPage] = useState(10);
   const [size, setSize] = useState(perPage);
@@ -238,13 +271,14 @@ function MeariList({ data }) {
 
   return (
     <>
-      <ListWrapper>
+      <ListWrapper $custom={$custom}>
         {mearilist
           ? getData(current, size, mearilist).map((item, index) => (
               <ListContent
                 key={index}
                 value={item?.content}
                 author={item?.nickName}
+                $custom
               />
             ))
           : null}
@@ -259,6 +293,7 @@ function MeariList({ data }) {
         itemRender={PrevNextArrow}
         onShowSizeChange={PerPageChange}
         showTitle={false}
+        $custom={$custom}
       />
     </>
   );

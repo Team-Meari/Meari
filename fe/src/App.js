@@ -19,8 +19,60 @@ const Wrapper = styled.div`
   display: flex;
   position: relative;
   width: 1920px;
-  height: 960px;
+  height: 910px;
   background: #ffffff;
+`;
+
+const OpenContainer = styled.div`
+  /* Frame 1 */
+
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 40px;
+  top: 40px;
+
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 26px;
+`;
+
+const Open = styled(Button)`
+  /* Frame 9 */
+
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 20px;
+  top: 20px;
+
+  background: #f8f8f8;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  border: none;
+`;
+
+const OpenWrapper = styled.div`
+  /* skip-left-line */
+
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  left: 27px;
+  top: 12px;
+
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+`;
+
+const OpenSvg = styled.svg`
+  /* Vector */
+
+  position: absolute;
+  left: 70%;
+  right: -11.3%;
+  top: 27.5%;
+  bottom: 28.71%;
+
+  transform: matrix(-1, 0, 0, 1, 0, 0);
 `;
 
 const Section = styled.div`
@@ -33,9 +85,64 @@ const Section = styled.div`
 
   background: #ffffff;
   border-radius: 26px;
+
+  ${(props) =>
+    props.$isfold
+      ? `
+        max-height: 0px;
+        max-width: 0px;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out,max-width 0.5s ease-out, opacity 0.5s ease-out;
+        animation-timing-function: ease-in;
+        animation-duration: 300ms;
+  `
+      : `
+        max-height: 850px;
+        max-width: 460px;
+        opacity: 1;
+        transition: max-height 0.5s ease-out,max-width 0.5s ease-out, opacity 0.5s ease-out;
+        animation-timing-function: ease-in;
+        animation-duration: 300ms;
+      
+      `}
 `;
 
-const Menu = styled.div`
+const Fold = styled(Button)`
+  /* Frame 9 */
+
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 369px;
+  top: 41px;
+
+  background: #f8f8f8;
+  border-radius: 16px;
+  border: none;
+`;
+
+const FoldWrapper = styled.div`
+  /* skip-left-line */
+
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  left: 10px;
+  top: 10px;
+`;
+
+const FoldSvg = styled.svg`
+  /* Vector */
+
+  position: absolute;
+  left: 30%;
+  right: 28.7%;
+  top: 27.5%;
+  bottom: 28.71%;
+`;
+
+export const Menu = styled.div`
   /* Auto layout */
   display: flex;
   flex-direction: row;
@@ -52,7 +159,7 @@ const Menu = styled.div`
   background-color: "#FFFFFF";
 `;
 
-const MainLink = styled(Link)`
+export const MainLink = styled(Link)`
   width: auto;
   height: 16px;
 
@@ -72,7 +179,7 @@ const MainLink = styled(Link)`
   background-color: transparent;
 `;
 
-const Bar = styled.text`
+export const Bar = styled.text`
   /* | */
 
   width: 5px;
@@ -133,6 +240,18 @@ const InputContainer = styled.div`
   box-shadow: 0px 4px 34px rgba(6, 106, 63, 0.45);
   border-radius: 26px;
   border: none;
+
+  ${(props) =>
+    props.$isfold
+      ? `
+      transform: translateX(-175px); /* 접혔을 때의 위치 */
+      transition: transform 0.5s ease-out
+  `
+      : `
+      transform: translateX(0); /* 펼쳐졌을 때의 위치 */
+      transition: transform 0.5s ease-out
+      
+      `}
 `;
 
 const MeariInput = styled(Input)`
@@ -158,8 +277,8 @@ const MeariSubmit = styled(Button)`
   position: absolute;
   width: 50px;
   height: 50px;
-  right: 10px;
-  top: 12px;
+  right: 20px;
+  top: 23px;
 
   background: #11a968;
   border-radius: 16px;
@@ -176,11 +295,33 @@ const Svg = styled.svg`
   top: 15px;
 `;
 
+export const LoginButton = styled(Button)`
+  width: auto;
+  height: 16px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+  background-color: transparent;
+  border: none;
+  color: #666666;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+
 function App() {
   const [myposition, setPosition] = useState(null);
+  const [isFold, setIsFold] = useState(false);
   const { nickname, memberId } = useContext(userContext);
   const { auth } = useContext(AuthContext);
   const input = useInput("");
+  const [LoginOpen, setLoginOpen] = useState(false);
 
   const mearidata = useGetAxios(
     {
@@ -218,13 +359,70 @@ function App() {
     input.textClear();
   };
 
+  const onLoginClick = () => {
+    setLoginOpen(true);
+  };
+
   return (
     <Wrapper>
-      <Section>
+      <OpenContainer>
+        <Open
+          onClick={() => {
+            setIsFold((prev) => {
+              return !prev ? true : false;
+            });
+            console.log(isFold);
+          }}
+        >
+          <OpenWrapper>
+            <OpenSvg
+              width="17"
+              height="18"
+              viewBox="0 0 17 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.24331 8.75888L0.48 1.99561L2.47559 0L11.2345 8.75888L2.47559 17.5178L0.48 15.5222L7.24331 8.75888ZM17 17.2255V0.292241H14.1778V17.2255H17Z"
+                fill="#999999"
+              />
+            </OpenSvg>
+          </OpenWrapper>
+        </Open>
+      </OpenContainer>
+      <Section $isfold={isFold}>
         <Title>MEARI</Title>
+        <Fold
+          onClick={() => {
+            setIsFold((prev) => {
+              return !prev ? true : false;
+            });
+            console.log(isFold);
+          }}
+        >
+          <FoldWrapper>
+            <FoldSvg
+              width="17"
+              height="18"
+              viewBox="0 0 17 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.75669 8.75888L16.52 1.99561L14.5244 0L5.76551 8.75888L14.5244 17.5178L16.52 15.5222L9.75669 8.75888ZM0 17.2255V0.292241H2.82222V17.2255H0Z"
+                fill="#999999"
+              />
+            </FoldSvg>
+          </FoldWrapper>
+        </Fold>
         <Menu>
           {/* 로그인 모달 컴포넌트 LogModal */}
-          <LogModal />
+          <LoginButton onClick={onLoginClick}>
+            {auth ? "로그아웃" : "로그인"}
+          </LoginButton>
+          {LoginOpen ? (
+            <LogModal LoginOpen={LoginOpen} setLoginOpen={setLoginOpen} />
+          ) : null}
           <Bar>|</Bar>
           {/* mypage로 이동하는 버튼 */}
           {auth ? (
@@ -237,7 +435,7 @@ function App() {
         </Menu>
 
         {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
-        <MeariList data={mearidata.data?.data} />
+        <MeariList $custom={false} data={mearidata.data?.data} />
 
         {/* <RedButton usage={"멤버 읽기"} onClick={onMemberTest} /> */}
       </Section>
@@ -247,7 +445,7 @@ function App() {
         lng={myposition?.longitude}
         mearidata={mearidata}
       />
-      <InputContainer>
+      <InputContainer $isfold={isFold}>
         <MeariInput
           name={"mearivalue"}
           placeholder={"메아리를 외쳐보세요!!"}

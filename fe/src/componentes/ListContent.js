@@ -22,6 +22,30 @@ const Wrapper = styled.div`
   order: 0;
   align-self: stretch;
   flex-grow: 0;
+
+  ${(props) =>
+    props.$custom &&
+    `
+    /* Frame 55 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+    margin-bottom: -10px;
+
+    width: 1012px;
+    height: 68px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+  `}
 `;
 
 const Content = styled.text`
@@ -52,6 +76,13 @@ const Content = styled.text`
   flex: none;
   order: 0;
   flex-grow: 0;
+
+  ${(props) =>
+    props.$custom &&
+    `
+    margin-top: 10px;
+    margin-left: 5px;
+  `}
 `;
 
 const SubContent = styled.text`
@@ -74,13 +105,19 @@ const SubContent = styled.text`
   flex: none;
   order: 1;
   flex-grow: 0;
+
+  ${(props) =>
+    props.$custom &&
+    `
+    margin-left: 5px;
+  `}
 `;
 
-function ListContent({ value, author }) {
+function ListContent({ value, author, $custom }) {
   return (
-    <Wrapper>
-      <Content>{value}</Content>
-      <SubContent>{author}</SubContent>
+    <Wrapper $custom>
+      <Content $custom>{value}</Content>
+      <SubContent $custom>{author}</SubContent>
     </Wrapper>
   );
 }
