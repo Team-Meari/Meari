@@ -17,6 +17,14 @@ const Wrapper = styled.div`
   margin-left: 20px;
   border-bottom: 1px solid #e3e3e3;
 
+  &::-webkit-box {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -54,7 +62,7 @@ const Content = styled.text`
   /* Auto layout */
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 0px;
   gap: 10px;
@@ -76,6 +84,11 @@ const Content = styled.text`
   flex: none;
   order: 0;
   flex-grow: 0;
+
+  //white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 
   ${(props) =>
     props.$custom &&
@@ -115,9 +128,9 @@ const SubContent = styled.text`
 
 function ListContent({ value, author, $custom }) {
   return (
-    <Wrapper $custom>
-      <Content $custom>{value}</Content>
-      <SubContent $custom>{author}</SubContent>
+    <Wrapper $custom={$custom}>
+      <Content $custom={$custom}>{value}</Content>
+      <SubContent $custom={$custom}>{author}</SubContent>
     </Wrapper>
   );
 }

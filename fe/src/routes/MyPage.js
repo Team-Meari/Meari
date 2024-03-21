@@ -7,6 +7,7 @@ import AuthContext from "../contexts/AuthProvider";
 import MeariList from "./MeariList";
 import LogModal from "./Login";
 import SignOutConfirm from "../modals/SignOutConfirm";
+import { useEffect } from "react";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -424,14 +425,17 @@ function MyPage() {
   const { auth, setAuth } = useContext(AuthContext);
 
   // 마이페이지 진입 시 내가 쓴 글 조회
-  const { data } = useGetAxios(
+  const { data, refetch } = useGetAxios(
     {
       url: apiurl + `chats/myPage`,
       method: "GET",
     },
     "mydata"
   );
-  console.log(data);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   // 회원탈퇴 버튼 클릭 시 회원탈퇴하는 로직
   const onClick = () => {

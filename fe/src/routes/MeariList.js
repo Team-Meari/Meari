@@ -278,7 +278,7 @@ function MeariList({ data, $custom }) {
                 key={index}
                 value={item?.content}
                 author={item?.nickName}
-                $custom
+                $custom={$custom}
               />
             ))
           : null}

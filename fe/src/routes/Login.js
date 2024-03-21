@@ -6,7 +6,7 @@ import { useInput } from "../hooks/useInput";
 import { usePostAxios } from "../hooks/useAxios";
 import AuthContext from "../contexts/AuthProvider";
 import styled from "styled-components";
-import { Bar, LoginButton, Menu } from "../App";
+import { FindIdModal, FindPwModal } from "../modals/FindIdPw";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -145,16 +145,79 @@ const LogText = styled.text`
   color: ${(props) => (props.$isfilled ? "#FFFFFF" : "#b6b6b6")};
 `;
 
-const FindMenu = styled(Menu)`
+const FindMenu = styled.div`
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+
+  position: absolute;
   width: 178px;
   height: 16px;
   left: 28px;
   top: 293px;
+
+  background-color: "#FFFFFF";
 `;
-const FindBar = styled(Bar)``;
-const FindId = styled(LoginButton)``;
-const FindPw = styled(LoginButton)`
+const FindBar = styled.text`
+  /* | */
+
+  width: 5px;
+  height: 16px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+
+  color: #666666;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+`;
+const FindId = styled(Button)`
+  width: auto;
+  height: 16px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+  background-color: transparent;
+  border: none;
+  color: #666666;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+const FindPw = styled(Button)`
+  width: auto;
+  height: 16px;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  /* identical to box height, or 16px */
+  background-color: transparent;
+  border: none;
+  color: #666666;
+
+  /* Inside auto layout */
+  flex: none;
   order: 2;
+  flex-grow: 0;
 `;
 
 const Close = styled(Button)`
@@ -170,15 +233,20 @@ const Close = styled(Button)`
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
+  const [isIdOpen, setIsIdOpen] = useState(false);
+  const [isPwOpen, setIsPwOpen] = useState(false);
   const id = useInput("");
   const password = useInput("");
+
+  const onIdClick = () => setIsIdOpen(true);
+  const onPwClick = () => setIsPwOpen(true);
 
   const { mutation } = usePostAxios("auth");
 
   const onSubmit = () => {
     //console.log(id.value, password.value);
     mutation.mutate({
-      url: apiurl + "members/login",
+      url: apiurl + "auth/login",
       method: "POST",
       data: {
         email: id.value,
@@ -216,9 +284,15 @@ function Login({ closeModal, isModalOpen }) {
           </LogButton>
         </form>
         <FindMenu>
-          <FindId>아이디찾기</FindId>
+          <FindId onClick={onIdClick}>아이디찾기</FindId>
+          {isIdOpen ? (
+            <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
+          ) : null}
           <FindBar>|</FindBar>
-          <FindPw>비밀번호찾기</FindPw>
+          <FindPw onClick={onPwClick}>비밀번호찾기</FindPw>
+          {isPwOpen ? (
+            <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
+          ) : null}
         </FindMenu>
         <Close onClick={closeModal}>
           <svg
