@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components";
+import MeariDetail from "../modals/MeariDetail";
 
 const Wrapper = styled.div`
   /* Frame 4 */
@@ -55,7 +57,6 @@ const Wrapper = styled.div`
 
   `}
 `;
-
 const Content = styled.text`
   /* Frame 36 */
 
@@ -97,7 +98,6 @@ const Content = styled.text`
     margin-left: 5px;
   `}
 `;
-
 const SubContent = styled.text`
   /* 24.03.11 */
 
@@ -127,11 +127,25 @@ const SubContent = styled.text`
 `;
 
 function ListContent({ value, author, $custom }) {
+  const [isDetailOpen, setDetailOpen] = useState(false);
+  const onClick = () => {
+    setDetailOpen(true);
+  };
   return (
-    <Wrapper $custom={$custom}>
-      <Content $custom={$custom}>{value}</Content>
-      <SubContent $custom={$custom}>{author}</SubContent>
-    </Wrapper>
+    <>
+      <Wrapper $custom={$custom} onClick={onClick}>
+        <Content $custom={$custom}>{value}</Content>
+        <SubContent $custom={$custom}>{author}</SubContent>
+      </Wrapper>
+      {isDetailOpen ? (
+        <MeariDetail
+          isDetailOpen={isDetailOpen}
+          setDetailOpen={setDetailOpen}
+          value={value}
+          author={author}
+        />
+      ) : null}
+    </>
   );
 }
 
