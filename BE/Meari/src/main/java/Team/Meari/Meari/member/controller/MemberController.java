@@ -40,21 +40,6 @@ public class MemberController {
 //    }
 
     /**
-     * 로그인
-     * @param loginDto
-     * @return
-     */
-    @PostMapping("/login")
-    public ResponseEntity<CustomMultiResDto> login(@RequestBody LoginDto loginDto) {
-        String email = loginDto.getEmail();
-        String password = loginDto.getPassword();
-        TokenDto tokenDto = memberService.login(email, password);
-        Member member = memberService.findMember(loginDto.getEmail());
-        MemberResDto memberResDto = new MemberResDto(member);
-        return new ResponseEntity<>(new CustomMultiResDto(tokenDto, memberResDto), HttpStatus.OK);
-    }
-
-    /**
      * Post 요청
      * @param memberPostReqDto
      * @return

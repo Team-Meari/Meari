@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -41,21 +42,22 @@ public class JwtTokenizer {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-
-        Date accessTokenExpiresIn = new Date(now + 1000 * 60 * 30); // 30분
+        Date now = new Date();
+        Date accessTokenExpiresIn = new Date(now.getTime() + 1000 * 60); // 1 min
 
         // Access Token 생성
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
+                .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 1000 * 60 * 60 * 24)) // 24시간
+                .setExpiration(new Date(now.getTime() + 1000 * 60 * 60 * 24)) // 24시간
+                .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
