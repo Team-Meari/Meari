@@ -1,5 +1,8 @@
 import defaultAxios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
+import AuthContext from "../contexts/AuthProvider";
+import userContext from "../contexts/UserProvider";
 
 export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
   const dataFetch = async () => {
@@ -9,10 +12,11 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
         url: config.url,
         headers: {
           "ngrok-skip-browser-warning": "any",
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      console.log(response.data.data);
-      return response.data.data;
+      console.log(response);
+      return response.data;
     } catch (error) {
       console.log(error);
       throw error;
@@ -26,7 +30,7 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     enabled: true,
-    refetchInterval: type === "userdata" ? null : 3000,
+    refetchInterval: type === "mearidata" ? 3000 : null,
   });
 
   return { data, error, isLoading, refetch };
@@ -34,27 +38,43 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
 
 export const usePostAxios = (type, axiosInstance = defaultAxios) => {
   const queryClient = useQueryClient();
+  const { setAuth } = useContext(AuthContext);
+  const { setNickname, setMemberId } = useContext(userContext);
 
   const mutation = useMutation({
     mutationKey: ["postdata"],
     mutationFn: async (config) => {
       try {
-        const request = await axiosInstance({
+        const response = await axiosInstance({
           method: config.method,
           url: config.url,
           data: config.data, // 2024-02-16 일반 데이터 형식으로 표현
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          },
         });
-        return request;
+        console.log(response);
+        return response;
       } catch (error) {
         console.log(error);
         throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       if (type === "userdata")
         queryClient.invalidateQueries({ queryKey: ["userdata"] });
       else if (type === "mearidata")
         queryClient.invalidateQueries({ queryKey: ["mearidata"] });
+      else if (type === "auth") {
+        window.localStorage.setItem(
+          "accessToken",
+          response.data.tokenDto.accessToken
+        );
+        setAuth(true);
+        setNickname(response.data.memberResDto.nickname);
+        setMemberId(response.data.memberResDto.memberId);
+        console.log(response.data.memberResDto);
+      }
     },
   });
 
