@@ -7,8 +7,13 @@ import SignUp from "./routes/SignUp";
 import { GlobalStyle } from "./css/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import axios from "axios";
+import { AuthProvider } from "./contexts/AuthProvider";
+import { UserProvider } from "./contexts/UserProvider";
 
 const queryClient = new QueryClient();
+
+axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
   {
@@ -16,7 +21,7 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/mypage",
+    path: "/mypage/:nickname/:memberId",
     element: <MyPage />,
   },
   {
@@ -30,6 +35,10 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <ReactQueryDevtools initialIsOpen={false} />
     <GlobalStyle />
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );

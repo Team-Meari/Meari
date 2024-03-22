@@ -10,6 +10,6 @@ body {
   padding: 0;
 }
 body {
-  overflow: hidden;
+  overflow-x: hidden;
 }
   `;
