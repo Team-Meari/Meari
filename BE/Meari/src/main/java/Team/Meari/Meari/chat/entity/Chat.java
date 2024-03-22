@@ -1,5 +1,6 @@
 package Team.Meari.Meari.chat.entity;
 
+import Team.Meari.Meari.global.auditing.BaseTimeEntity;
 import Team.Meari.Meari.member.entity.Member;
 import lombok.*;
 
@@ -7,7 +8,7 @@ import javax.persistence.*;
 
 @Entity @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Chat {
+public class Chat extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;

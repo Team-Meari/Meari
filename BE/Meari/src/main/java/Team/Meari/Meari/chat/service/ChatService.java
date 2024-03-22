@@ -35,12 +35,12 @@ public class ChatService {
     }
     @Transactional
     public Page<Chat> findChats(Pageable pageable){
-        return chatRepository.findAll(pageable);
+        return chatRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     @Transactional
     public Page<Chat> findMyChats(Pageable pageable, Member member) {
-        return chatRepository.findAllByMember(pageable, member);
+        return chatRepository.findAllByMemberOrderByCreatedAtDesc(pageable, member);
     }
 
 }

@@ -1,11 +1,14 @@
 package Team.Meari.Meari.member.dto;
 
+import Team.Meari.Meari.global.auditing.BaseTimeEntity;
 import Team.Meari.Meari.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter @Setter
-public class MemberPatchReqDto {
+public class MemberPatchReqDto extends BaseTimeEntity {
     private String password;
     private String nickname;
     private Member.MemberStatus memberStatus;
@@ -15,6 +18,7 @@ public class MemberPatchReqDto {
                 .password(this.password)
                 .nickname(this.nickname)
                 .build();
+        member.setModifiedAt(LocalDateTime.now());
         return member;
     }
 }

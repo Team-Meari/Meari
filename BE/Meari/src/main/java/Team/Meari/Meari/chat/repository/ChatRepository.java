@@ -11,5 +11,6 @@ import java.util.Optional;
 
 @Transactional
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    Page<Chat> findAllByMember(Pageable pageable, Member member);
+    Page<Chat> findAllByMemberOrderByCreatedAtDesc(Pageable pageable, Member member);
+    Page<Chat>findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

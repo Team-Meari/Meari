@@ -1,5 +1,6 @@
 package Team.Meari.Meari.global.security.utils;
 
+import Team.Meari.Meari.auth.repository.RefreshTokenRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

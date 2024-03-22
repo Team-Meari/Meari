@@ -1,5 +1,6 @@
 package Team.Meari.Meari.member.entity;
 
+import Team.Meari.Meari.global.auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Entity @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
     private String email;
