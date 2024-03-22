@@ -59,6 +59,7 @@ public class SecurityConfiguration {
                 .antMatchers("/chats/find-all").permitAll()
                 .antMatchers("/chats/**").permitAll()
                 .antMatchers("/chats").hasAuthority("USER")
+                .antMatchers("/auth/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
