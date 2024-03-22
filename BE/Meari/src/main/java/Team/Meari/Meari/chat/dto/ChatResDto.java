@@ -1,6 +1,7 @@
 package Team.Meari.Meari.chat.dto;
 
 import Team.Meari.Meari.chat.entity.Chat;
+import Team.Meari.Meari.global.auditing.BaseTimeEntity;
 import Team.Meari.Meari.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @AllArgsConstructor
-public class ChatResDto {
+public class ChatResDto extends BaseTimeEntity {
     private String nickName;
     private String email;
     private Long chatId;
@@ -23,5 +24,6 @@ public class ChatResDto {
         this.content = chat.getContent();
         this.latitude = chat.getLatitude();
         this.longitude = chat.getLongitude();
+        setCreatedAt(chat.getCreatedAt());
     }
 }
