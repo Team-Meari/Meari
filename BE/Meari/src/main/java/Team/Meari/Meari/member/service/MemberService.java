@@ -1,5 +1,7 @@
 package Team.Meari.Meari.member.service;
 
+import Team.Meari.Meari.auth.entity.RefreshToken;
+import Team.Meari.Meari.auth.repository.RefreshTokenRepository;
 import Team.Meari.Meari.global.exception.dto.BusinessLogicException;
 import Team.Meari.Meari.global.exception.exception.ExceptionCode;
 import Team.Meari.Meari.global.security.dto.TokenDto;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,29 +31,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils customAuthorityUtils;
-
-    /**
-     * 로그인
-     * @param email
-     * @param password
-     * @return
-     */
-    @Transactional
-    public TokenDto login(String email, String password) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체를 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰을 생성
-        TokenDto tokenDto = jwtTokenizer.generateTokenDto(authentication);
-
-        return tokenDto;
-    }
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * 회원 생성
@@ -79,6 +60,7 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         Optional.ofNullable(member.getNickname()).ifPresent(existMember::setNickname);
+        existMember.setModifiedAt(LocalDateTime.now());
 
         return memberRepository.save(existMember);
     }
