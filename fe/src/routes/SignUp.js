@@ -29,7 +29,6 @@ const customStyles = {
     borderRadius: "26px",
   },
 };
-
 const Form = styled.form`
   /* Frame 45 */
 
@@ -45,7 +44,6 @@ const Form = styled.form`
   left: 30px;
   top: 123px;
 `;
-
 const Title = styled.text`
   /* 회원가입 */
 
@@ -64,7 +62,6 @@ const Title = styled.text`
 
   color: #000000;
 `;
-
 const SubTitle = styled.text`
   /* 메아리서비스 이용을 위해 회원가입해주세요. */
 
@@ -83,7 +80,6 @@ const SubTitle = styled.text`
 
   color: #666666;
 `;
-
 const EmailInput = styled.div`
   /* input */
 
@@ -96,24 +92,20 @@ const EmailInput = styled.div`
   order: 0;
   flex-grow: 0;
 `;
-
 const IdInput = styled.div`
   height: 105px;
   order: 1;
 `;
-
 const PwInput = styled.div`
   ${EmailInput};
   height: 105px;
   order: 2;
 `;
-
 const PwConfirm = styled.div`
   ${EmailInput};
   height: 105px;
   order: 3;
 `;
-
 const Explain = styled.div`
   /* Frame 41 */
 
@@ -129,7 +121,6 @@ const Explain = styled.div`
   left: 10px;
   top: 0px;
 `;
-
 const ExText = styled.text`
   /* 이메일 */
 
@@ -150,7 +141,6 @@ const ExText = styled.text`
   order: 0;
   flex-grow: 0;
 `;
-
 const Star = styled.text`
   /* * */
 
@@ -171,7 +161,6 @@ const Star = styled.text`
   order: 1;
   flex-grow: 0;
 `;
-
 const CustomInput = styled(Input)`
   /* Frame 38 */
 
@@ -187,11 +176,9 @@ const CustomInput = styled(Input)`
   border: 1px solid #e3e3e3;
   border-radius: 16px;
 `;
-
 const CustomIdInput = styled(CustomInput)`
   width: 386px;
 `;
-
 const IdConfirm = styled(Button)`
   /* Frame 44 */
 
@@ -204,7 +191,6 @@ const IdConfirm = styled(Button)`
   border-radius: 16px;
   border: none;
 `;
-
 const ConfirmText = styled.text`
   /* 중복확인 */
 
@@ -224,7 +210,6 @@ const ConfirmText = styled.text`
 
   color: #ffffff;
 `;
-
 const HelperText = styled.div`
   /* Frame 40 */
 
@@ -238,7 +223,6 @@ const HelperText = styled.div`
   width: 310px;
   height: 16px;
 `;
-
 const IdHelper = styled.div`
   /* Frame 43 */
 
@@ -254,14 +238,12 @@ const IdHelper = styled.div`
   left: 10px;
   top: 103px;
 `;
-
 const PwHelper = styled(IdHelper)`
   width: 222px;
 `;
 const ConfirmHelper = styled(IdHelper)`
   width: 189px;
 `;
-
 const ErrorSvg = styled.svg`
   /* error-warning-fill */
 
@@ -273,7 +255,6 @@ const ErrorSvg = styled.svg`
   order: 0;
   flex-grow: 0;
 `;
-
 const ErrorText = styled.text`
   /* 이메일을 입력해주세요. */
 
@@ -294,7 +275,6 @@ const ErrorText = styled.text`
   order: 1;
   flex-grow: 0;
 `;
-
 const Close = styled(Button)`
   position: absolute;
   height: 24px;
@@ -305,7 +285,6 @@ const Close = styled(Button)`
   background-color: transparent;
   border: none;
 `;
-
 const TermText = styled.text`
   /* 약관동의 */
 
@@ -343,7 +322,6 @@ const TermForm = styled.div`
   background: #f8f8f8;
   border-radius: 16px;
 `;
-
 const TermWrapper1 = styled.div`
   /* Frame 48 */
 
@@ -377,7 +355,6 @@ const TermWrapper3 = styled(TermWrapper1)`
   order: 2;
   flex-grow: 0;
 `;
-
 const TermSet = styled.div`
   /* Frame 49 */
 
@@ -385,7 +362,6 @@ const TermSet = styled.div`
   width: 181px;
   height: 25px;
 `;
-
 const CustomTerm = styled(Input)`
   /* 약관 전체동의 */
 
@@ -432,7 +408,6 @@ const Label2 = styled.label`
 
   color: #666666;
 `;
-
 const Detail = styled.text`
   /* 자세히보기 */
 
