@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import axios from "axios";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { UserProvider } from "./contexts/UserProvider";
+import { WidthProvider } from "./contexts/WidthProvider";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +36,12 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <ReactQueryDevtools initialIsOpen={false} />
     <GlobalStyle />
-    <AuthProvider>
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
-    </AuthProvider>
+    <WidthProvider>
+      <AuthProvider>
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
+      </AuthProvider>
+    </WidthProvider>
   </QueryClientProvider>
 );
