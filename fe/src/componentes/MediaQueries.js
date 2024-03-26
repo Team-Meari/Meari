@@ -15,6 +15,7 @@ export const Mobile = ({ children }) => {
   const { setIsMobile } = useContext(WidthContext);
   useEffect(() => {
     setIsMobile(isMobile);
+    console.log("모바일인가요? ", isMobile);
   }, []);
   return isMobile ? children : null;
 };

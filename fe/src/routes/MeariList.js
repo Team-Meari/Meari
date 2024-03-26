@@ -53,10 +53,11 @@ const ListWrapper = styled.div`
     /* Frame 11 */
 
     position: absolute;
-    width: 385px;
-    height: 516px;
+    width: ${(props) => (props.$custom ? "385px" : "385px")};
+    height: ${(props) => (props.$custom ? "386px" : "516px")};
     left: 15px;
-    top: 112px;
+    top: ${(props) => (props.$custom ? "283px" : "112px")};
+    background: ${(props) => (props.$custom ? "#ffffff" : "#f8f8f8")};
   }
 `;
 
@@ -91,7 +92,7 @@ export const StyledPagination = styled(Pagination)`
     width: 302px;
     height: 40px;
     left: calc(50% - 365px / 2);
-    top: 638px;
+    top: ${(props) => (props.$custom ? " 665px" : "638px")};
   }
 
   a,

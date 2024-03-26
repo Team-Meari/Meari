@@ -8,6 +8,7 @@ import MeariList from "./MeariList";
 import LogModal from "./Login";
 import SignOutConfirm from "../modals/SignOutConfirm";
 import { useEffect } from "react";
+import WidthContext from "../contexts/WidthProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -16,7 +17,12 @@ const Wrapper = styled.div`
   width: 1920px;
   height: 1266px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: #ffffff;
+  @media (max-width: 786px) {
+    width: 414px;
+    height: 736px;
+  }
 `;
 const Header = styled.div`
   /* Frame 56 */
@@ -31,6 +37,9 @@ const Header = styled.div`
 
   background: #ffffff;
   border-bottom: 1px solid #e3e3e3;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const HeaderText = styled.text`
   /* MEARI */
@@ -139,6 +148,9 @@ const MainText = styled.text`
   /* identical to box height, or 34px */
 
   color: #000000;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const UserWrapper = styled.div`
   /* Frame 1 */
@@ -158,17 +170,37 @@ const UserWrapper = styled.div`
 
   background: #f8f8f8;
   border-radius: 26px;
+  @media (max-width: 786px) {
+    /* Frame 74 */
+    display: flex;
+    position: absolute;
+    width: 414px;
+    height: 123px;
+    left: 0px;
+    top: 0px;
+    border-radius: 0px;
+  }
 `;
 const UserInfo = styled.div`
   /* Frame 54 */
-
+  position: absolute;
   width: 137px;
   height: 189px;
+  left: 0px;
 
   /* Inside auto layout */
   flex: none;
   order: 0;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    /* Frame 54 */
+
+    position: absolute;
+    width: 137px;
+    height: 144px;
+    left: calc(7%);
+    top: 5px;
+  }
 `;
 const UserIcon = styled.div`
   /* Frame 53 */
@@ -180,6 +212,19 @@ const UserIcon = styled.div`
 
   background: #ffffff;
   border-radius: 360px;
+
+  @media (max-width: 786px) {
+    /* Frame 53 */
+
+    position: absolute;
+    width: 86px;
+    height: 86px;
+    left: 125px;
+    top: 20px;
+
+    background: #ffffff;
+    border-radius: 360px;
+  }
 `;
 const Icons = styled.div`
   /* user-fill */
@@ -187,7 +232,14 @@ const Icons = styled.div`
   position: relative;
   width: 120px;
   height: 120px;
-  top: 0px;
+  top: 5px;
+
+  @media (max-width: 786px) {
+    /* user-fill */
+
+    position: absolute;
+    top: -7px;
+  }
 `;
 const IconSvg = styled.svg`
   width: 70px;
@@ -199,6 +251,18 @@ const IconSvg = styled.svg`
   right: 20.67%;
   top: 4.17%;
   bottom: 8.33%;
+
+  @media (max-width: 786px) {
+    /* Vector */
+    width: 50px;
+    height: 75px;
+
+    position: absolute;
+    left: 15.67%;
+    right: 15.67%;
+    top: 4.17%;
+    bottom: 8.33%;
+  }
 `;
 const Nickname = styled.text`
   /* test1234!! */
@@ -206,7 +270,7 @@ const Nickname = styled.text`
   position: absolute;
   width: 95px;
   height: 20px;
-  margin-left: 21px;
+  left: 120px;
   top: 150px;
 
   font-family: "Pretendard";
@@ -218,6 +282,10 @@ const Nickname = styled.text`
   text-align: center;
 
   color: #1d1d1d;
+
+  @media (max-width: 786px) {
+    top: 120px;
+  }
 `;
 const LogWrapper = styled.div`
   /* Frame 28 */
@@ -232,8 +300,12 @@ const LogWrapper = styled.div`
   position: absolute;
   width: 137px;
   height: 16px;
-  left: 107px;
+  left: 103px;
   top: 180px;
+
+  @media (max-width: 786px) {
+    top: 160px;
+  }
 `;
 const LoginButton = styled(Button)`
   width: auto;
@@ -292,6 +364,18 @@ const ListText = styled.text`
   /* identical to box height, or 24px */
 
   color: #000000;
+  @media (max-width: 786px) {
+    /* 작성한글 */
+
+    position: absolute;
+    width: 80px;
+    height: 20px;
+    left: 35px;
+    top: 233px;
+
+    font-weight: 600;
+    font-size: 20px;
+  }
 `;
 
 const Footer = styled.div`
@@ -304,6 +388,9 @@ const Footer = styled.div`
   top: 1067px;
 
   background-color: #f8f8f8;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const Title = styled.text`
   /* MEARI */
@@ -423,7 +510,8 @@ function MyPage() {
   const [SignOutOpen, setSignOutOpen] = useState(false);
   const { nickname, memberId } = useParams();
   const { auth, setAuth } = useContext(AuthContext);
-
+  const { isMoblie } = useContext(WidthContext);
+  console.log("마이페이지에서 모바일 인가요? ", isMoblie);
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, refetch } = useGetAxios(
     {
