@@ -13,11 +13,13 @@ public class MemberResDto extends BaseTimeEntity {
     private String email;
     private String nickname;
     private String memberStatus;
+    private String phone;
 
     public MemberResDto(Member member) {
         this.memberId = member.getMemberId();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
+        this.phone = member.getPhone();
         this.memberStatus = member.getMemberStatus().getStatus();
         setCreatedAt(member.getCreatedAt());
         setModifiedAt(member.getModifiedAt());
