@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import MyPage from "./routes/MyPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import SignUp from "./routes/SignUp";
 import { GlobalStyle } from "./css/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -24,10 +23,6 @@ const router = createBrowserRouter([
   {
     path: "/mypage/:nickname/:memberId",
     element: <MyPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
   },
 ]);
 

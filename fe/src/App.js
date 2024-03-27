@@ -687,7 +687,11 @@ function App() {
                 {auth ? "로그아웃" : "로그인"}
               </LoginButton>
               {LoginOpen ? (
-                <LogModal LoginOpen={LoginOpen} setLoginOpen={setLoginOpen} />
+                <LogModal
+                  LoginOpen={LoginOpen}
+                  setLoginOpen={setLoginOpen}
+                  isMobile={isMobile}
+                />
               ) : null}
               <Bar>|</Bar>
               {/* mypage로 이동하는 버튼 */}
@@ -702,8 +706,6 @@ function App() {
 
             {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
             <MeariList $custom={false} data={mearidata.data?.data} />
-
-            {/* <RedButton usage={"멤버 읽기"} onClick={onMemberTest} /> */}
           </Section>
         )}
       </Mobile>

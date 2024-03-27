@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetAxios } from "../hooks/useAxios";
 import styled from "styled-components";
 import Button from "../componentes/Button";
@@ -300,7 +300,7 @@ const LogWrapper = styled.div`
   position: absolute;
   width: 137px;
   height: 16px;
-  left: 103px;
+  left: 98px;
   top: 180px;
 
   @media (max-width: 786px) {
@@ -308,7 +308,7 @@ const LogWrapper = styled.div`
   }
 `;
 const LoginButton = styled(Button)`
-  width: auto;
+  width: 68px;
   height: 16px;
 
   font-family: "Pretendard";
@@ -320,6 +320,7 @@ const LoginButton = styled(Button)`
   background-color: transparent;
   border: none;
   color: #666666;
+  margin-right: -6px;
 
   /* Inside auto layout */
   flex: none;
@@ -504,14 +505,39 @@ const Copyright = styled.text`
 
   color: #666666;
 `;
+const Close = styled(Button)`
+  display: none;
+  @media (max-width: 786px) {
+    /* close-large-fill */
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 375px;
+    top: 29px;
+    border: none;
+    background: transparent;
+  }
+`;
+const CloseSvg = styled.svg`
+  @media (max-width: 786px) {
+    /* Vector */
 
+    position: absolute;
+    left: 10.64%;
+    right: 10.64%;
+    top: 10.64%;
+    bottom: 10.64%;
+  }
+`;
 function MyPage() {
   const [LoginOpen, setLoginOpen] = useState(false);
   const [SignOutOpen, setSignOutOpen] = useState(false);
   const { nickname, memberId } = useParams();
   const { auth, setAuth } = useContext(AuthContext);
   const { isMoblie } = useContext(WidthContext);
-  console.log("마이페이지에서 모바일 인가요? ", isMoblie);
+  const navigate = useNavigate();
+
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, refetch } = useGetAxios(
     {
@@ -555,7 +581,21 @@ function MyPage() {
           </MapBtn>
         </BtnWrapper>
       </Header>
-
+      {/** 모바일의 경우에만 생기는 뒤로가기 버튼 */}
+      <Close onClick={() => navigate(-1)}>
+        <CloseSvg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.5859 10.0001L0.792969 2.20718L2.20718 0.792969L10.0001 8.58582L17.793 0.792969L19.2072 2.20718L11.4143 10.0001L19.2072 17.7929L17.793 19.2072L10.0001 11.4143L2.20718 19.2072L0.792969 17.7929L8.5859 10.0001Z"
+            fill="black"
+          />
+        </CloseSvg>
+      </Close>
       <MainText>마이페이지</MainText>
       <UserWrapper>
         <UserInfo>
