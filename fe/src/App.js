@@ -15,6 +15,9 @@ import SignUp from "./routes/SignUp";
 import { Default, Mobile } from "./componentes/MediaQueries";
 import WidthContext from "./contexts/WidthProvider";
 import MobileHeader from "./mobile_components/MobileHeader";
+import ModalContext from "./contexts/ModalProvider";
+import { FindIdModal, FindPwModal } from "./modals/FindIdPw";
+import Success from "./modals/Success";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -455,8 +458,19 @@ function App() {
   const { nickname, memberId } = useContext(userContext);
   const { auth } = useContext(AuthContext);
   const { isMobile } = useContext(WidthContext);
+  const {
+    isIdOpen,
+    setIsIdOpen,
+    isPwOpen,
+    setIsPwOpen,
+    LoginOpen,
+    setLoginOpen,
+    isSuccess,
+    setSuccessOpen,
+    isPwSuccess,
+    setPwSuccessOpen,
+  } = useContext(ModalContext);
   const input = useInput("");
-  const [LoginOpen, setLoginOpen] = useState(false);
 
   const mearidata = useGetAxios(
     {
@@ -557,9 +571,6 @@ function App() {
               <LoginButton onClick={onLoginClick}>
                 {auth ? "로그아웃" : "로그인"}
               </LoginButton>
-              {LoginOpen ? (
-                <LogModal LoginOpen={LoginOpen} setLoginOpen={setLoginOpen} />
-              ) : null}
               <Bar>|</Bar>
               {/* mypage로 이동하는 버튼 */}
               {auth ? (
@@ -604,6 +615,25 @@ function App() {
             </MeariSubmit>
           </InputContainer>
         </Wrapper>
+        {LoginOpen ? (
+          <LogModal LoginOpen={LoginOpen} setLoginOpen={setLoginOpen} />
+        ) : null}
+        {isIdOpen ? (
+          <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
+        ) : null}
+        {isPwOpen ? (
+          <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
+        ) : null}
+        {isSuccess ? (
+          <Success SuccessOpen={isSuccess} setSuccessOpen={setSuccessOpen} />
+        ) : null}
+        {isPwSuccess ? (
+          <Success
+            SuccessOpen={isPwSuccess}
+            setSuccessOpen={setPwSuccessOpen}
+            isPw={true}
+          />
+        ) : null}
       </Default>
 
       {/** 여기부터는 모바일 버전 컴포넌트 구성 */}
@@ -711,6 +741,28 @@ function App() {
 
             {/* Meari를 디스플레이해주는 리스트 컴포넌트 MeariList */}
             <MeariList $custom={false} data={mearidata.data?.data} />
+            {LoginOpen ? (
+              <LogModal LoginOpen={LoginOpen} setLoginOpen={setLoginOpen} />
+            ) : null}
+            {isIdOpen ? (
+              <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
+            ) : null}
+            {isPwOpen ? (
+              <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
+            ) : null}
+            {isSuccess ? (
+              <Success
+                SuccessOpen={isSuccess}
+                setSuccessOpen={setSuccessOpen}
+              />
+            ) : null}
+            {isPwSuccess ? (
+              <Success
+                SuccessOpen={isPwSuccess}
+                setSuccessOpen={setPwSuccessOpen}
+                isPw={true}
+              />
+            ) : null}
           </Section>
         )}
       </Mobile>
