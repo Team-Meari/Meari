@@ -15,6 +15,7 @@ public class Member extends BaseTimeEntity {
     private String email;
     private String password;
     private String nickname;
+    private String phone;
     private MemberStatus memberStatus;
 
     @ElementCollection(fetch = FetchType.EAGER)
