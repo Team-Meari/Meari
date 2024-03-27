@@ -1,6 +1,6 @@
-INSERT INTO Member(memberId, email, memberStatus, nickname, password, createdAt, lastModifiedAt) VALUES
-(1, 'meari@naver.com', 0, 'meari', '{bcrypt}$2a$10$9jJnmFjexL3nhKs20NtzDeLc.O1qZki5JLRSWHd8eNlIZebtGD4tC','2024-03-14T19:52:58.9517531', '2024-03-14T19:55:58.9517531'),
-(2, 'meari2@naver.com', 0, 'meari2', '{bcrypt}$2a$10$9jJnmFjexL3nhKs20NtzDeLc.O1qZki5JLRSWHd8eNlIZebtGD4tC','2024-03-14T19:52:58.9517531', '2024-03-14T19:55:58.9517531');
+INSERT INTO Member(memberId, email, memberStatus, nickname, phone, password, createdAt, lastModifiedAt) VALUES
+(1, 'meari@naver.com', 0, 'meari', '01011111111', '{bcrypt}$2a$10$9jJnmFjexL3nhKs20NtzDeLc.O1qZki5JLRSWHd8eNlIZebtGD4tC','2024-03-14T19:52:58.9517531', '2024-03-14T19:55:58.9517531'),
+(2, 'meari2@naver.com', 0, 'meari2', '01022222222', '{bcrypt}$2a$10$9jJnmFjexL3nhKs20NtzDeLc.O1qZki5JLRSWHd8eNlIZebtGD4tC','2024-03-14T19:52:58.9517531', '2024-03-14T19:55:58.9517531');
 
 INSERT INTO Member_roles(member_memberId, roles) VALUES
 (1, 'USER'),
