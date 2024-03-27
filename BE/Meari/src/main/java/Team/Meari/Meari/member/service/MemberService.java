@@ -1,10 +1,8 @@
 package Team.Meari.Meari.member.service;
 
-import Team.Meari.Meari.auth.entity.RefreshToken;
 import Team.Meari.Meari.auth.repository.RefreshTokenRepository;
 import Team.Meari.Meari.global.exception.dto.BusinessLogicException;
 import Team.Meari.Meari.global.exception.exception.ExceptionCode;
-import Team.Meari.Meari.global.security.dto.TokenDto;
 import Team.Meari.Meari.global.security.jwt.JwtTokenizer;
 import Team.Meari.Meari.global.security.utils.CustomAuthorityUtils;
 import Team.Meari.Meari.member.entity.Member;
@@ -12,9 +10,7 @@ import Team.Meari.Meari.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +22,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final JwtTokenizer jwtTokenizer;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils customAuthorityUtils;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * 회원 생성
@@ -40,7 +33,7 @@ public class MemberService {
      */
     @Transactional
     public Member createMember(Member member){
-        verifyNotExistEmail(member.getEmail());
+        checkEmailDuplicate(member.getEmail());
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
         List<String> roles = customAuthorityUtils.createRoles(member.getEmail());
@@ -104,9 +97,30 @@ public class MemberService {
      * Email 중복 확인 메서드
      * @param email
      */
-    private void verifyNotExistEmail(String email) {
-        Optional<Member> optionalEmail = memberRepository.findByEmail(email);
-        if(optionalEmail.isPresent()) throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+    @Transactional
+    public void checkEmailDuplicate(String email) {
+        if(memberRepository.existsByEmail(email)) throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+    }
+
+    /**
+     * Nickname 중복 확인 메서드
+     * @param nickname
+     */
+    @Transactional
+    public void checkNicknameDuplicate(String nickname) {
+        if(memberRepository.existsByNickname(nickname)) throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+
+    }
+
+    @Transactional
+    public Member findEmail(String phone) {
+        return memberRepository.findByPhone(phone)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+    @Transactional
+    public Member findPassword(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
 }
