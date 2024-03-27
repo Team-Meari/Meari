@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import { usePostAxios } from "../hooks/useAxios";
 import styled from "styled-components";
 import { Cancle, CancleText, OutText, SubmitOut } from "../routes/Login";
+import { Default, Mobile } from "../componentes/MediaQueries";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -23,6 +24,30 @@ const customCofirmStyles = {
     height: "249px",
     left: "calc(50% - 460px/2)",
     top: "calc(50% - 249px/2 + 0.5px)",
+
+    background: "#FFFFFF",
+    borderRadius: "26px",
+  },
+};
+const MobileCofirmStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    /* 마이페이지/탈퇴하기 */
+
+    position: "absolute",
+    width: "88vw",
+    height: "30vh",
+    left: "calc(50% - 99vw/2)",
+    top: "calc(50% - 50vh/2 + 0.5px)",
+    overflow: "hidden",
 
     background: "#FFFFFF",
     borderRadius: "26px",
@@ -97,23 +122,46 @@ export default function SignOutConfirm({
   };
   return (
     <>
-      <Modal
-        isOpen={SignOutOpen}
-        onRequestClose={closeModal}
-        style={customCofirmStyles}
-        contentLabel="Confirm"
-      >
-        <Title>회원탈퇴하시겠습까?</Title>
-        <SubTitle>
-          탈퇴하고 다시 가입하더라도 기존의 작성한 글은 복구되지 않습니다.
-        </SubTitle>
-        <Cancel>
-          <CancleText onClick={closeModal}>취소하기</CancleText>
-        </Cancel>
-        <Submit>
-          <OutText onClick={onClick}>탈퇴하기</OutText>
-        </Submit>
-      </Modal>
+      <Default>
+        <Modal
+          isOpen={SignOutOpen}
+          onRequestClose={closeModal}
+          style={customCofirmStyles}
+          contentLabel="Confirm"
+        >
+          <Title>회원탈퇴하시겠습까?</Title>
+          <SubTitle>
+            탈퇴하고 다시 가입하더라도 기존의 작성한 글은 복구되지 않습니다.
+          </SubTitle>
+          <Cancel>
+            <CancleText onClick={closeModal}>취소하기</CancleText>
+          </Cancel>
+          <Submit>
+            <OutText onClick={onClick}>탈퇴하기</OutText>
+          </Submit>
+        </Modal>
+      </Default>
+
+      {/** 모바일 회원탈퇴 화면 */}
+      <Mobile>
+        <Modal
+          isOpen={SignOutOpen}
+          onRequestClose={closeModal}
+          style={MobileCofirmStyles}
+          contentLabel="Confirm"
+        >
+          <Title>회원탈퇴하시겠습까?</Title>
+          <SubTitle>
+            탈퇴하고 다시 가입하더라도 기존의 작성한 글은 복구되지 않습니다.
+          </SubTitle>
+          <Cancel>
+            <CancleText onClick={closeModal}>취소하기</CancleText>
+          </Cancel>
+          <Submit>
+            <OutText onClick={onClick}>탈퇴하기</OutText>
+          </Submit>
+        </Modal>
+      </Mobile>
     </>
   );
 }

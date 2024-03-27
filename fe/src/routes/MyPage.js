@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetAxios } from "../hooks/useAxios";
 import styled from "styled-components";
 import Button from "../componentes/Button";
@@ -8,6 +8,7 @@ import MeariList from "./MeariList";
 import LogModal from "./Login";
 import SignOutConfirm from "../modals/SignOutConfirm";
 import { useEffect } from "react";
+import WidthContext from "../contexts/WidthProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -16,7 +17,12 @@ const Wrapper = styled.div`
   width: 1920px;
   height: 1266px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: #ffffff;
+  @media (max-width: 786px) {
+    width: 414px;
+    height: 736px;
+  }
 `;
 const Header = styled.div`
   /* Frame 56 */
@@ -31,6 +37,9 @@ const Header = styled.div`
 
   background: #ffffff;
   border-bottom: 1px solid #e3e3e3;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const HeaderText = styled.text`
   /* MEARI */
@@ -139,6 +148,9 @@ const MainText = styled.text`
   /* identical to box height, or 34px */
 
   color: #000000;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const UserWrapper = styled.div`
   /* Frame 1 */
@@ -158,17 +170,37 @@ const UserWrapper = styled.div`
 
   background: #f8f8f8;
   border-radius: 26px;
+  @media (max-width: 786px) {
+    /* Frame 74 */
+    display: flex;
+    position: absolute;
+    width: 414px;
+    height: 123px;
+    left: 0px;
+    top: 0px;
+    border-radius: 0px;
+  }
 `;
 const UserInfo = styled.div`
   /* Frame 54 */
-
+  position: absolute;
   width: 137px;
   height: 189px;
+  left: 0px;
 
   /* Inside auto layout */
   flex: none;
   order: 0;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    /* Frame 54 */
+
+    position: absolute;
+    width: 137px;
+    height: 144px;
+    left: calc(7%);
+    top: 5px;
+  }
 `;
 const UserIcon = styled.div`
   /* Frame 53 */
@@ -180,6 +212,19 @@ const UserIcon = styled.div`
 
   background: #ffffff;
   border-radius: 360px;
+
+  @media (max-width: 786px) {
+    /* Frame 53 */
+
+    position: absolute;
+    width: 86px;
+    height: 86px;
+    left: 125px;
+    top: 20px;
+
+    background: #ffffff;
+    border-radius: 360px;
+  }
 `;
 const Icons = styled.div`
   /* user-fill */
@@ -187,7 +232,14 @@ const Icons = styled.div`
   position: relative;
   width: 120px;
   height: 120px;
-  top: 0px;
+  top: 5px;
+
+  @media (max-width: 786px) {
+    /* user-fill */
+
+    position: absolute;
+    top: -7px;
+  }
 `;
 const IconSvg = styled.svg`
   width: 70px;
@@ -199,6 +251,18 @@ const IconSvg = styled.svg`
   right: 20.67%;
   top: 4.17%;
   bottom: 8.33%;
+
+  @media (max-width: 786px) {
+    /* Vector */
+    width: 50px;
+    height: 75px;
+
+    position: absolute;
+    left: 15.67%;
+    right: 15.67%;
+    top: 4.17%;
+    bottom: 8.33%;
+  }
 `;
 const Nickname = styled.text`
   /* test1234!! */
@@ -206,7 +270,7 @@ const Nickname = styled.text`
   position: absolute;
   width: 95px;
   height: 20px;
-  margin-left: 21px;
+  left: 120px;
   top: 150px;
 
   font-family: "Pretendard";
@@ -218,6 +282,10 @@ const Nickname = styled.text`
   text-align: center;
 
   color: #1d1d1d;
+
+  @media (max-width: 786px) {
+    top: 120px;
+  }
 `;
 const LogWrapper = styled.div`
   /* Frame 28 */
@@ -232,11 +300,15 @@ const LogWrapper = styled.div`
   position: absolute;
   width: 137px;
   height: 16px;
-  left: 107px;
+  left: 98px;
   top: 180px;
+
+  @media (max-width: 786px) {
+    top: 160px;
+  }
 `;
 const LoginButton = styled(Button)`
-  width: auto;
+  width: 68px;
   height: 16px;
 
   font-family: "Pretendard";
@@ -248,6 +320,7 @@ const LoginButton = styled(Button)`
   background-color: transparent;
   border: none;
   color: #666666;
+  margin-right: -6px;
 
   /* Inside auto layout */
   flex: none;
@@ -292,6 +365,18 @@ const ListText = styled.text`
   /* identical to box height, or 24px */
 
   color: #000000;
+  @media (max-width: 786px) {
+    /* 작성한글 */
+
+    position: absolute;
+    width: 80px;
+    height: 20px;
+    left: 35px;
+    top: 233px;
+
+    font-weight: 600;
+    font-size: 20px;
+  }
 `;
 
 const Footer = styled.div`
@@ -304,6 +389,9 @@ const Footer = styled.div`
   top: 1067px;
 
   background-color: #f8f8f8;
+  @media (max-width: 786px) {
+    display: none;
+  }
 `;
 const Title = styled.text`
   /* MEARI */
@@ -417,12 +505,38 @@ const Copyright = styled.text`
 
   color: #666666;
 `;
+const Close = styled(Button)`
+  display: none;
+  @media (max-width: 786px) {
+    /* close-large-fill */
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 375px;
+    top: 29px;
+    border: none;
+    background: transparent;
+  }
+`;
+const CloseSvg = styled.svg`
+  @media (max-width: 786px) {
+    /* Vector */
 
+    position: absolute;
+    left: 10.64%;
+    right: 10.64%;
+    top: 10.64%;
+    bottom: 10.64%;
+  }
+`;
 function MyPage() {
   const [LoginOpen, setLoginOpen] = useState(false);
   const [SignOutOpen, setSignOutOpen] = useState(false);
   const { nickname, memberId } = useParams();
   const { auth, setAuth } = useContext(AuthContext);
+  const { isMoblie } = useContext(WidthContext);
+  const navigate = useNavigate();
 
   // 마이페이지 진입 시 내가 쓴 글 조회
   const { data, refetch } = useGetAxios(
@@ -467,7 +581,21 @@ function MyPage() {
           </MapBtn>
         </BtnWrapper>
       </Header>
-
+      {/** 모바일의 경우에만 생기는 뒤로가기 버튼 */}
+      <Close onClick={() => navigate(-1)}>
+        <CloseSvg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.5859 10.0001L0.792969 2.20718L2.20718 0.792969L10.0001 8.58582L17.793 0.792969L19.2072 2.20718L11.4143 10.0001L19.2072 17.7929L17.793 19.2072L10.0001 11.4143L2.20718 19.2072L0.792969 17.7929L8.5859 10.0001Z"
+            fill="black"
+          />
+        </CloseSvg>
+      </Close>
       <MainText>마이페이지</MainText>
       <UserWrapper>
         <UserInfo>
