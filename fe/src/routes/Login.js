@@ -7,6 +7,8 @@ import { usePostAxios } from "../hooks/useAxios";
 import AuthContext from "../contexts/AuthProvider";
 import styled from "styled-components";
 import { FindIdModal, FindPwModal } from "../modals/FindIdPw";
+import { Default, Mobile } from "../componentes/MediaQueries";
+import ModalContext from "../contexts/ModalProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -53,6 +55,28 @@ const customLogOutStyles = {
 
     background: "#FFFFFF",
     borderRadius: " 26px",
+  },
+};
+const MobileLoginStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    position: "absolute",
+    width: "88vw",
+    height: "50vh",
+    left: "calc(50% - 99vw/2 + 0.5px)",
+    top: "calc(50% - 80vh/2 + 0.5px)",
+    overflowX: "hidden",
+
+    background: "#FFFFFF",
+    borderRadius: "26px",
   },
 };
 
@@ -106,6 +130,11 @@ const EmailInput = styled(Input)`
 
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+
+  @media (max-width: 786px) {
+    left: 20px;
+    width: 90vw;
+  }
 `;
 
 const PwInput = styled(EmailInput)`
@@ -229,17 +258,28 @@ const Close = styled(Button)`
   top: 23px;
   background-color: transparent;
   border: none;
+
+  @media (max-width: 786px) {
+    top: 35px;
+    left: 360px;
+  }
 `;
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
-  const [isIdOpen, setIsIdOpen] = useState(false);
-  const [isPwOpen, setIsPwOpen] = useState(false);
+  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen } =
+    useContext(ModalContext);
   const id = useInput("");
   const password = useInput("");
 
-  const onIdClick = () => setIsIdOpen(true);
-  const onPwClick = () => setIsPwOpen(true);
+  const onIdClick = () => {
+    setIsIdOpen(true);
+    closeModal();
+  };
+  const onPwClick = () => {
+    setIsPwOpen(true);
+    closeModal();
+  };
 
   const { mutation } = usePostAxios("auth");
 
@@ -259,60 +299,136 @@ function Login({ closeModal, isModalOpen }) {
   };
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={customLoginStyles}
-        contentLabel="Login"
-      >
-        <Title>로그인해주세요</Title>
-        <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
-        <form style={{ display: "flex", flexDirection: "column" }}>
-          <EmailInput placeholder={"email"} {...id} />
-          <PwInput placeholder={"password"} {...password} />
-          <LogButton
-            $isfilled={id.value !== "" && password.value !== "" ? true : false}
-            onClick={onSubmit}
-          >
-            <LogText
+      <Default>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          style={customLoginStyles}
+          contentLabel="Login"
+        >
+          <Title>로그인해주세요</Title>
+          <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
+          <form style={{ display: "flex", flexDirection: "column" }}>
+            <EmailInput placeholder={"email"} {...id} />
+            <PwInput placeholder={"password"} {...password} />
+            <LogButton
               $isfilled={
                 id.value !== "" && password.value !== "" ? true : false
               }
+              onClick={onSubmit}
             >
-              로그인하기
-            </LogText>
-          </LogButton>
-        </form>
-        <FindMenu>
-          <FindId onClick={onIdClick}>아이디찾기</FindId>
-          {isIdOpen ? (
-            <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
-          ) : null}
-          <FindBar>|</FindBar>
-          <FindPw onClick={onPwClick}>비밀번호찾기</FindPw>
-          {isPwOpen ? (
-            <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
-          ) : null}
-        </FindMenu>
-        <Close onClick={closeModal}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
-              fill="black"
-            />
-          </svg>
-        </Close>
-      </Modal>
+              <LogText
+                $isfilled={
+                  id.value !== "" && password.value !== "" ? true : false
+                }
+              >
+                로그인하기
+              </LogText>
+            </LogButton>
+          </form>
+          <FindMenu>
+            <FindId onClick={onIdClick}>아이디찾기</FindId>
+            <FindBar>|</FindBar>
+            <FindPw onClick={onPwClick}>비밀번호찾기</FindPw>
+          </FindMenu>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
+        </Modal>
+      </Default>
+
+      {/** 모바일 로그인 모달 */}
+      <Mobile>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          style={MobileLoginStyles}
+          contentLabel="MobileLogin"
+        >
+          <Title>로그인해주세요</Title>
+          <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
+          <form style={{ display: "flex", flexDirection: "column" }}>
+            <EmailInput placeholder={"email"} {...id} />
+            <PwInput placeholder={"password"} {...password} />
+            <LogButton
+              $isfilled={
+                id.value !== "" && password.value !== "" ? true : false
+              }
+              onClick={onSubmit}
+            >
+              <LogText
+                $isfilled={
+                  id.value !== "" && password.value !== "" ? true : false
+                }
+              >
+                로그인하기
+              </LogText>
+            </LogButton>
+          </form>
+          <FindMenu>
+            <FindId onClick={onIdClick}>아이디찾기</FindId>
+            {isIdOpen ? (
+              <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
+            ) : null}
+            <FindBar>|</FindBar>
+            <FindPw onClick={onPwClick}>비밀번호찾기</FindPw>
+            {isPwOpen ? (
+              <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
+            ) : null}
+          </FindMenu>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
+        </Modal>
+      </Mobile>
     </>
   );
 }
 
+const MobileLogOutStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    position: "absolute",
+    width: "87vw",
+    height: "25vh",
+    left: "calc(50% - 98vw/2 + 0.5px)",
+    top: "calc(50% - 40vh/2 + 0.5px)",
+    overflowX: "hidden",
+
+    background: "#FFFFFF",
+    borderRadius: "26px",
+  },
+};
 export const LogOutText = styled.text`
   /* 로그아웃하시겠습니까? */
 
@@ -331,6 +447,10 @@ export const LogOutText = styled.text`
   text-align: center;
 
   color: #000000;
+  @media (max-width: 786px) {
+    width: 100vw;
+    left: calc(50% - 100vw / 2);
+  }
 `;
 export const Cancle = styled(Button)`
   /* btn-lg */
@@ -404,20 +524,40 @@ function Logout({ closeModal, isModalOpen, setAuth }) {
 
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={customLogOutStyles}
-        contentLabel="Logout"
-      >
-        <LogOutText>로그아웃 하시나요??</LogOutText>
-        <Cancle onClick={closeModal}>
-          <CancleText>취소하기</CancleText>
-        </Cancle>
-        <SubmitOut onClick={onClick}>
-          <OutText>로그아웃</OutText>
-        </SubmitOut>
-      </Modal>
+      <Default>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          style={customLogOutStyles}
+          contentLabel="Logout"
+        >
+          <LogOutText>로그아웃 하시나요??</LogOutText>
+          <Cancle onClick={closeModal}>
+            <CancleText>취소하기</CancleText>
+          </Cancle>
+          <SubmitOut onClick={onClick}>
+            <OutText>로그아웃</OutText>
+          </SubmitOut>
+        </Modal>
+      </Default>
+
+      {/** 모바일 로그아웃 */}
+      <Mobile>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          style={MobileLogOutStyles}
+          contentLabel="Logout"
+        >
+          <LogOutText>로그아웃 하시나요??</LogOutText>
+          <Cancle onClick={closeModal}>
+            <CancleText>취소하기</CancleText>
+          </Cancle>
+          <SubmitOut onClick={onClick}>
+            <OutText>로그아웃</OutText>
+          </SubmitOut>
+        </Modal>
+      </Mobile>
     </>
   );
 }
