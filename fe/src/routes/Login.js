@@ -68,9 +68,9 @@ const MobileLoginStyles = {
   },
   content: {
     position: "absolute",
-    width: "90vw",
+    width: "88vw",
     height: "50vh",
-    left: "calc(50% - 420px/2 + 0.5px)",
+    left: "calc(50% - 97vw/2 + 0.5px)",
     top: "calc(50% - 80vh/2 + 0.5px)",
     overflowX: "hidden",
 
@@ -418,7 +418,7 @@ const MobileLogOutStyles = {
   },
   content: {
     position: "absolute",
-    width: "90vw",
+    width: "88vw",
     height: "20vh",
     left: "calc(50% - 420px/2 + 0.5px)",
     top: "calc(50% - 40vh/2 + 0.5px)",

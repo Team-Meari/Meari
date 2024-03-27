@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Button from "../componentes/Button";
 
 const Wrapper = styled.div`
   /* Frame 75 */
@@ -8,7 +7,7 @@ const Wrapper = styled.div`
   width: calc(100%);
   height: 50px;
   left: 0px;
-  top: 0px;
+  top: calc(0vh);
 
   background: rgba(255, 255, 255, 0.5);
 `;

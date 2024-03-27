@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
 import { useState } from "react";
 import Modal from "react-modal";
+import { Default, Mobile } from "../componentes/MediaQueries";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -29,6 +30,28 @@ const customStyles = {
     borderRadius: "26px",
   },
 };
+const customMobileStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    position: "absolute",
+    width: "90vw",
+    height: "95vh",
+    left: "calc(50% - 100vw/2)",
+    top: "calc(50% - 100vh/2)",
+    overflowY: "scroll",
+    overflowX: "hidden",
+    background: " #FFFFFF",
+    borderRadius: "26px",
+  },
+};
 const Form = styled.form`
   /* Frame 45 */
 
@@ -43,6 +66,10 @@ const Form = styled.form`
   height: 524px;
   left: 30px;
   top: 123px;
+
+  @media (max-width: 786px) {
+    width: 80vw;
+  }
 `;
 const Title = styled.text`
   /* 회원가입 */
@@ -61,6 +88,10 @@ const Title = styled.text`
   /* identical to box height, or 30px */
 
   color: #000000;
+
+  @media (max-width: 786px) {
+    width: 300px;
+  }
 `;
 const SubTitle = styled.text`
   /* 메아리서비스 이용을 위해 회원가입해주세요. */
@@ -91,20 +122,32 @@ const EmailInput = styled.div`
   flex: none;
   order: 0;
   flex-grow: 0;
+
+  @media (max-width: 786px) {
+    width: 80vw;
+  }
 `;
 const IdInput = styled.div`
   height: 105px;
   order: 1;
+  @media (max-width: 786px) {
+    width: 80vw;
+  }
 `;
 const PwInput = styled.div`
-  ${EmailInput};
   height: 105px;
   order: 2;
+  @media (max-width: 786px) {
+    width: 80vw;
+  }
 `;
 const PwConfirm = styled.div`
   ${EmailInput};
   height: 105px;
   order: 3;
+  @media (max-width: 786px) {
+    width: 87vw;
+  }
 `;
 const Explain = styled.div`
   /* Frame 41 */
@@ -175,9 +218,16 @@ const CustomInput = styled(Input)`
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+
+  @media (max-width: 786px) {
+    width: 87vw;
+  }
 `;
 const CustomIdInput = styled(CustomInput)`
   width: 386px;
+  @media (max-width: 786px) {
+    width: 60vw;
+  }
 `;
 const IdConfirm = styled(Button)`
   /* Frame 44 */
@@ -190,6 +240,11 @@ const IdConfirm = styled(Button)`
   background: #0cb46c;
   border-radius: 16px;
   border: none;
+
+  @media (max-width: 786px) {
+    width: 105px;
+    left: 255px;
+  }
 `;
 const ConfirmText = styled.text`
   /* 중복확인 */
@@ -284,6 +339,10 @@ const Close = styled(Button)`
   top: 23px;
   background-color: transparent;
   border: none;
+
+  @media (max-width: 786px) {
+    left: 365px;
+  }
 `;
 const TermText = styled.text`
   /* 약관동의 */
@@ -321,6 +380,11 @@ const TermForm = styled.div`
 
   background: #f8f8f8;
   border-radius: 16px;
+
+  @media (max-width: 786px) {
+    width: 80vw;
+    height: 85px;
+  }
 `;
 const TermWrapper1 = styled.div`
   /* Frame 48 */
@@ -525,168 +589,336 @@ function SignUp() {
   return (
     <>
       <SignUpButton onClick={openModal}>회원가입</SignUpButton>
-      {isModalOpen ? (
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Login"
-        >
-          <Title>회원가입</Title>
-          <SubTitle>메아리서비스 이용을 위해 회원가입해주세요</SubTitle>
-          <Form>
-            <EmailInput>
-              <Explain>
-                <ExText $widths={"37px"}>이메일</ExText>
-                <Star>*</Star>
-              </Explain>
-              <CustomInput name={"email"} {...email} />
-              <HelperText>HelperText</HelperText>
-            </EmailInput>
-
-            <IdInput>
-              <Explain>
-                <ExText $widths={"37px"}>아이디</ExText>
-                <Star>*</Star>
-              </Explain>
-              <CustomIdInput name={"nickname"} {...nickname} />
-              <IdConfirm>
-                <ConfirmText>중복확인</ConfirmText>
-              </IdConfirm>
-              <IdHelper>
-                <ErrorSvg>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                      fill="#FF2828"
-                    />
-                  </svg>
-                </ErrorSvg>
-                <ErrorText>
-                  아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
-                </ErrorText>
-              </IdHelper>
-            </IdInput>
-
-            <PwInput>
-              <Explain>
-                <ExText $widths={"49px"}>비밀번호</ExText>
-                <Star>*</Star>
-              </Explain>
-              <CustomInput name={"password"} {...password} />
-              <PwHelper>
-                <ErrorSvg>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                      fill="#FF2828"
-                    />
-                  </svg>
-                </ErrorSvg>
-                <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
-              </PwHelper>
-            </PwInput>
-
-            <PwConfirm>
-              <Explain>
-                <ExText $widths={"77px"}>비밀번호 확인</ExText>
-                <Star>*</Star>
-              </Explain>
-              <CustomInput name={"pwconfirm"} {...pwConfirm} />
-              <ConfirmHelper>
-                <ErrorSvg>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                      fill="#FF2828"
-                    />
-                  </svg>
-                </ErrorSvg>
-                <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
-              </ConfirmHelper>
-            </PwConfirm>
-          </Form>
-
-          <TermText>약관동의</TermText>
-          <TermForm>
-            <TermWrapper1>
-              <CustomTerm id="option1" type="radio"></CustomTerm>
-              <Label1 for="option1">약관 전체동의</Label1>
-            </TermWrapper1>
-
-            <TermWrapper2>
-              <TermSet>
-                <CustomTerm id="option2" type="radio"></CustomTerm>
-                <Label2 for="option2">이용약관 동의(필수)</Label2>
-              </TermSet>
-
-              <Detail>자세히보기</Detail>
-            </TermWrapper2>
-
-            <TermWrapper3>
-              <TermSet>
-                <CustomTerm id="option3" type="radio"></CustomTerm>
-                <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
-              </TermSet>
-              <Detail>자세히보기</Detail>
-            </TermWrapper3>
-          </TermForm>
-
-          <SubMitBtn
-            $isfilled={
-              email.value !== "" &&
-              nickname.value !== "" &&
-              password.value !== "" &&
-              pwConfirm.value !== ""
-            }
-            onClick={onSubmit}
+      <Default>
+        {isModalOpen ? (
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Login"
           >
-            <SubMitText
+            <Title>회원가입</Title>
+            <SubTitle>메아리서비스 이용을 위해 회원가입해주세요</SubTitle>
+            <Form>
+              <EmailInput>
+                <Explain>
+                  <ExText $widths={"37px"}>이메일</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"email"} {...email} />
+                <HelperText>HelperText</HelperText>
+              </EmailInput>
+
+              <IdInput>
+                <Explain>
+                  <ExText $widths={"37px"}>아이디</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomIdInput name={"nickname"} {...nickname} />
+                <IdConfirm>
+                  <ConfirmText>중복확인</ConfirmText>
+                </IdConfirm>
+                <IdHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>
+                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
+                  </ErrorText>
+                </IdHelper>
+              </IdInput>
+
+              <PwInput>
+                <Explain>
+                  <ExText $widths={"49px"}>비밀번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"password"} {...password} />
+                <PwHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                </PwHelper>
+              </PwInput>
+
+              <PwConfirm>
+                <Explain>
+                  <ExText $widths={"77px"}>비밀번호 확인</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <ConfirmHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                </ConfirmHelper>
+              </PwConfirm>
+            </Form>
+
+            <TermText>약관동의</TermText>
+            <TermForm>
+              <TermWrapper1>
+                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <Label1 for="option1">약관 전체동의</Label1>
+              </TermWrapper1>
+
+              <TermWrapper2>
+                <TermSet>
+                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <Label2 for="option2">이용약관 동의(필수)</Label2>
+                </TermSet>
+
+                <Detail>자세히보기</Detail>
+              </TermWrapper2>
+
+              <TermWrapper3>
+                <TermSet>
+                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
+                </TermSet>
+                <Detail>자세히보기</Detail>
+              </TermWrapper3>
+            </TermForm>
+
+            <SubMitBtn
               $isfilled={
                 email.value !== "" &&
                 nickname.value !== "" &&
                 password.value !== "" &&
                 pwConfirm.value !== ""
               }
+              onClick={onSubmit}
             >
-              회원가입하기
-            </SubMitText>
-          </SubMitBtn>
+              <SubMitText
+                $isfilled={
+                  email.value !== "" &&
+                  nickname.value !== "" &&
+                  password.value !== "" &&
+                  pwConfirm.value !== ""
+                }
+              >
+                회원가입하기
+              </SubMitText>
+            </SubMitBtn>
 
-          <Close onClick={closeModal}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <Close onClick={closeModal}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                  fill="black"
+                />
+              </svg>
+            </Close>
+          </Modal>
+        ) : null}
+      </Default>
+
+      {/** 모바일 회원가입 양식 */}
+      <Mobile>
+        {isModalOpen ? (
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            style={customMobileStyles}
+            contentLabel="Login"
+          >
+            <Title>회원가입</Title>
+            <SubTitle>메아리서비스 이용을 위해 회원가입해주세요</SubTitle>
+            <Form>
+              <EmailInput>
+                <Explain>
+                  <ExText $widths={"37px"}>이메일</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"email"} {...email} />
+                <HelperText>HelperText</HelperText>
+              </EmailInput>
+
+              <IdInput>
+                <Explain>
+                  <ExText $widths={"37px"}>아이디</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomIdInput name={"nickname"} {...nickname} />
+                <IdConfirm>
+                  <ConfirmText>중복확인</ConfirmText>
+                </IdConfirm>
+                <IdHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>
+                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
+                  </ErrorText>
+                </IdHelper>
+              </IdInput>
+
+              <PwInput>
+                <Explain>
+                  <ExText $widths={"49px"}>비밀번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"password"} {...password} />
+                <PwHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                </PwHelper>
+              </PwInput>
+
+              <PwConfirm>
+                <Explain>
+                  <ExText $widths={"77px"}>비밀번호 확인</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <ConfirmHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                </ConfirmHelper>
+              </PwConfirm>
+            </Form>
+
+            <TermText>약관동의</TermText>
+            <TermForm>
+              <TermWrapper1>
+                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <Label1 for="option1">약관 전체동의</Label1>
+              </TermWrapper1>
+
+              <TermWrapper2>
+                <TermSet>
+                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <Label2 for="option2">이용약관 동의(필수)</Label2>
+                </TermSet>
+
+                <Detail>자세히보기</Detail>
+              </TermWrapper2>
+
+              <TermWrapper3>
+                <TermSet>
+                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
+                </TermSet>
+                <Detail>자세히보기</Detail>
+              </TermWrapper3>
+            </TermForm>
+
+            <SubMitBtn
+              $isfilled={
+                email.value !== "" &&
+                nickname.value !== "" &&
+                password.value !== "" &&
+                pwConfirm.value !== ""
+              }
+              onClick={onSubmit}
             >
-              <path
-                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
-                fill="black"
-              />
-            </svg>
-          </Close>
-        </Modal>
-      ) : null}
+              <SubMitText
+                $isfilled={
+                  email.value !== "" &&
+                  nickname.value !== "" &&
+                  password.value !== "" &&
+                  pwConfirm.value !== ""
+                }
+              >
+                회원가입하기
+              </SubMitText>
+            </SubMitBtn>
+
+            <Close onClick={closeModal}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                  fill="black"
+                />
+              </svg>
+            </Close>
+          </Modal>
+        ) : null}
+      </Mobile>
     </>
   );
 }

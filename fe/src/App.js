@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BasicMap from "./componentes/Map";
 import Button from "./componentes/Button";
@@ -25,6 +25,11 @@ const Wrapper = styled.div`
   height: 910px;
 
   background: #ffffff;
+`;
+const MobileWrapper = styled.div`
+  @media (max-width: 786px) {
+    overflow: hidden;
+  }
 `;
 
 const OpenContainer = styled.div`
@@ -605,7 +610,7 @@ function App() {
 
       <Mobile>
         {isFold ? (
-          <>
+          <MobileWrapper>
             <MobileHeader>
               <Title>MEARI</Title>
               <Open
@@ -656,7 +661,7 @@ function App() {
                 </Svg>
               </MeariSubmit>
             </InputContainer>
-          </>
+          </MobileWrapper>
         ) : (
           <Section $isfold={isFold}>
             <Title $isfold={isFold}>MEARI</Title>
