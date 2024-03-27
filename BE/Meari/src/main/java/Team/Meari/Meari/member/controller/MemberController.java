@@ -1,17 +1,9 @@
 package Team.Meari.Meari.member.controller;
 
-import Team.Meari.Meari.chat.dto.ChatResDto;
-import Team.Meari.Meari.chat.entity.Chat;
 import Team.Meari.Meari.chat.service.ChatService;
-import Team.Meari.Meari.global.security.dto.CustomMultiResDto;
 import Team.Meari.Meari.global.dto.MultiResDto;
 import Team.Meari.Meari.global.dto.SingleResDto;
-import Team.Meari.Meari.global.security.dto.LoginDto;
-import Team.Meari.Meari.global.security.dto.TokenDto;
-import Team.Meari.Meari.global.security.utils.SecurityUtils;
-import Team.Meari.Meari.member.dto.MemberPatchReqDto;
-import Team.Meari.Meari.member.dto.MemberPostReqDto;
-import Team.Meari.Meari.member.dto.MemberResDto;
+import Team.Meari.Meari.member.dto.*;
 import Team.Meari.Meari.member.entity.Member;
 import Team.Meari.Meari.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,15 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-    private final ChatService chatService;
 
-//    @PostMapping("/login")
-//    public TokenDto login(@RequestBody LoginDto loginDto) {
-//        String email = loginDto.getEmail();
-//        String password = loginDto.getPassword();
-//        TokenDto tokenDto = memberService.login(email, password);
-//        return tokenDto;
-//    }
 
     /**
      * Post 요청
@@ -45,10 +30,10 @@ public class MemberController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<SingleResDto<Long>> postMember(@RequestBody MemberPostReqDto memberPostReqDto) {
+    public ResponseEntity<SingleResDto<String>> postMember(@Valid @RequestBody MemberPostReqDto memberPostReqDto) {
         Member savedMember = memberService.createMember(memberPostReqDto.toEntity());
 
-        return new ResponseEntity<>(new SingleResDto<>(savedMember.getMemberId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResDto<>("회원가입이 완료되었습니다."), HttpStatus.CREATED);
     }
 
     /**
@@ -102,5 +87,41 @@ public class MemberController {
         List<MemberResDto> list = response.stream().collect(Collectors.toList());
 
         return new ResponseEntity<>(new MultiResDto<>(list, page), HttpStatus.OK);
+    }
+
+    /**
+     * 이메일 중복 확인
+     * @param email
+     * @return
+     */
+    @GetMapping("/verify-email/{email}")
+    public ResponseEntity<SingleResDto<String>> checkEmailDuplicate(@PathVariable String email) {
+        memberService.checkEmailDuplicate(email);
+        return new ResponseEntity<>(new SingleResDto<>("사용 가능한 이메일입니다."), HttpStatus.OK);
+    }
+
+    /**
+     * 닉네임 중복 확인
+     * @param nickname
+     * @return
+     */
+    @GetMapping("/verify-nickname/{nickname}")
+    public ResponseEntity<SingleResDto<String>> checkNicknameDuplicate(@PathVariable String nickname) {
+        memberService.checkNicknameDuplicate(nickname);
+
+        return new ResponseEntity<>(new SingleResDto<>("사용 가능한 닉네임입니다."), HttpStatus.OK);
+    }
+
+    @GetMapping("/findId")
+    public ResponseEntity<SingleResDto<String>> findEmail(@RequestBody FindEmailDto findEmailDto){
+        Member member = memberService.findEmail(findEmailDto.getPhone());
+
+        return new ResponseEntity<>(new SingleResDto<>(member.getEmail()), HttpStatus.OK);
+    }
+    @GetMapping("/findPassword")
+    public ResponseEntity<SingleResDto<String>> findPassword(@RequestBody FindPasswordDto findPasswordDto){
+        Member member = memberService.findPassword(findPasswordDto.getEmail());
+
+        return new ResponseEntity<>(new SingleResDto<>(member.getPassword()), HttpStatus.OK);
     }
 }
