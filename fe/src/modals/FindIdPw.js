@@ -3,8 +3,10 @@ import styled from "styled-components";
 import Button from "../componentes/Button";
 import Input from "../componentes/Input";
 import { useInput } from "../hooks/useInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Success from "./Success";
+import { Default, Mobile } from "../componentes/MediaQueries";
+import ModalContext from "../contexts/ModalProvider";
 
 const customIdStyles = {
   overlay: {
@@ -29,6 +31,30 @@ const customIdStyles = {
     borderRadius: "26px",
   },
 };
+const MobileIdStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    /* 아이디찾기/disabled */
+
+    position: "absolute",
+    width: "88vw",
+    height: "50vh",
+    left: "calc(50% - 99vw/2 + 0.5px)",
+    top: "calc(50% - 80vh/2 - 0.5px)",
+    overflow: "hidden",
+
+    background: "#FFFFFF",
+    borderRadius: "26px",
+  },
+};
 const customPwStyles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
@@ -47,6 +73,30 @@ const customPwStyles = {
     height: "432px",
     left: "calc(50% - 559px/2 + 0.5px)",
     top: "calc(50% - 432px/2)",
+
+    background: "#FFFFFF",
+    borderRadius: "26px",
+  },
+};
+const MobilePwStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    /* 아이디찾기/disabled */
+
+    position: "absolute",
+    width: "88vw",
+    height: "50vh",
+    left: "calc(50% - 99vw/2 + 0.5px)",
+    top: "calc(50% - 80vh/2 - 0.5px)",
+    overflow: "hidden",
 
     background: "#FFFFFF",
     borderRadius: "26px",
@@ -87,6 +137,10 @@ const Wrapper = styled.div`
   height: 167px;
   left: 40px;
   top: 100px;
+
+  @media (max-width: 786px) {
+    left: 30px;
+  }
 `;
 const Email = styled.div`
   /* input */
@@ -98,6 +152,10 @@ const Email = styled.div`
   flex: none;
   order: 0;
   flex-grow: 0;
+
+  @media (max-width: 786px) {
+    width: 90vw;
+  }
 `;
 const Text = styled.div`
   /* Frame 41 */
@@ -165,6 +223,9 @@ const Number = styled.div`
   flex: none;
   order: 1;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    width: 90vw;
+  }
 `;
 const EmailInput = styled(Input)`
   /* Frame 38 */
@@ -179,6 +240,9 @@ const EmailInput = styled(Input)`
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+  @media (max-width: 786px) {
+    width: 63vw;
+  }
 `;
 
 const NumberInput = styled(EmailInput)``;
@@ -194,6 +258,10 @@ const EmailBtn = styled(Button)`
   color: ${(props) => (props.$isfill ? "#ffffff" : "#b6b6b6")};
   border-radius: 16px;
   border: none;
+
+  @media (max-width: 786px) {
+    width: 20vw;
+  }
 `;
 const NumerBtn = styled(EmailBtn)``;
 
@@ -230,7 +298,7 @@ const SubmitInside = styled(InsideText)`
 `;
 
 export function FindIdModal({ isIdOpen, setIsIdOpen }) {
-  const [isSuccess, setSuccessOpen] = useState(false);
+  const { setSuccessOpen } = useContext(ModalContext);
   const email = useInput("");
   const number = useInput("");
   const closeModal = () => {
@@ -238,60 +306,112 @@ export function FindIdModal({ isIdOpen, setIsIdOpen }) {
   };
   const onSubmit = () => {
     setSuccessOpen(true);
+    closeModal();
   };
   return (
     <>
-      <Modal
-        isOpen={isIdOpen}
-        onRequestClose={closeModal}
-        style={customIdStyles}
-        contentLabel="IdFind"
-      >
-        <Title>아이디찾기</Title>
-        <Wrapper>
-          <Email>
-            <Text>
-              <Text1>이메일</Text1>
-              <Star>
-                <svg
-                  width="8"
-                  height="8"
-                  viewBox="0 0 8 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                    fill="#FF2828"
-                  />
-                </svg>
-              </Star>
-            </Text>
-            <EmailInput placeholder={"email"} {...email}></EmailInput>
-            <EmailBtn $isfill={email.value !== "" ? true : false}>
-              <InsideText>인증받기</InsideText>
-            </EmailBtn>
-          </Email>
-          <Number>
-            <NumberInput
-              placeholder={"인증번호를 입력해주세요"}
-              {...number}
-            ></NumberInput>
-            <NumerBtn $isfill={number.value !== "" ? true : false}>
-              <InsideText>확인</InsideText>
-            </NumerBtn>
-          </Number>
-        </Wrapper>
-        <Submit
-          onClick={onSubmit}
-          $isfill={email.value !== "" && number.value !== "" ? true : false}
+      <Default>
+        <Modal
+          isOpen={isIdOpen}
+          onRequestClose={closeModal}
+          style={customIdStyles}
+          contentLabel="IdFind"
         >
-          <SubmitInside>아이디찾기</SubmitInside>
-        </Submit>
-        {isSuccess ? (
-          <Success SuccessOpen={isSuccess} setSuccessOpen={setSuccessOpen} />
-        ) : null}
-      </Modal>
+          <Title>아이디찾기</Title>
+          <Wrapper>
+            <Email>
+              <Text>
+                <Text1>이메일</Text1>
+                <Star>
+                  <svg
+                    width="8"
+                    height="8"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                      fill="#FF2828"
+                    />
+                  </svg>
+                </Star>
+              </Text>
+              <EmailInput placeholder={"email"} {...email}></EmailInput>
+              <EmailBtn $isfill={email.value !== "" ? true : false}>
+                <InsideText>인증받기</InsideText>
+              </EmailBtn>
+            </Email>
+            <Number>
+              <NumberInput
+                placeholder={"인증번호를 입력해주세요"}
+                {...number}
+              ></NumberInput>
+              <NumerBtn $isfill={number.value !== "" ? true : false}>
+                <InsideText>확인</InsideText>
+              </NumerBtn>
+            </Number>
+          </Wrapper>
+          <Submit
+            onClick={onSubmit}
+            $isfill={email.value !== "" && number.value !== "" ? true : false}
+          >
+            <SubmitInside>아이디찾기</SubmitInside>
+          </Submit>
+        </Modal>
+      </Default>
+
+      {/** 아이디 찾기 모바일 */}
+      <Mobile>
+        <Modal
+          isOpen={isIdOpen}
+          onRequestClose={closeModal}
+          style={MobileIdStyles}
+          contentLabel="IdFind"
+        >
+          <Title>아이디찾기</Title>
+          <Wrapper>
+            <Email>
+              <Text>
+                <Text1>이메일</Text1>
+                <Star>
+                  <svg
+                    width="8"
+                    height="8"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                      fill="#FF2828"
+                    />
+                  </svg>
+                </Star>
+              </Text>
+              <EmailInput placeholder={"email"} {...email}></EmailInput>
+              <EmailBtn $isfill={email.value !== "" ? true : false}>
+                <InsideText>인증받기</InsideText>
+              </EmailBtn>
+            </Email>
+            <Number>
+              <NumberInput
+                placeholder={"인증번호를 입력해주세요"}
+                {...number}
+              ></NumberInput>
+              <NumerBtn $isfill={number.value !== "" ? true : false}>
+                <InsideText>확인</InsideText>
+              </NumerBtn>
+            </Number>
+          </Wrapper>
+          <Submit
+            onClick={onSubmit}
+            $isfill={email.value !== "" && number.value !== "" ? true : false}
+          >
+            <SubmitInside>아이디찾기</SubmitInside>
+          </Submit>
+        </Modal>
+      </Mobile>
     </>
   );
 }
@@ -319,6 +439,10 @@ const PwEmailInput = styled(Input)`
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+
+  @media (max-width: 786px) {
+    width: 83vw;
+  }
 `;
 const PwId = styled.div`
   /* input */
@@ -343,77 +467,138 @@ const PwIdInput = styled(Input)`
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+
+  @media (max-width: 786px) {
+    width: 83vw;
+  }
 `;
 
 export function FindPwModal({ isPwOpen, setIsPwOpen }) {
-  const [isSuccess, setSuccessOpen] = useState(false);
+  const { setPwSuccessOpen } = useContext(ModalContext);
   const email = useInput("");
   const id = useInput("");
   const closeModal = () => {
     setIsPwOpen(false);
   };
   const onSubmit = () => {
-    setSuccessOpen(true);
+    setPwSuccessOpen(true);
+    closeModal();
   };
   return (
     <>
-      <Modal
-        isOpen={isPwOpen}
-        onRequestClose={closeModal}
-        style={customPwStyles}
-        contentLabel="PwFind"
-      >
-        <Title>비밀번호찾기</Title>
-        <PwEmail>
-          <Text>
-            <Text1>이메일</Text1>
-            <Star>
-              <svg
-                width="8"
-                height="8"
-                viewBox="0 0 8 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                  fill="#FF2828"
-                />
-              </svg>
-            </Star>
-          </Text>
-          <PwEmailInput placeholder={"email"} {...email}></PwEmailInput>
-        </PwEmail>
-        <PwId>
-          <Text>
-            <Text1>아이디</Text1>
-            <Star>
-              <svg
-                width="8"
-                height="8"
-                viewBox="0 0 8 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
-                  fill="#FF2828"
-                />
-              </svg>
-            </Star>
-          </Text>
-          <PwIdInput placeholder={"id"} {...id}></PwIdInput>
-        </PwId>
-        <Submit
-          onClick={onSubmit}
-          $isfill={email.value !== "" && id.value !== "" ? true : false}
+      <Default>
+        <Modal
+          isOpen={isPwOpen}
+          onRequestClose={closeModal}
+          style={customPwStyles}
+          contentLabel="PwFind"
         >
-          <SubmitInside>비밀번호찾기</SubmitInside>
-        </Submit>
-        {isSuccess ? (
-          <Success SuccessOpen={isSuccess} setSuccessOpen={setSuccessOpen} />
-        ) : null}
-      </Modal>
+          <Title>비밀번호찾기</Title>
+          <PwEmail>
+            <Text>
+              <Text1>이메일</Text1>
+              <Star>
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                    fill="#FF2828"
+                  />
+                </svg>
+              </Star>
+            </Text>
+            <PwEmailInput placeholder={"email"} {...email}></PwEmailInput>
+          </PwEmail>
+          <PwId>
+            <Text>
+              <Text1>아이디</Text1>
+              <Star>
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                    fill="#FF2828"
+                  />
+                </svg>
+              </Star>
+            </Text>
+            <PwIdInput placeholder={"id"} {...id}></PwIdInput>
+          </PwId>
+          <Submit
+            onClick={onSubmit}
+            $isfill={email.value !== "" && id.value !== "" ? true : false}
+          >
+            <SubmitInside>비밀번호찾기</SubmitInside>
+          </Submit>
+        </Modal>
+      </Default>
+
+      <Mobile>
+        <Modal
+          isOpen={isPwOpen}
+          onRequestClose={closeModal}
+          style={MobilePwStyles}
+          contentLabel="PwFind"
+        >
+          <Title>비밀번호찾기</Title>
+          <PwEmail>
+            <Text>
+              <Text1>이메일</Text1>
+              <Star>
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                    fill="#FF2828"
+                  />
+                </svg>
+              </Star>
+            </Text>
+            <PwEmailInput placeholder={"email"} {...email}></PwEmailInput>
+          </PwEmail>
+          <PwId>
+            <Text>
+              <Text1>아이디</Text1>
+              <Star>
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.636 7.42L3.744 4.72L1.44 6.16L0.828 5.116L3.24 3.856L0.828 2.596L1.44 1.516L3.744 2.992L3.636 0.256H4.86L4.752 2.992L7.056 1.516L7.632 2.596L5.22 3.856L7.632 5.116L7.056 6.16L4.752 4.72L4.86 7.42H3.636Z"
+                    fill="#FF2828"
+                  />
+                </svg>
+              </Star>
+            </Text>
+            <PwIdInput placeholder={"id"} {...id}></PwIdInput>
+          </PwId>
+          <Submit
+            onClick={onSubmit}
+            $isfill={email.value !== "" && id.value !== "" ? true : false}
+          >
+            <SubmitInside>비밀번호찾기</SubmitInside>
+          </Submit>
+        </Modal>
+      </Mobile>
     </>
   );
 }

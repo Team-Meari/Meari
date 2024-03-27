@@ -10,6 +10,7 @@ import axios from "axios";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { UserProvider } from "./contexts/UserProvider";
 import { WidthProvider } from "./contexts/WidthProvider";
+import { ModalProvider } from "./contexts/ModalProvider";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,9 @@ root.render(
     <WidthProvider>
       <AuthProvider>
         <UserProvider>
-          <RouterProvider router={router} />
+          <ModalProvider>
+            <RouterProvider router={router} />
+          </ModalProvider>
         </UserProvider>
       </AuthProvider>
     </WidthProvider>

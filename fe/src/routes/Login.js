@@ -8,6 +8,7 @@ import AuthContext from "../contexts/AuthProvider";
 import styled from "styled-components";
 import { FindIdModal, FindPwModal } from "../modals/FindIdPw";
 import { Default, Mobile } from "../componentes/MediaQueries";
+import ModalContext from "../contexts/ModalProvider";
 
 const apiurl = process.env.REACT_APP_URL;
 
@@ -70,7 +71,7 @@ const MobileLoginStyles = {
     position: "absolute",
     width: "88vw",
     height: "50vh",
-    left: "calc(50% - 97vw/2 + 0.5px)",
+    left: "calc(50% - 99vw/2 + 0.5px)",
     top: "calc(50% - 80vh/2 + 0.5px)",
     overflowX: "hidden",
 
@@ -266,13 +267,19 @@ const Close = styled(Button)`
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
-  const [isIdOpen, setIsIdOpen] = useState(false);
-  const [isPwOpen, setIsPwOpen] = useState(false);
+  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen } =
+    useContext(ModalContext);
   const id = useInput("");
   const password = useInput("");
 
-  const onIdClick = () => setIsIdOpen(true);
-  const onPwClick = () => setIsPwOpen(true);
+  const onIdClick = () => {
+    setIsIdOpen(true);
+    closeModal();
+  };
+  const onPwClick = () => {
+    setIsPwOpen(true);
+    closeModal();
+  };
 
   const { mutation } = usePostAxios("auth");
 
@@ -321,14 +328,8 @@ function Login({ closeModal, isModalOpen }) {
           </form>
           <FindMenu>
             <FindId onClick={onIdClick}>아이디찾기</FindId>
-            {isIdOpen ? (
-              <FindIdModal isIdOpen={isIdOpen} setIsIdOpen={setIsIdOpen} />
-            ) : null}
             <FindBar>|</FindBar>
             <FindPw onClick={onPwClick}>비밀번호찾기</FindPw>
-            {isPwOpen ? (
-              <FindPwModal isPwOpen={isPwOpen} setIsPwOpen={setIsPwOpen} />
-            ) : null}
           </FindMenu>
           <Close onClick={closeModal}>
             <svg
@@ -418,9 +419,9 @@ const MobileLogOutStyles = {
   },
   content: {
     position: "absolute",
-    width: "88vw",
-    height: "20vh",
-    left: "calc(50% - 420px/2 + 0.5px)",
+    width: "87vw",
+    height: "25vh",
+    left: "calc(50% - 98vw/2 + 0.5px)",
     top: "calc(50% - 40vh/2 + 0.5px)",
     overflowX: "hidden",
 
