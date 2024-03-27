@@ -278,8 +278,8 @@ export default function Success({ SuccessOpen, setSuccessOpen, isPw }) {
           <FindPwBtn onClick={onFindClick}>
             <BtnText>{isPw ? "아이디찾기" : "비밀번호찾기"}</BtnText>
           </FindPwBtn>
-          <LoginButton>
-            <LogText onClick={onLoginClick}>로그인하기</LogText>
+          <LoginButton onClick={onLoginClick}>
+            <LogText>로그인하기</LogText>
           </LoginButton>
           <Close onClick={closeModal}>
             <svg
