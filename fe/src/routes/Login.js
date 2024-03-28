@@ -286,7 +286,7 @@ function Login({ closeModal, isModalOpen }) {
   const onSubmit = () => {
     //console.log(id.value, password.value);
     mutation.mutate({
-      url: "/auth/login",
+      url: apiurl + "auth/login",
       method: "POST",
       data: {
         email: id.value,

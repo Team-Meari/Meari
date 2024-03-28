@@ -474,7 +474,7 @@ function App() {
 
   const mearidata = useGetAxios(
     {
-      url: "/chats/find-all?size=100",
+      url: apiurl + "chats/find-all?size=100",
       method: "GET",
     },
     "mearidata"
