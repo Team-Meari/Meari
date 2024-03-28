@@ -1,8 +1,12 @@
 [[redirects]]
-  from = "/proxy/*"
-  to = "https://e76d-211-108-235-4.ngrok-free.app/:splat"
+  from = "/chats/find-all?size=100"
+  to = "http://15.165.207.71:8080/chats/find-all?size=100"
   status = 200
-  force = true
+
+[[redirects]]
+  from = "/auth/*"
+  to = "http://15.165.207.71:8080/"
+  status = 200
 
 [[redirects]]
   from = "/*"
