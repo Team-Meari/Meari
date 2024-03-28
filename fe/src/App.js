@@ -152,8 +152,8 @@ const Section = styled.div`
     /* 모바일/메인/사이드네비 */
 
     position: relative;
-    width: 414px;
-    height: 736px;
+    width: 95vw;
+    height: 100vh;
     left: 0px;
     top: 0px;
 

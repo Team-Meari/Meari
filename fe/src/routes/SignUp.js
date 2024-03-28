@@ -34,7 +34,7 @@ const customMobileStyles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
     width: "100%",
-    height: "100vh",
+    height: "95vh",
     zIndex: "10",
     position: "fixed",
     top: "0",
@@ -44,8 +44,8 @@ const customMobileStyles = {
     position: "absolute",
     width: "90vw",
     height: "95vh",
-    left: "calc(50% - 100vw/2)",
-    top: "calc(50% - 100vh/2)",
+    left: "calc(50% - 103vw/2)",
+    top: "calc(50% - 94vh/2)",
     overflowY: "scroll",
     overflowX: "hidden",
     background: " #FFFFFF",
@@ -361,6 +361,9 @@ const TermText = styled.text`
   /* identical to box height, or 18px */
 
   color: #1d1d1d;
+  @media (max-width: 786px) {
+    top: 597px;
+  }
 `;
 const TermForm = styled.div`
   /* Frame 47 */
@@ -504,6 +507,10 @@ const SubMitBtn = styled(Button)`
   background: ${(props) => (props.$isfilled ? "#0CB46C" : "#EDEDED")};
   border-radius: 0px 0px 26px 26px;
   border: none;
+
+  @media (max-width: 786px) {
+    bottom: 0px;
+  }
 `;
 
 const SubMitText = styled.text`

@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import Button from "../componentes/Button";
 import Modal from "react-modal";
+import { Default, Mobile } from "../componentes/MediaQueries";
+import { usePostAxios } from "../hooks/useAxios";
+import { useState } from "react";
+import Loading from "../componentes/Loading";
+
+const apiurl = process.env.REACT_APP_URL;
 
 const customDetailStyles = {
   overlay: {
@@ -31,6 +37,36 @@ const customDetailStyles = {
     borderRadius: "26px",
   },
 };
+
+const MobileDetailStyles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  },
+  content: {
+    /* 로그인해주세요. */
+
+    /* Auto layout */
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: " 40px 0px 0px",
+    gap: "30px",
+
+    width: "96vw",
+    height: "70vh",
+    left: "calc(50% - 100vw/2 - 4px)",
+    top: "calc(50% - 80vh/2 + 0.5px)",
+    overflow: "hidden",
+    background: "#FFFFFF",
+    borderRadius: "26px",
+  },
+};
 const Wrapper = styled.div`
   /* Frame 67 */
 
@@ -48,6 +84,10 @@ const Wrapper = styled.div`
   flex: none;
   order: 0;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    width: 90vw;
+    height: 40vh;
+  }
 `;
 const Content = styled.text`
   width: 590px;
@@ -69,6 +109,11 @@ const Content = styled.text`
   flex: none;
   order: 0;
   flex-grow: 0;
+
+  @media (max-width: 786px) {
+    width: 90vw;
+    height: 40vh;
+  }
 `;
 const SubContent = styled.div`
   /* Frame 70 */
@@ -92,6 +137,9 @@ const SubContent = styled.div`
   flex: none;
   order: 1;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    width: 90vw;
+  }
 `;
 const SubText1 = styled.div`
   /* Frame 68 */
@@ -105,6 +153,9 @@ const SubText1 = styled.div`
   flex: none;
   order: 0;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    width: 90vw;
+  }
 `;
 const SubText2 = styled.div`
   /* Frame 69 */
@@ -119,6 +170,9 @@ const SubText2 = styled.div`
   flex: none;
   order: 1;
   flex-grow: 0;
+  @media (max-width: 786px) {
+    width: 90vw;
+  }
 `;
 const Explain = styled.text`
   /* 작성위치 */
@@ -202,38 +256,83 @@ export default function MeariDetail({
   setDetailOpen,
   value,
   author,
+  chatId,
 }) {
+  const [isLoading, setLoading] = useState(false);
+  const { mutation } = usePostAxios("postdelete");
   const closeModal = () => {
     setDetailOpen(false);
   };
+  const onDelete = () => {
+    setLoading(true);
+    mutation.mutate({
+      url: apiurl + `chats/${chatId}`,
+      method: "DELETE",
+    });
+    setLoading(false);
+    closeModal();
+  };
   return (
     <>
-      <Modal
-        isOpen={isDetailOpen}
-        onRequestClose={closeModal}
-        style={customDetailStyles}
-        contentLabel="detail"
-      >
-        <Wrapper>
-          <Content>{value}</Content>
-          <SubContent>
-            <SubText1>
-              <Explain>작성자</Explain>
-              <Detail>{author}</Detail>
-            </SubText1>
-            <SubText2>
-              <Explain>작성날짜</Explain>
-              <Detail>24.03.11</Detail>
-            </SubText2>
-          </SubContent>
-        </Wrapper>
-        <RemoveBtn>
-          <BtnText>삭제하기</BtnText>
-        </RemoveBtn>
-        <Close>
-          <BtnText>닫기</BtnText>
-        </Close>
-      </Modal>
+      <Default>
+        <Modal
+          isOpen={isDetailOpen}
+          onRequestClose={closeModal}
+          style={customDetailStyles}
+          contentLabel="detail"
+        >
+          <Wrapper>
+            <Content>{value}</Content>
+            <SubContent>
+              <SubText1>
+                <Explain>작성자</Explain>
+                <Detail>{author}</Detail>
+              </SubText1>
+              <SubText2>
+                <Explain>작성날짜</Explain>
+                <Detail>24.03.11</Detail>
+              </SubText2>
+            </SubContent>
+          </Wrapper>
+          <RemoveBtn onClick={onDelete}>
+            <BtnText>삭제하기</BtnText>
+          </RemoveBtn>
+          <Close>
+            <BtnText onClick={() => closeModal()}>닫기</BtnText>
+          </Close>
+        </Modal>
+      </Default>
+
+      <Mobile>
+        <Modal
+          isOpen={isDetailOpen}
+          onRequestClose={closeModal}
+          style={MobileDetailStyles}
+          contentLabel="detail"
+        >
+          <Wrapper>
+            <Content>{value}</Content>
+            <SubContent>
+              <SubText1>
+                <Explain>작성자</Explain>
+                <Detail>{author}</Detail>
+              </SubText1>
+              <SubText2>
+                <Explain>작성날짜</Explain>
+                <Detail>24.03.11</Detail>
+              </SubText2>
+            </SubContent>
+          </Wrapper>
+          <RemoveBtn onClick={onDelete}>
+            <BtnText>삭제하기</BtnText>
+          </RemoveBtn>
+          <Close onClick={() => closeModal()}>
+            <BtnText>닫기</BtnText>
+          </Close>
+        </Modal>
+      </Mobile>
+
+      {isLoading ? <Loading /> : null}
     </>
   );
 }

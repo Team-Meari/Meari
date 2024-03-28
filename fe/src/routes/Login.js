@@ -297,6 +297,7 @@ function Login({ closeModal, isModalOpen }) {
     password.textClear();
     closeModal();
   };
+
   return (
     <>
       <Default>
@@ -516,10 +517,29 @@ export const OutText = styled.text`
 `;
 
 function Logout({ closeModal, isModalOpen, setAuth }) {
+  const logout = usePostAxios("");
+
   const onClick = () => {
-    window.localStorage.removeItem("accessToken");
+    logout.mutation.mutate({
+      url: apiurl + "auth/logout",
+      method: "DELETE",
+    });
+    window.localStorage.removeItem("refreshToken");
     setAuth(false);
     closeModal();
+  };
+
+  const resign = usePostAxios("reauth");
+
+  const refresh = () => {
+    resign.mutation.mutate({
+      url: apiurl + "auth/reissue",
+      method: "POST",
+      data: {
+        accessToken: window.localStorage.getItem("accessToken"),
+        refreshToken: window.localStorage.getItem("refreshToken"),
+      },
+    });
   };
 
   return (
@@ -538,6 +558,7 @@ function Logout({ closeModal, isModalOpen, setAuth }) {
           <SubmitOut onClick={onClick}>
             <OutText>로그아웃</OutText>
           </SubmitOut>
+          <Button onClick={refresh}>리프레쉬</Button>
         </Modal>
       </Default>
 

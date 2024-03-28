@@ -298,6 +298,7 @@ function MeariList({ data, $custom }) {
                 key={index}
                 value={item?.content}
                 author={item?.nickName}
+                chatId={item?.chatId}
                 $custom={$custom}
               />
             ))

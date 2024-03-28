@@ -15,7 +15,7 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      console.log(response);
+      //console.log("data: ", response);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -50,13 +50,16 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
           url: config.url,
           data: config.data, // 2024-02-16 일반 데이터 형식으로 표현
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+            Authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
           },
         });
-        console.log(response);
+        console.log("response: ", response);
+        console.log("포스트 실행됨");
         return response;
       } catch (error) {
         console.log(error);
+        console.log("포스트 실행됨");
         throw error;
       }
     },
@@ -70,11 +73,28 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
           "accessToken",
           response.data.tokenDto.accessToken
         );
+        window.localStorage.setItem(
+          "refreshToken",
+          response.data.tokenDto.refreshToken
+        );
         setAuth(true);
         setNickname(response.data.memberResDto.nickname);
         setMemberId(response.data.memberResDto.memberId);
-        console.log(response.data.memberResDto);
+      } else if (type === "reauth") {
+        window.localStorage.setItem(
+          "accessToken",
+          response.data.tokenDto.accessToken
+        );
+        window.localStorage.setItem(
+          "refreshToken",
+          response.data.tokenDto.refreshToken
+        );
+      } else {
+        console.log(response);
       }
+    },
+    onError: (response) => {
+      console.log(response);
     },
   });
 
