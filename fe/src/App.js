@@ -29,8 +29,6 @@ const apiurl =
 const Wrapper = styled.div`
   display: flex;
   position: relative;
-  width: 1920px;
-  height: 910px;
 
   background: #ffffff;
 `;
