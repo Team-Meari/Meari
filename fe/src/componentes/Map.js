@@ -2,7 +2,6 @@ import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import OverlayContent from "./OverlayContent";
 import markerImage from "../img/marker.png";
-import { useEffect, useState } from "react";
 import { useList } from "../hooks/useList";
 
 const StyledMap = styled(Map)`
