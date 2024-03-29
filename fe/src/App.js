@@ -18,6 +18,7 @@ import MobileHeader from "./mobile_components/MobileHeader";
 import ModalContext from "./contexts/ModalProvider";
 import { FindIdModal, FindPwModal } from "./modals/FindIdPw";
 import Success from "./modals/Success";
+import Loading from "./componentes/Loading";
 
 //const apiurl = process.env.REACT_APP_URL;
 
@@ -29,6 +30,8 @@ const apiurl =
 const Wrapper = styled.div`
   display: flex;
   position: relative;
+  width: 100vw;
+  height: 100vh;
 
   background: #ffffff;
 `;
@@ -457,7 +460,9 @@ const LoginButton = styled(Button)`
 
 function App() {
   const [myposition, setPosition] = useState(null);
-  const [isFold, setIsFold] = useState(true);
+  const [isFold, setIsFold] = useState(false);
+  const [mobileFold, setMobileFold] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { nickname, memberId } = useContext(userContext);
   const { auth } = useContext(AuthContext);
   const { isMobile } = useContext(WidthContext);
@@ -475,6 +480,12 @@ function App() {
   } = useContext(ModalContext);
   const input = useInput("");
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
   const mearidata = useGetAxios(
     {
       url: apiurl + "chats/find-all?size=100",
@@ -517,6 +528,7 @@ function App() {
 
   return (
     <>
+      {loading ? <Loading /> : null}
       <Default>
         <Wrapper>
           <OpenContainer>
@@ -642,16 +654,15 @@ function App() {
       {/** 여기부터는 모바일 버전 컴포넌트 구성 */}
 
       <Mobile>
-        {isFold ? (
+        {mobileFold ? (
           <MobileWrapper>
             <MobileHeader>
               <Title>MEARI</Title>
               <Open
                 onClick={() => {
-                  setIsFold((prev) => {
+                  setMobileFold((prev) => {
                     return !prev ? true : false;
                   });
-                  console.log(isFold);
                 }}
               >
                 <MobileMenuSvg
@@ -700,10 +711,9 @@ function App() {
             <Title $isfold={isFold}>MEARI</Title>
             <Fold
               onClick={() => {
-                setIsFold((prev) => {
+                setMobileFold((prev) => {
                   return !prev ? true : false;
                 });
-                console.log(isFold);
               }}
             >
               <svg

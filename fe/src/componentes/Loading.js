@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Spinner from "../img/loading.gif";
 
 const Background = styled.div`
   position: absolute;
@@ -25,7 +26,7 @@ export default function Loading() {
   return (
     <Background>
       <LoadingText>잠시만 기다려주세요!!!</LoadingText>
-      <Image src="src\img\loading.gif"></Image>
+      <Image src={Spinner}></Image>
     </Background>
   );
 }

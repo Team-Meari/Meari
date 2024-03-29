@@ -15,7 +15,7 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      //console.log("data: ", response);
+      console.log("data: ", response);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -29,8 +29,9 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
-    enabled: true,
+    enabled: type === "mearidata" ? true : false,
     refetchInterval: type === "mearidata" ? 60 * 5000 : null,
+    retry: false,
   });
 
   return { data, error, isLoading, refetch };

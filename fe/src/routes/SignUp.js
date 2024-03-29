@@ -1,11 +1,12 @@
-import { usePostAxios } from "../hooks/useAxios";
+import { useGetAxios, usePostAxios } from "../hooks/useAxios";
 import Input from "../componentes/Input";
 import Button from "../componentes/Button";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Default, Mobile } from "../componentes/MediaQueries";
+import Loading from "../componentes/Loading";
 
 //const apiurl = process.env.REACT_APP_URL;
 const apiurl =
@@ -47,8 +48,8 @@ const customMobileStyles = {
     position: "absolute",
     width: "90vw",
     height: "95vh",
-    left: "calc(50% - 103vw/2)",
-    top: "calc(50% - 94vh/2)",
+    left: "calc(50% - 100vw/2)",
+    top: "calc(50% - 96vh/2)",
     overflowY: "scroll",
     overflowX: "hidden",
     background: " #FFFFFF",
@@ -271,19 +272,6 @@ const ConfirmText = styled.text`
 
   color: #ffffff;
 `;
-const HelperText = styled.div`
-  /* Frame 40 */
-
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px;
-  gap: 5px;
-
-  width: 310px;
-  height: 16px;
-`;
 const IdHelper = styled.div`
   /* Frame 43 */
 
@@ -368,7 +356,7 @@ const TermText = styled.text`
 
   color: #1d1d1d;
   @media (max-width: 786px) {
-    top: 597px;
+    top: 637px;
   }
 `;
 const TermForm = styled.div`
@@ -393,6 +381,7 @@ const TermForm = styled.div`
   @media (max-width: 786px) {
     width: 80vw;
     height: 85px;
+    top: 667px;
   }
 `;
 const TermWrapper1 = styled.div`
@@ -515,7 +504,8 @@ const SubMitBtn = styled(Button)`
   border: none;
 
   @media (max-width: 786px) {
-    bottom: 0px;
+    display: flex;
+    top: 790px;
   }
 `;
 
@@ -577,11 +567,30 @@ const useModal = () => {
 
 function SignUp() {
   const { openModal, closeModal, isModalOpen } = useModal();
+  const [emailText, setEmailText] = useState(" ");
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [nickCheck, setNickCheck] = useState(false);
+  const [nicknameText, setNicknameText] = useState(
+    "5~16자 이내의 닉네임을 입력해주세요."
+  );
   const email = useInput("");
   const nickname = useInput("");
   const number = useInput("");
   const password = useInput("");
   const pwConfirm = useInput("");
+
+  const verifyNickname = useGetAxios(
+    {
+      url: apiurl + `members/verify-nickname/${nickname.value}`,
+    },
+    "verifyn"
+  );
+  const verifyEmail = useGetAxios(
+    {
+      url: apiurl + `members/verify-email/${email.value}`,
+    },
+    "verifye"
+  );
 
   const { mutation } = usePostAxios("userdata");
 
@@ -599,6 +608,41 @@ function SignUp() {
     closeModal();
     console.log("회원가입 완료");
   };
+  const onEmailVerify = () => {
+    verifyEmail.refetch();
+  };
+  useEffect(() => {
+    if (verifyEmail.error !== null) {
+      setEmailText("중복된 이메일입니다!!");
+      setEmailCheck(false);
+    } else {
+      if (email.value === "") {
+        setEmailText("이메일을 입력해주세요.");
+        setEmailCheck(false);
+      } else {
+        setEmailText("사용가능한 이메일입니다.");
+        setEmailCheck(true);
+      }
+    }
+  }, [verifyEmail, email.value]);
+
+  const onNicknameVerify = () => {
+    verifyNickname.refetch();
+  };
+  useEffect(() => {
+    if (verifyNickname.error !== null) {
+      setNicknameText("중복된 아이디입니다!!");
+      setNickCheck(false);
+    } else {
+      if (nickname.value === "") {
+        setNicknameText("아이디를 입력해주세요.");
+        setNickCheck(false);
+      } else {
+        setNicknameText("사용가능한 아이디입니다.");
+        setNickCheck(true);
+      }
+    }
+  }, [verifyNickname, nickname.value]);
 
   return (
     <>
@@ -620,10 +664,57 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomEmailInput name={"email"} {...email} />
-                <EmailConfirm>
+                <EmailConfirm onClick={onEmailVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </EmailConfirm>
-                <HelperText>HelperText</HelperText>
+                <IdHelper>
+                  <ErrorSvg>
+                    {!emailCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </ErrorSvg>
+                  <ErrorText>{emailText}</ErrorText>
+                </IdHelper>
               </EmailInput>
 
               <IdInput>
@@ -632,27 +723,56 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomIdInput name={"nickname"} {...nickname} />
-                <IdConfirm>
+                <IdConfirm onClick={onNicknameVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </IdConfirm>
                 <IdHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!nickCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>
-                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
-                  </ErrorText>
+                  <ErrorText>{nicknameText}</ErrorText>
                 </IdHelper>
               </IdInput>
 
@@ -795,7 +915,7 @@ function SignUp() {
           </Modal>
         ) : null}
       </Default>
-
+      {verifyEmail.isLoading ? <Loading /> : null}
       {/** 모바일 회원가입 양식 */}
       <Mobile>
         {isModalOpen ? (
@@ -814,10 +934,26 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomEmailInput name={"email"} {...email} />
-                <EmailConfirm>
+                <EmailConfirm onClick={onEmailVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </EmailConfirm>
-                <HelperText>HelperText</HelperText>
+                <IdHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>{emailText}</ErrorText>
+                </IdHelper>
               </EmailInput>
 
               <IdInput>
@@ -826,7 +962,7 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomIdInput name={"nickname"} {...nickname} />
-                <IdConfirm>
+                <IdConfirm onClick={onNicknameVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </IdConfirm>
                 <IdHelper>
@@ -844,11 +980,34 @@ function SignUp() {
                       />
                     </svg>
                   </ErrorSvg>
-                  <ErrorText>
-                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
-                  </ErrorText>
+                  <ErrorText>{nicknameText}</ErrorText>
                 </IdHelper>
               </IdInput>
+
+              <NumberInput>
+                <Explain>
+                  <ExText $widths={"55px"}>전화번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"phonenumber"} {...number} />
+                <PwHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>정확한 전화번호를 입력해주세요</ErrorText>
+                </PwHelper>
+              </NumberInput>
 
               <PwInput>
                 <Explain>
