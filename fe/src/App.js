@@ -24,7 +24,7 @@ import Success from "./modals/Success";
 const apiurl =
   window.location.hostname === "localhost"
     ? "http://15.165.207.71:8080/"
-    : "api";
+    : "api/";
 
 const Wrapper = styled.div`
   display: flex;
