@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { Cancle, CancleText, OutText, SubmitOut } from "../routes/Login";
 import { Default, Mobile } from "../componentes/MediaQueries";
 
-const apiurl = process.env.REACT_APP_URL;
+//const apiurl = process.env.REACT_APP_URL;
+const apiurl =
+  window.location.hostname === "localhost"
+    ? "http://15.165.207.71:8080/"
+    : "api/";
 
 const customCofirmStyles = {
   overlay: {

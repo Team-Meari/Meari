@@ -10,7 +10,12 @@ import { FindIdModal, FindPwModal } from "../modals/FindIdPw";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import ModalContext from "../contexts/ModalProvider";
 
-const apiurl = process.env.REACT_APP_URL;
+//const apiurl = process.env.REACT_APP_URL;
+
+const apiurl =
+  window.location.hostname === "localhost"
+    ? "http://15.165.207.71:8080/"
+    : "api/";
 
 const customLoginStyles = {
   overlay: {

@@ -6,7 +6,11 @@ import { usePostAxios } from "../hooks/useAxios";
 import { useState } from "react";
 import Loading from "../componentes/Loading";
 
-const apiurl = process.env.REACT_APP_URL;
+//const apiurl = process.env.REACT_APP_URL;
+const apiurl =
+  window.location.hostname === "localhost"
+    ? "http://15.165.207.71:8080/"
+    : "api/";
 
 const customDetailStyles = {
   overlay: {

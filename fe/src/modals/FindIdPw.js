@@ -8,6 +8,11 @@ import Success from "./Success";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import ModalContext from "../contexts/ModalProvider";
 
+const apiurl =
+  window.location.hostname === "localhost"
+    ? "http://15.165.207.71:8080/"
+    : "api/";
+
 const customIdStyles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
