@@ -25,7 +25,6 @@ const customStyles = {
     height: "800px",
     left: "calc(50% - 549px/2 + 0.5px)",
     top: "calc(50% - 800px/2 + 0.5px)",
-
     background: " #FFFFFF",
     borderRadius: "26px",
   },
@@ -141,6 +140,7 @@ const PwInput = styled.div`
     width: 80vw;
   }
 `;
+const NumberInput = styled(PwInput)``;
 const PwConfirm = styled.div`
   ${EmailInput};
   height: 105px;
@@ -229,6 +229,7 @@ const CustomIdInput = styled(CustomInput)`
     width: 60vw;
   }
 `;
+const CustomEmailInput = styled(CustomIdInput)``;
 const IdConfirm = styled(Button)`
   /* Frame 44 */
 
@@ -246,6 +247,7 @@ const IdConfirm = styled(Button)`
     left: 255px;
   }
 `;
+const EmailConfirm = styled(IdConfirm)``;
 const ConfirmText = styled.text`
   /* 중복확인 */
 
@@ -351,7 +353,7 @@ const TermText = styled.text`
   width: 63px;
   height: 18px;
   left: 30px;
-  top: 597px;
+  top: 630px;
 
   font-family: "Pretendard";
   font-style: normal;
@@ -379,7 +381,7 @@ const TermForm = styled.div`
   width: 500px;
   height: 95px;
   left: 30px;
-  top: 625px;
+  top: 650px;
 
   background: #f8f8f8;
   border-radius: 16px;
@@ -573,6 +575,7 @@ function SignUp() {
   const { openModal, closeModal, isModalOpen } = useModal();
   const email = useInput("");
   const nickname = useInput("");
+  const number = useInput("");
   const password = useInput("");
   const pwConfirm = useInput("");
 
@@ -612,7 +615,10 @@ function SignUp() {
                   <ExText $widths={"37px"}>이메일</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"email"} {...email} />
+                <CustomEmailInput name={"email"} {...email} />
+                <EmailConfirm>
+                  <ConfirmText>중복확인</ConfirmText>
+                </EmailConfirm>
                 <HelperText>HelperText</HelperText>
               </EmailInput>
 
@@ -645,6 +651,31 @@ function SignUp() {
                   </ErrorText>
                 </IdHelper>
               </IdInput>
+
+              <NumberInput>
+                <Explain>
+                  <ExText $widths={"55px"}>전화번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"phonenumber"} {...number} />
+                <PwHelper>
+                  <ErrorSvg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                        fill="#FF2828"
+                      />
+                    </svg>
+                  </ErrorSvg>
+                  <ErrorText>정확한 전화번호를 입력해주세요</ErrorText>
+                </PwHelper>
+              </NumberInput>
 
               <PwInput>
                 <Explain>
@@ -778,7 +809,10 @@ function SignUp() {
                   <ExText $widths={"37px"}>이메일</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"email"} {...email} />
+                <CustomEmailInput name={"email"} {...email} />
+                <EmailConfirm>
+                  <ConfirmText>중복확인</ConfirmText>
+                </EmailConfirm>
                 <HelperText>HelperText</HelperText>
               </EmailInput>
 
