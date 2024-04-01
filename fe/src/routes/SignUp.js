@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import Loading from "../componentes/Loading";
 import { useCheck } from "../hooks/useCheck";
+import RadioInput from "../componentes/RadioInput";
 
 //const apiurl = process.env.REACT_APP_URL;
 const apiurl =
@@ -430,19 +431,7 @@ const TermSet = styled.div`
   width: 181px;
   height: 25px;
 `;
-const CustomTerm = styled(Input)`
-  /* 약관 전체동의 */
-
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 100%;
-  /* identical to box height, or 16px */
-
-  color: #1d1d1d;
-`;
-const Label1 = styled.label`
+const Label1 = styled.text`
   /* 약관 전체동의 */
 
   position: absolute;
@@ -458,7 +447,7 @@ const Label1 = styled.label`
 
   color: #1d1d1d;
 `;
-const Label2 = styled.label`
+const Label2 = styled.text`
   /* 이용약관 동의(필수) */
 
   position: absolute;
@@ -493,6 +482,7 @@ const Detail = styled.text`
   display: flex;
   align-items: center;
   text-decoration-line: underline;
+  cursor: pointer;
 
   color: #666666;
 `;
@@ -576,6 +566,10 @@ function SignUp() {
   const [emailText, setEmailText] = useState(" ");
   const [emailCheck, setEmailCheck] = useState(false);
   const [nickCheck, setNickCheck] = useState(false);
+  const [isAllChecked, setAllChecked] = useState(false);
+  const [is2Checked, set2Checked] = useState(false);
+  const [is3Checked, set3Checked] = useState(false);
+
   const [nicknameText, setNicknameText] = useState(
     "5~16자 이내의 닉네임을 입력해주세요."
   );
@@ -653,6 +647,29 @@ function SignUp() {
     }
   }, [verifyNickname, nickname.value]);
 
+  const handleAllRadioClick = () => {
+    setAllChecked(!isAllChecked); // 상태를 반전시킴
+    if (!isAllChecked) {
+      set2Checked(true);
+      set3Checked(true);
+    } else {
+      set2Checked(false);
+      set3Checked(false);
+    }
+  };
+  const handle2RadioClick = () => {
+    set2Checked(!is2Checked);
+  };
+  const handle3RadioClick = () => {
+    set3Checked(!is3Checked);
+  };
+  useEffect(() => {
+    if (is2Checked && is3Checked) {
+      setAllChecked(true);
+    } else {
+      setAllChecked(false);
+    }
+  }, [is2Checked, is3Checked]);
   return (
     <>
       <SignUpButton onClick={openModal}>회원가입</SignUpButton>
@@ -969,13 +986,23 @@ function SignUp() {
             <TermText>약관동의</TermText>
             <TermForm>
               <TermWrapper1>
-                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <RadioInput
+                  id="option1"
+                  value="1"
+                  isChecked={isAllChecked}
+                  handleRadioClick={handleAllRadioClick}
+                />
                 <Label1 for="option1">약관 전체동의</Label1>
               </TermWrapper1>
 
               <TermWrapper2>
                 <TermSet>
-                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option2"
+                    value="2"
+                    isChecked={is2Checked}
+                    handleRadioClick={handle2RadioClick}
+                  />
                   <Label2 for="option2">이용약관 동의(필수)</Label2>
                 </TermSet>
 
@@ -984,7 +1011,12 @@ function SignUp() {
 
               <TermWrapper3>
                 <TermSet>
-                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option3"
+                    value="3"
+                    isChecked={is3Checked}
+                    handleRadioClick={handle3RadioClick}
+                  />
                   <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
                 </TermSet>
                 <Detail>자세히보기</Detail>
@@ -1344,13 +1376,23 @@ function SignUp() {
             <TermText>약관동의</TermText>
             <TermForm>
               <TermWrapper1>
-                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <RadioInput
+                  id="option1"
+                  value="1"
+                  isChecked={isAllChecked}
+                  handleRadioClick={handleAllRadioClick}
+                />
                 <Label1 for="option1">약관 전체동의</Label1>
               </TermWrapper1>
 
               <TermWrapper2>
                 <TermSet>
-                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option2"
+                    value="2"
+                    isChecked={is2Checked}
+                    handleRadioClick={handle2RadioClick}
+                  />
                   <Label2 for="option2">이용약관 동의(필수)</Label2>
                 </TermSet>
 
@@ -1359,7 +1401,12 @@ function SignUp() {
 
               <TermWrapper3>
                 <TermSet>
-                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option3"
+                    value="3"
+                    isChecked={is3Checked}
+                    handleRadioClick={handle3RadioClick}
+                  />
                   <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
                 </TermSet>
                 <Detail>자세히보기</Detail>

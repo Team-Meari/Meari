@@ -4,7 +4,6 @@ import BasicMap from "./componentes/Map";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import MeariList from "./routes/MeariList";
-import Input from "./componentes/Input";
 import { useInput } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
@@ -369,7 +368,7 @@ const InputContainer = styled.div`
       `}
 `;
 
-const MeariInput = styled(Input)`
+const InputBackGround = styled.div`
   box-sizing: border-box;
 
   width: 500px;
@@ -379,16 +378,41 @@ const MeariInput = styled(Input)`
   border: 1px solid #e3e3e3;
   border-radius: 16px;
 
+  @media (max-width: 768px) {
+    /* input */
+    width: 384px;
+    height: 50px;
+  }
+`;
+const MeariInput = styled.textarea`
+  box-sizing: border-box;
+
+  width: 420px;
+  min-height: 35px; /* 최소 높이 설정 */
+  height: auto;
+  top: 10px;
+  margin: 15px;
+
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  outline: none;
+
+  resize: none; /* 세로 방향 크기 조절만 허용 */
+  overflow-y: auto; /* 내용이 넘칠 때 스크롤바 자동으로 나타나도록 설정 *
+
   /* Inside auto layout */
   flex: none;
   order: 0;
   align-self: stretch;
   flex-grow: 0;
 
+  font-size: 16px;
+
   @media (max-width: 768px) {
     /* input */
-    width: 384px;
-    height: 50px;
+    width: 284px;
+    height: 30px;
   }
 `;
 
@@ -610,25 +634,27 @@ function App() {
             mearidata={mearidata}
           />
           <InputContainer $isfold={isFold}>
-            <MeariInput
-              name={"mearivalue"}
-              placeholder={"메아리를 외쳐보세요!!"}
-              {...input}
-            ></MeariInput>
-            <MeariSubmit onClick={onSubmitMeari}>
-              <Svg
-                width="19"
-                height="19"
-                viewBox="0 0 19 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
-                  fill="white"
-                />
-              </Svg>
-            </MeariSubmit>
+            <InputBackGround>
+              <MeariInput
+                name={"mearivalue"}
+                placeholder={"메아리를 외쳐보세요!!"}
+                {...input}
+              ></MeariInput>
+              <MeariSubmit onClick={onSubmitMeari}>
+                <Svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
+                    fill="white"
+                  />
+                </Svg>
+              </MeariSubmit>
+            </InputBackGround>
           </InputContainer>
         </Wrapper>
         {LoginOpen ? (
@@ -686,25 +712,27 @@ function App() {
               mearidata={mearidata}
             />
             <InputContainer $isfold={isFold}>
-              <MeariInput
-                name={"mearivalue"}
-                placeholder={"메아리를 외쳐보세요!!"}
-                {...input}
-              ></MeariInput>
-              <MeariSubmit onClick={onSubmitMeari}>
-                <Svg
-                  width="19"
-                  height="19"
-                  viewBox="0 0 19 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
-                    fill="white"
-                  />
-                </Svg>
-              </MeariSubmit>
+              <InputBackGround>
+                <MeariInput
+                  name={"mearivalue"}
+                  placeholder={"메아리를 외쳐보세요!!"}
+                  {...input}
+                ></MeariInput>
+                <MeariSubmit onClick={onSubmitMeari}>
+                  <Svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 19 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
+                      fill="white"
+                    />
+                  </Svg>
+                </MeariSubmit>
+              </InputBackGround>
             </InputContainer>
           </MobileWrapper>
         ) : (

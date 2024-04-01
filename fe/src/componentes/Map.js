@@ -28,7 +28,7 @@ export default function BasicMap({ lat, lng, mearidata }) {
         lng: lng ? lng : 126.570667,
       }}
       level={3} // 지도의 확대 레벨
-      zoomable={false}
+      //zoomable={false}
     >
       <MapMarker
         position={{
