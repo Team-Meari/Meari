@@ -256,6 +256,7 @@ const MainLink = styled(Link)`
   order: 2;
   flex-grow: 0;
   background-color: transparent;
+  text-decoration: none;
 `;
 
 const Bar = styled.text`

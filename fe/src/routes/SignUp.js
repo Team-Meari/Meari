@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import Loading from "../componentes/Loading";
+import { useCheck } from "../hooks/useCheck";
 
 //const apiurl = process.env.REACT_APP_URL;
 const apiurl =
@@ -31,6 +32,8 @@ const customStyles = {
     left: "calc(50% - 549px/2 + 0.5px)",
     top: "calc(50% - 800px/2 + 0.5px)",
     background: " #FFFFFF",
+    overflowY: "scroll",
+    overflowX: "hidden",
     borderRadius: "26px",
   },
 };
@@ -79,6 +82,7 @@ const Title = styled.text`
   /* 회원가입 */
 
   position: absolute;
+  width: 300px;
   height: 30px;
   left: 30px;
   right: 455px;
@@ -286,6 +290,8 @@ const IdHelper = styled.div`
   height: 16px;
   left: 10px;
   top: 103px;
+
+  margin-top: 5px;
 `;
 const PwHelper = styled(IdHelper)`
   width: 222px;
@@ -345,7 +351,7 @@ const TermText = styled.text`
   width: 63px;
   height: 18px;
   left: 30px;
-  top: 630px;
+  top: 680px;
 
   font-family: "Pretendard";
   font-style: normal;
@@ -373,7 +379,7 @@ const TermForm = styled.div`
   width: 500px;
   height: 95px;
   left: 30px;
-  top: 650px;
+  top: 720px;
 
   background: #f8f8f8;
   border-radius: 16px;
@@ -498,7 +504,7 @@ const SubMitBtn = styled(Button)`
   left: 0px;
   right: 0px;
   bottom: 0px;
-
+  top: 860px;
   background: ${(props) => (props.$isfilled ? "#0CB46C" : "#EDEDED")};
   border-radius: 0px 0px 26px 26px;
   border: none;
@@ -529,7 +535,7 @@ const SubMitText = styled.text`
   color: ${(props) => (props.$isfilled ? "#FFFFFF" : "#b6b6b6")};
 `;
 
-const SignUpButton = styled.text`
+const SignUpButton = styled(Button)`
   width: auto;
   height: 16px;
 
@@ -576,8 +582,11 @@ function SignUp() {
   const email = useInput("");
   const nickname = useInput("");
   const number = useInput("");
+  const numberCheck = useCheck(number.value);
   const password = useInput("");
+  const pwCheck = useCheck(password.value);
   const pwConfirm = useInput("");
+  const pwConfirmCheck = useCheck(pwConfirm.value);
 
   const verifyNickname = useGetAxios(
     {
@@ -784,20 +793,55 @@ function SignUp() {
                 <CustomInput name={"phonenumber"} {...number} />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!numberCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>정확한 전화번호를 입력해주세요</ErrorText>
+                  <ErrorText>
+                    {numberCheck.isChecked
+                      ? "가능한 전화번호 입니다."
+                      : "정확한 전화번호를 입력해주세요"}
+                  </ErrorText>
                 </PwHelper>
               </NumberInput>
 
@@ -809,20 +853,55 @@ function SignUp() {
                 <CustomInput name={"password"} {...password} />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                  <ErrorText>
+                    {pwCheck.isChecked
+                      ? "가능한 비밀번호 입니다."
+                      : "영문+숫자 비밀번호를 입력해주세요."}
+                  </ErrorText>
                 </PwHelper>
               </PwInput>
 
@@ -834,20 +913,55 @@ function SignUp() {
                 <CustomInput name={"pwconfirm"} {...pwConfirm} />
                 <ConfirmHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwConfirmCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                  <ErrorText>
+                    {pwConfirmCheck.isChecked
+                      ? "비밀번호가 확인되었습니다."
+                      : "비밀번호가 일치하지 않습니다."}
+                  </ErrorText>
                 </ConfirmHelper>
               </PwConfirm>
             </Form>
@@ -939,18 +1053,49 @@ function SignUp() {
                 </EmailConfirm>
                 <IdHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!emailCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
                   <ErrorText>{emailText}</ErrorText>
                 </IdHelper>
@@ -967,18 +1112,49 @@ function SignUp() {
                 </IdConfirm>
                 <IdHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!nickCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
                   <ErrorText>{nicknameText}</ErrorText>
                 </IdHelper>
@@ -992,20 +1168,55 @@ function SignUp() {
                 <CustomInput name={"phonenumber"} {...number} />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!numberCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>정확한 전화번호를 입력해주세요</ErrorText>
+                  <ErrorText>
+                    {numberCheck.isChecked
+                      ? "가능한 전화번호 입니다."
+                      : "정확한 전화번호를 입력해주세요"}
+                  </ErrorText>
                 </PwHelper>
               </NumberInput>
 
@@ -1017,20 +1228,55 @@ function SignUp() {
                 <CustomInput name={"password"} {...password} />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                  <ErrorText>
+                    {pwCheck.isChecked
+                      ? "가능한 비밀번호 입니다."
+                      : "영문+숫자 비밀번호를 입력해주세요."}
+                  </ErrorText>
                 </PwHelper>
               </PwInput>
 
@@ -1042,20 +1288,55 @@ function SignUp() {
                 <CustomInput name={"pwconfirm"} {...pwConfirm} />
                 <ConfirmHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwConfirmCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                  <ErrorText>
+                    {pwConfirmCheck.isChecked
+                      ? "비밀번호가 확인되었습니다."
+                      : "비밀번호가 일치하지 않습니다."}
+                  </ErrorText>
                 </ConfirmHelper>
               </PwConfirm>
             </Form>
