@@ -19,12 +19,9 @@ import { FindIdModal, FindPwModal } from "./modals/FindIdPw";
 import Success from "./modals/Success";
 import Loading from "./componentes/Loading";
 
-//const apiurl = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_URL;
 
-const apiurl =
-  window.location.hostname === "localhost"
-    ? "http://15.165.207.71:8080/"
-    : "api/";
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const Wrapper = styled.div`
   display: flex;

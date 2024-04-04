@@ -10,11 +10,8 @@ import Loading from "../componentes/Loading";
 import { useCheck } from "../hooks/useCheck";
 import RadioInput from "../componentes/RadioInput";
 
-//const apiurl = process.env.REACT_APP_URL;
-const apiurl =
-  window.location.hostname === "localhost"
-    ? "http://15.165.207.71:8080/"
-    : "api/";
+const url = process.env.REACT_APP_URL;
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const customStyles = {
   overlay: {
