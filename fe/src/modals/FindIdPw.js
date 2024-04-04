@@ -6,11 +6,8 @@ import { useInput } from "../hooks/useInput";
 import { useContext } from "react";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import ModalContext from "../contexts/ModalProvider";
-
-const apiurl =
-  window.location.hostname === "localhost"
-    ? "http://15.165.207.71:8080/"
-    : "api/";
+const url = process.env.REACT_APP_URL;
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const customIdStyles = {
   overlay: {
