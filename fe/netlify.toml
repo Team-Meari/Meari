@@ -1,0 +1,13 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://fa44-180-68-125-6.ngrok-free.app/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  # 모든 경로에 대한 CORS 허용
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
