@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import AuthContext from "../contexts/AuthProvider";
 import userContext from "../contexts/UserProvider";
+import ModalContext from "../contexts/ModalProvider";
 
 export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
   const dataFetch = async () => {
@@ -41,6 +42,7 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
   const queryClient = useQueryClient();
   const { setAuth } = useContext(AuthContext);
   const { setNickname, setMemberId } = useContext(userContext);
+  const { setErrorOpen } = useContext(ModalContext);
 
   const mutation = useMutation({
     mutationKey: ["postdata"],
@@ -56,11 +58,9 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
           },
         });
         console.log("response: ", response);
-        console.log("포스트 실행됨");
         return response;
       } catch (error) {
         console.log(error);
-        console.log("포스트 실행됨");
         throw error;
       }
     },
@@ -95,6 +95,7 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
       }
     },
     onError: (response) => {
+      setErrorOpen(true);
       console.log(response);
     },
   });

@@ -18,6 +18,7 @@ import ModalContext from "./contexts/ModalProvider";
 import { FindIdModal, FindPwModal } from "./modals/FindIdPw";
 import Success from "./modals/Success";
 import Loading from "./componentes/Loading";
+import DeleteConfirm from "./modals/DeleteConfirm";
 
 const url = process.env.REACT_APP_URL;
 
@@ -499,6 +500,8 @@ function App() {
     setSuccessOpen,
     isPwSuccess,
     setPwSuccessOpen,
+    isErrorOpen,
+    setErrorOpen,
   } = useContext(ModalContext);
   const input = useInput("");
 
@@ -673,6 +676,12 @@ function App() {
             isPw={true}
           />
         ) : null}
+        {isErrorOpen ? (
+          <DeleteConfirm
+            isErrorOpen={isErrorOpen}
+            setErrorOpen={setErrorOpen}
+          />
+        ) : null}
       </Default>
 
       {/** 여기부터는 모바일 버전 컴포넌트 구성 */}
@@ -800,6 +809,12 @@ function App() {
                 SuccessOpen={isPwSuccess}
                 setSuccessOpen={setPwSuccessOpen}
                 isPw={true}
+              />
+            ) : null}
+            {isErrorOpen ? (
+              <DeleteConfirm
+                isErrorOpen={isErrorOpen}
+                setErrorOpen={setErrorOpen}
               />
             ) : null}
           </Section>

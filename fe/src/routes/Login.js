@@ -269,7 +269,7 @@ const Close = styled(Button)`
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
-  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen } =
+  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen, isError } =
     useContext(ModalContext);
   const id = useInput("");
   const password = useInput("");
