@@ -3,10 +3,11 @@ import styled from "styled-components";
 import Button from "../componentes/Button";
 import Input from "../componentes/Input";
 import { useInput } from "../hooks/useInput";
-import { useContext, useState } from "react";
-import Success from "./Success";
+import { useContext } from "react";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import ModalContext from "../contexts/ModalProvider";
+const url = process.env.REACT_APP_URL;
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const customIdStyles = {
   overlay: {
@@ -296,7 +297,21 @@ const InsideText = styled.text`
 const SubmitInside = styled(InsideText)`
   font-size: 20px;
 `;
+const Close = styled(Button)`
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  left: 535px;
+  right: 30px;
+  top: 23px;
+  background-color: transparent;
+  border: none;
 
+  @media (max-width: 786px) {
+    top: 35px;
+    left: 360px;
+  }
+`;
 export function FindIdModal({ isIdOpen, setIsIdOpen }) {
   const { setSuccessOpen } = useContext(ModalContext);
   const email = useInput("");
@@ -358,6 +373,20 @@ export function FindIdModal({ isIdOpen, setIsIdOpen }) {
           >
             <SubmitInside>아이디찾기</SubmitInside>
           </Submit>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
         </Modal>
       </Default>
 
@@ -410,6 +439,20 @@ export function FindIdModal({ isIdOpen, setIsIdOpen }) {
           >
             <SubmitInside>아이디찾기</SubmitInside>
           </Submit>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
         </Modal>
       </Mobile>
     </>
@@ -540,6 +583,20 @@ export function FindPwModal({ isPwOpen, setIsPwOpen }) {
           >
             <SubmitInside>비밀번호찾기</SubmitInside>
           </Submit>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
         </Modal>
       </Default>
 
@@ -597,6 +654,20 @@ export function FindPwModal({ isPwOpen, setIsPwOpen }) {
           >
             <SubmitInside>비밀번호찾기</SubmitInside>
           </Submit>
+          <Close onClick={closeModal}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+                fill="black"
+              />
+            </svg>
+          </Close>
         </Modal>
       </Mobile>
     </>

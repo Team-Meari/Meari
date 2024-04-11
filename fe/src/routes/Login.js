@@ -10,7 +10,9 @@ import { FindIdModal, FindPwModal } from "../modals/FindIdPw";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import ModalContext from "../contexts/ModalProvider";
 
-const apiurl = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_URL;
+
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const customLoginStyles = {
   overlay: {
@@ -267,7 +269,7 @@ const Close = styled(Button)`
 
 // modal 방식으로 구현예정
 function Login({ closeModal, isModalOpen }) {
-  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen } =
+  const { isIdOpen, setIsIdOpen, isPwOpen, setIsPwOpen, isError } =
     useContext(ModalContext);
   const id = useInput("");
   const password = useInput("");
@@ -297,6 +299,7 @@ function Login({ closeModal, isModalOpen }) {
     password.textClear();
     closeModal();
   };
+
   return (
     <>
       <Default>
@@ -310,7 +313,7 @@ function Login({ closeModal, isModalOpen }) {
           <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
           <form style={{ display: "flex", flexDirection: "column" }}>
             <EmailInput placeholder={"email"} {...id} />
-            <PwInput placeholder={"password"} {...password} />
+            <PwInput placeholder={"password"} type={"password"} {...password} />
             <LogButton
               $isfilled={
                 id.value !== "" && password.value !== "" ? true : false
@@ -360,7 +363,7 @@ function Login({ closeModal, isModalOpen }) {
           <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
           <form style={{ display: "flex", flexDirection: "column" }}>
             <EmailInput placeholder={"email"} {...id} />
-            <PwInput placeholder={"password"} {...password} />
+            <PwInput placeholder={"password"} type={"password"} {...password} />
             <LogButton
               $isfilled={
                 id.value !== "" && password.value !== "" ? true : false
@@ -516,10 +519,29 @@ export const OutText = styled.text`
 `;
 
 function Logout({ closeModal, isModalOpen, setAuth }) {
+  const logout = usePostAxios("");
+
   const onClick = () => {
-    window.localStorage.removeItem("accessToken");
+    logout.mutation.mutate({
+      url: apiurl + "auth/logout",
+      method: "DELETE",
+    });
+    window.localStorage.removeItem("refreshToken");
     setAuth(false);
     closeModal();
+  };
+
+  const resign = usePostAxios("reauth");
+
+  const refresh = () => {
+    resign.mutation.mutate({
+      url: apiurl + "auth/reissue",
+      method: "POST",
+      data: {
+        accessToken: window.localStorage.getItem("accessToken"),
+        refreshToken: window.localStorage.getItem("refreshToken"),
+      },
+    });
   };
 
   return (
@@ -538,6 +560,7 @@ function Logout({ closeModal, isModalOpen, setAuth }) {
           <SubmitOut onClick={onClick}>
             <OutText>로그아웃</OutText>
           </SubmitOut>
+          <Button onClick={refresh}>리프레쉬</Button>
         </Modal>
       </Default>
 

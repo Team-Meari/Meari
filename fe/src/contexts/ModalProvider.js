@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 const ModalContext = createContext({});
 
 export function ModalProvider({ children }) {
+  const [isErrorOpen, setErrorOpen] = useState(false);
   const [isIdOpen, setIsIdOpen] = useState(false);
   const [isPwOpen, setIsPwOpen] = useState(false);
   const [isSuccess, setSuccessOpen] = useState(false);
@@ -21,6 +22,8 @@ export function ModalProvider({ children }) {
         setLoginOpen,
         isPwSuccess,
         setPwSuccessOpen,
+        isErrorOpen,
+        setErrorOpen,
       }}
     >
       {children}
