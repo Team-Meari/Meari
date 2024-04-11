@@ -1,11 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import BasicMap from "./componentes/Map";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import MeariList from "./routes/MeariList";
-import Input from "./componentes/Input";
-import { useInput } from "./hooks/useInput";
+import { useTextArea } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
@@ -18,14 +17,18 @@ import MobileHeader from "./mobile_components/MobileHeader";
 import ModalContext from "./contexts/ModalProvider";
 import { FindIdModal, FindPwModal } from "./modals/FindIdPw";
 import Success from "./modals/Success";
+import Loading from "./componentes/Loading";
+import DeleteConfirm from "./modals/DeleteConfirm";
 
-const apiurl = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_URL;
+
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const Wrapper = styled.div`
   display: flex;
   position: relative;
-  width: 1920px;
-  height: 910px;
+  width: 100vw;
+  height: 100vh;
 
   background: #ffffff;
 `;
@@ -152,9 +155,9 @@ const Section = styled.div`
     /* 모바일/메인/사이드네비 */
 
     position: relative;
-    width: 414px;
-    height: 736px;
-    left: 0px;
+    width: 95vw;
+    height: 100vh;
+    left: calc(50% - 95vw / 2);
     top: 0px;
 
     background: #ffffff;
@@ -250,6 +253,7 @@ const MainLink = styled(Link)`
   order: 2;
   flex-grow: 0;
   background-color: transparent;
+  text-decoration: none;
 `;
 
 const Bar = styled.text`
@@ -314,7 +318,7 @@ const InputContainer = styled.div`
 
   position: absolute;
   width: 530px;
-  height: 95px;
+  height: auto;
   left: calc(50% - 530px / 2 + 204px);
   top: 780px;
 
@@ -338,7 +342,7 @@ const InputContainer = styled.div`
 
     position: absolute;
     width: 414px;
-    height: 80px;
+    height: auto;
     left: calc(50% - 414px / 2);
     top: 656px;
 
@@ -362,15 +366,40 @@ const InputContainer = styled.div`
       `}
 `;
 
-const MeariInput = styled(Input)`
+const InputBackGround = styled.div`
   box-sizing: border-box;
 
   width: 500px;
-  height: 65px;
+  height: auto;
 
   background: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 16px;
+
+  @media (max-width: 768px) {
+    /* input */
+    width: 384px;
+    height: auto;
+  }
+`;
+const MeariInput = styled.textarea`
+  box-sizing: border-box;
+
+  width: 420px;
+  height: 20px;
+  max-height: 58px;
+  top: 20px;
+
+  align-items: center;
+  margin: 20px;
+
+  background: transparent;
+  border: none;
+  //border-radius: 16px;
+  outline: none;
+
+  resize: none; /* 세로 방향 크기 조절만 허용 */
+  overflow-y: auto; /* 내용이 넘칠 때 스크롤바 자동으로 나타나도록 설정 *
 
   /* Inside auto layout */
   flex: none;
@@ -378,10 +407,16 @@ const MeariInput = styled(Input)`
   align-self: stretch;
   flex-grow: 0;
 
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+
   @media (max-width: 768px) {
     /* input */
-    width: 384px;
-    height: 50px;
+    width: 284px;
+    max-height: 30px;
   }
 `;
 
@@ -404,6 +439,7 @@ const MeariSubmit = styled(Button)`
     position: absolute;
     width: 35px;
     height: 35px;
+    top: 30px;
 
     background: #11a968;
     border-radius: 12px;
@@ -454,7 +490,9 @@ const LoginButton = styled(Button)`
 
 function App() {
   const [myposition, setPosition] = useState(null);
-  const [isFold, setIsFold] = useState(true);
+  const [isFold, setIsFold] = useState(false);
+  const [mobileFold, setMobileFold] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { nickname, memberId } = useContext(userContext);
   const { auth } = useContext(AuthContext);
   const { isMobile } = useContext(WidthContext);
@@ -469,9 +507,18 @@ function App() {
     setSuccessOpen,
     isPwSuccess,
     setPwSuccessOpen,
+    isErrorOpen,
+    setErrorOpen,
   } = useContext(ModalContext);
-  const input = useInput("");
+  const textarea = useRef();
+  const input = useTextArea(textarea);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
   const mearidata = useGetAxios(
     {
       url: apiurl + "chats/find-all?size=100",
@@ -514,6 +561,7 @@ function App() {
 
   return (
     <>
+      {loading ? <Loading /> : null}
       <Default>
         <Wrapper>
           <OpenContainer>
@@ -594,25 +642,29 @@ function App() {
             mearidata={mearidata}
           />
           <InputContainer $isfold={isFold}>
-            <MeariInput
-              name={"mearivalue"}
-              placeholder={"메아리를 외쳐보세요!!"}
-              {...input}
-            ></MeariInput>
-            <MeariSubmit onClick={onSubmitMeari}>
-              <Svg
-                width="19"
-                height="19"
-                viewBox="0 0 19 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
-                  fill="white"
-                />
-              </Svg>
-            </MeariSubmit>
+            <InputBackGround>
+              <MeariInput
+                rows={1}
+                ref={textarea}
+                name={"mearivalue"}
+                placeholder={"메아리를 외쳐보세요!!"}
+                {...input}
+              ></MeariInput>
+              <MeariSubmit onClick={onSubmitMeari}>
+                <Svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
+                    fill="white"
+                  />
+                </Svg>
+              </MeariSubmit>
+            </InputBackGround>
           </InputContainer>
         </Wrapper>
         {LoginOpen ? (
@@ -634,21 +686,26 @@ function App() {
             isPw={true}
           />
         ) : null}
+        {isErrorOpen ? (
+          <DeleteConfirm
+            isErrorOpen={isErrorOpen}
+            setErrorOpen={setErrorOpen}
+          />
+        ) : null}
       </Default>
 
       {/** 여기부터는 모바일 버전 컴포넌트 구성 */}
 
       <Mobile>
-        {isFold ? (
+        {mobileFold ? (
           <MobileWrapper>
             <MobileHeader>
               <Title>MEARI</Title>
               <Open
                 onClick={() => {
-                  setIsFold((prev) => {
+                  setMobileFold((prev) => {
                     return !prev ? true : false;
                   });
-                  console.log(isFold);
                 }}
               >
                 <MobileMenuSvg
@@ -671,25 +728,29 @@ function App() {
               mearidata={mearidata}
             />
             <InputContainer $isfold={isFold}>
-              <MeariInput
-                name={"mearivalue"}
-                placeholder={"메아리를 외쳐보세요!!"}
-                {...input}
-              ></MeariInput>
-              <MeariSubmit onClick={onSubmitMeari}>
-                <Svg
-                  width="19"
-                  height="19"
-                  viewBox="0 0 19 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
-                    fill="white"
-                  />
-                </Svg>
-              </MeariSubmit>
+              <InputBackGround>
+                <MeariInput
+                  rows={1}
+                  ref={textarea}
+                  name={"mearivalue"}
+                  placeholder={"메아리를 외쳐보세요!!"}
+                  {...input}
+                ></MeariInput>
+                <MeariSubmit onClick={onSubmitMeari}>
+                  <Svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 19 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.0931 6.91655C0.635877 6.76414 0.632263 6.51824 1.10251 6.3615L17.8029 0.794685C18.2653 0.640545 18.5306 0.899378 18.401 1.35287L13.6294 18.0534C13.4973 18.5157 13.2308 18.5318 13.0354 18.0922L9.8902 11.0156L15.1402 4.01559L8.14022 9.26555L1.0931 6.91655Z"
+                      fill="white"
+                    />
+                  </Svg>
+                </MeariSubmit>
+              </InputBackGround>
             </InputContainer>
           </MobileWrapper>
         ) : (
@@ -697,10 +758,9 @@ function App() {
             <Title $isfold={isFold}>MEARI</Title>
             <Fold
               onClick={() => {
-                setIsFold((prev) => {
+                setMobileFold((prev) => {
                   return !prev ? true : false;
                 });
-                console.log(isFold);
               }}
             >
               <svg
@@ -765,6 +825,12 @@ function App() {
             ) : null}
           </Section>
         )}
+        {isErrorOpen ? (
+          <DeleteConfirm
+            isErrorOpen={isErrorOpen}
+            setErrorOpen={setErrorOpen}
+          />
+        ) : null}
       </Mobile>
     </>
   );

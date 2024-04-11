@@ -12,4 +12,18 @@ body {
 body {
   overflow-x: hidden;
 }
+* {
+  &::-webkit-scrollbar {
+    width: 6px;
+    border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      //background-color: #0cb46c;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      //background-color: #ebebeb;
+      border-radius: 10px;
+    }
+}
   `;

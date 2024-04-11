@@ -4,7 +4,7 @@ function Button({ usage, onClick, className, children }) {
       className={className}
       type="button"
       onClick={onClick}
-      style={{ zIndex: 5 }}
+      style={{ zIndex: 5, cursor: "pointer" }}
     >
       {usage ? usage : children}
     </button>

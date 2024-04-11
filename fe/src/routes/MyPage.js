@@ -10,7 +10,8 @@ import SignOutConfirm from "../modals/SignOutConfirm";
 import { useEffect } from "react";
 import WidthContext from "../contexts/WidthProvider";
 
-const apiurl = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_URL;
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const Wrapper = styled.div`
   position: relative;
@@ -327,10 +328,10 @@ const LoginButton = styled(Button)`
   order: 0;
   flex-grow: 0;
 `;
-const SignOut = styled.text`
+const SignOut = styled(Button)`
   /* 회원탈퇴 */
 
-  width: 56px;
+  width: 68px;
   height: 16px;
 
   font-family: "Pretendard";
@@ -346,6 +347,10 @@ const SignOut = styled.text`
   flex: none;
   order: 2;
   flex-grow: 0;
+
+  background-color: transparent;
+  border: none;
+  margin-left: -6px;
 `;
 
 const ListText = styled.text`

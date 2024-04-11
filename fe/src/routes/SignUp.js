@@ -1,13 +1,17 @@
-import { usePostAxios } from "../hooks/useAxios";
+import { useGetAxios, usePostAxios } from "../hooks/useAxios";
 import Input from "../componentes/Input";
 import Button from "../componentes/Button";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Default, Mobile } from "../componentes/MediaQueries";
+import Loading from "../componentes/Loading";
+import { useCheck } from "../hooks/useCheck";
+import RadioInput from "../componentes/RadioInput";
 
-const apiurl = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_URL;
+const apiurl = window.location.hostname === "localhost" ? url : "api/";
 
 const customStyles = {
   overlay: {
@@ -25,8 +29,9 @@ const customStyles = {
     height: "800px",
     left: "calc(50% - 549px/2 + 0.5px)",
     top: "calc(50% - 800px/2 + 0.5px)",
-
     background: " #FFFFFF",
+    overflowY: "scroll",
+    overflowX: "hidden",
     borderRadius: "26px",
   },
 };
@@ -34,7 +39,7 @@ const customMobileStyles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
     width: "100%",
-    height: "100vh",
+    height: "95vh",
     zIndex: "10",
     position: "fixed",
     top: "0",
@@ -45,7 +50,7 @@ const customMobileStyles = {
     width: "90vw",
     height: "95vh",
     left: "calc(50% - 100vw/2)",
-    top: "calc(50% - 100vh/2)",
+    top: "calc(50% - 96vh/2)",
     overflowY: "scroll",
     overflowX: "hidden",
     background: " #FFFFFF",
@@ -75,6 +80,7 @@ const Title = styled.text`
   /* 회원가입 */
 
   position: absolute;
+  width: 300px;
   height: 30px;
   left: 30px;
   right: 455px;
@@ -141,6 +147,7 @@ const PwInput = styled.div`
     width: 80vw;
   }
 `;
+const NumberInput = styled(PwInput)``;
 const PwConfirm = styled.div`
   ${EmailInput};
   height: 105px;
@@ -229,6 +236,7 @@ const CustomIdInput = styled(CustomInput)`
     width: 60vw;
   }
 `;
+const CustomEmailInput = styled(CustomIdInput)``;
 const IdConfirm = styled(Button)`
   /* Frame 44 */
 
@@ -246,6 +254,7 @@ const IdConfirm = styled(Button)`
     left: 255px;
   }
 `;
+const EmailConfirm = styled(IdConfirm)``;
 const ConfirmText = styled.text`
   /* 중복확인 */
 
@@ -265,19 +274,6 @@ const ConfirmText = styled.text`
 
   color: #ffffff;
 `;
-const HelperText = styled.div`
-  /* Frame 40 */
-
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px;
-  gap: 5px;
-
-  width: 310px;
-  height: 16px;
-`;
 const IdHelper = styled.div`
   /* Frame 43 */
 
@@ -292,6 +288,8 @@ const IdHelper = styled.div`
   height: 16px;
   left: 10px;
   top: 103px;
+
+  margin-top: 5px;
 `;
 const PwHelper = styled(IdHelper)`
   width: 222px;
@@ -351,7 +349,7 @@ const TermText = styled.text`
   width: 63px;
   height: 18px;
   left: 30px;
-  top: 597px;
+  top: 680px;
 
   font-family: "Pretendard";
   font-style: normal;
@@ -361,6 +359,9 @@ const TermText = styled.text`
   /* identical to box height, or 18px */
 
   color: #1d1d1d;
+  @media (max-width: 786px) {
+    top: 637px;
+  }
 `;
 const TermForm = styled.div`
   /* Frame 47 */
@@ -376,7 +377,7 @@ const TermForm = styled.div`
   width: 500px;
   height: 95px;
   left: 30px;
-  top: 625px;
+  top: 720px;
 
   background: #f8f8f8;
   border-radius: 16px;
@@ -384,6 +385,7 @@ const TermForm = styled.div`
   @media (max-width: 786px) {
     width: 80vw;
     height: 85px;
+    top: 667px;
   }
 `;
 const TermWrapper1 = styled.div`
@@ -426,19 +428,7 @@ const TermSet = styled.div`
   width: 181px;
   height: 25px;
 `;
-const CustomTerm = styled(Input)`
-  /* 약관 전체동의 */
-
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 100%;
-  /* identical to box height, or 16px */
-
-  color: #1d1d1d;
-`;
-const Label1 = styled.label`
+const Label1 = styled.text`
   /* 약관 전체동의 */
 
   position: absolute;
@@ -454,7 +444,7 @@ const Label1 = styled.label`
 
   color: #1d1d1d;
 `;
-const Label2 = styled.label`
+const Label2 = styled.text`
   /* 이용약관 동의(필수) */
 
   position: absolute;
@@ -489,6 +479,7 @@ const Detail = styled.text`
   display: flex;
   align-items: center;
   text-decoration-line: underline;
+  cursor: pointer;
 
   color: #666666;
 `;
@@ -500,10 +491,15 @@ const SubMitBtn = styled(Button)`
   left: 0px;
   right: 0px;
   bottom: 0px;
-
+  top: 860px;
   background: ${(props) => (props.$isfilled ? "#0CB46C" : "#EDEDED")};
   border-radius: 0px 0px 26px 26px;
   border: none;
+
+  @media (max-width: 786px) {
+    display: flex;
+    top: 790px;
+  }
 `;
 
 const SubMitText = styled.text`
@@ -526,7 +522,7 @@ const SubMitText = styled.text`
   color: ${(props) => (props.$isfilled ? "#FFFFFF" : "#b6b6b6")};
 `;
 
-const SignUpButton = styled.text`
+const SignUpButton = styled(Button)`
   width: auto;
   height: 16px;
 
@@ -564,10 +560,37 @@ const useModal = () => {
 
 function SignUp() {
   const { openModal, closeModal, isModalOpen } = useModal();
+  const [emailText, setEmailText] = useState(" ");
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [nickCheck, setNickCheck] = useState(false);
+  const [isAllChecked, setAllChecked] = useState(false);
+  const [is2Checked, set2Checked] = useState(false);
+  const [is3Checked, set3Checked] = useState(false);
+
+  const [nicknameText, setNicknameText] = useState(
+    "5~16자 이내의 닉네임을 입력해주세요."
+  );
   const email = useInput("");
   const nickname = useInput("");
+  const number = useInput("");
+  const numberCheck = useCheck(number.value);
   const password = useInput("");
+  const pwCheck = useCheck(password.value);
   const pwConfirm = useInput("");
+  const pwConfirmCheck = useCheck(pwConfirm.value);
+
+  const verifyNickname = useGetAxios(
+    {
+      url: apiurl + `members/verify-nickname/${nickname.value}`,
+    },
+    "verifyn"
+  );
+  const verifyEmail = useGetAxios(
+    {
+      url: apiurl + `members/verify-email/${email.value}`,
+    },
+    "verifye"
+  );
 
   const { mutation } = usePostAxios("userdata");
 
@@ -585,7 +608,65 @@ function SignUp() {
     closeModal();
     console.log("회원가입 완료");
   };
+  const onEmailVerify = () => {
+    verifyEmail.refetch();
+  };
+  useEffect(() => {
+    if (verifyEmail.error !== null) {
+      setEmailText("중복된 이메일입니다!!");
+      setEmailCheck(false);
+    } else {
+      if (email.value === "") {
+        setEmailText("이메일을 입력해주세요.");
+        setEmailCheck(false);
+      } else {
+        setEmailText("사용가능한 이메일입니다.");
+        setEmailCheck(true);
+      }
+    }
+  }, [verifyEmail, email.value]);
 
+  const onNicknameVerify = () => {
+    verifyNickname.refetch();
+  };
+  useEffect(() => {
+    if (verifyNickname.error !== null) {
+      setNicknameText("중복된 아이디입니다!!");
+      setNickCheck(false);
+    } else {
+      if (nickname.value === "") {
+        setNicknameText("아이디를 입력해주세요.");
+        setNickCheck(false);
+      } else {
+        setNicknameText("사용가능한 아이디입니다.");
+        setNickCheck(true);
+      }
+    }
+  }, [verifyNickname, nickname.value]);
+
+  const handleAllRadioClick = () => {
+    setAllChecked(!isAllChecked); // 상태를 반전시킴
+    if (!isAllChecked) {
+      set2Checked(true);
+      set3Checked(true);
+    } else {
+      set2Checked(false);
+      set3Checked(false);
+    }
+  };
+  const handle2RadioClick = () => {
+    set2Checked(!is2Checked);
+  };
+  const handle3RadioClick = () => {
+    set3Checked(!is3Checked);
+  };
+  useEffect(() => {
+    if (is2Checked && is3Checked) {
+      setAllChecked(true);
+    } else {
+      setAllChecked(false);
+    }
+  }, [is2Checked, is3Checked]);
   return (
     <>
       <SignUpButton onClick={openModal}>회원가입</SignUpButton>
@@ -605,8 +686,58 @@ function SignUp() {
                   <ExText $widths={"37px"}>이메일</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"email"} {...email} />
-                <HelperText>HelperText</HelperText>
+                <CustomEmailInput name={"email"} {...email} />
+                <EmailConfirm onClick={onEmailVerify}>
+                  <ConfirmText>중복확인</ConfirmText>
+                </EmailConfirm>
+                <IdHelper>
+                  <ErrorSvg>
+                    {!emailCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </ErrorSvg>
+                  <ErrorText>{emailText}</ErrorText>
+                </IdHelper>
               </EmailInput>
 
               <IdInput>
@@ -615,52 +746,180 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomIdInput name={"nickname"} {...nickname} />
-                <IdConfirm>
+                <IdConfirm onClick={onNicknameVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </IdConfirm>
                 <IdHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!nickCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>
-                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
-                  </ErrorText>
+                  <ErrorText>{nicknameText}</ErrorText>
                 </IdHelper>
               </IdInput>
+
+              <NumberInput>
+                <Explain>
+                  <ExText $widths={"55px"}>전화번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"phonenumber"} {...number} />
+                <PwHelper>
+                  <ErrorSvg>
+                    {!numberCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </ErrorSvg>
+                  <ErrorText>
+                    {numberCheck.isChecked
+                      ? "가능한 전화번호 입니다."
+                      : "정확한 전화번호를 입력해주세요"}
+                  </ErrorText>
+                </PwHelper>
+              </NumberInput>
 
               <PwInput>
                 <Explain>
                   <ExText $widths={"49px"}>비밀번호</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"password"} {...password} />
+                <CustomInput
+                  name={"password"}
+                  type={"password"}
+                  {...password}
+                />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                  <ErrorText>
+                    {pwCheck.isChecked
+                      ? "가능한 비밀번호 입니다."
+                      : "영문+숫자 비밀번호를 입력해주세요."}
+                  </ErrorText>
                 </PwHelper>
               </PwInput>
 
@@ -669,23 +928,62 @@ function SignUp() {
                   <ExText $widths={"77px"}>비밀번호 확인</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <CustomInput
+                  name={"pwconfirm"}
+                  type={"password"}
+                  {...pwConfirm}
+                />
                 <ConfirmHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwConfirmCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                  <ErrorText>
+                    {pwConfirmCheck.isChecked
+                      ? "비밀번호가 확인되었습니다."
+                      : "비밀번호가 일치하지 않습니다."}
+                  </ErrorText>
                 </ConfirmHelper>
               </PwConfirm>
             </Form>
@@ -693,13 +991,23 @@ function SignUp() {
             <TermText>약관동의</TermText>
             <TermForm>
               <TermWrapper1>
-                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <RadioInput
+                  id="option1"
+                  value="1"
+                  isChecked={isAllChecked}
+                  handleRadioClick={handleAllRadioClick}
+                />
                 <Label1 for="option1">약관 전체동의</Label1>
               </TermWrapper1>
 
               <TermWrapper2>
                 <TermSet>
-                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option2"
+                    value="2"
+                    isChecked={is2Checked}
+                    handleRadioClick={handle2RadioClick}
+                  />
                   <Label2 for="option2">이용약관 동의(필수)</Label2>
                 </TermSet>
 
@@ -708,7 +1016,12 @@ function SignUp() {
 
               <TermWrapper3>
                 <TermSet>
-                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option3"
+                    value="3"
+                    isChecked={is3Checked}
+                    handleRadioClick={handle3RadioClick}
+                  />
                   <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
                 </TermSet>
                 <Detail>자세히보기</Detail>
@@ -752,6 +1065,7 @@ function SignUp() {
             </Close>
           </Modal>
         ) : null}
+        {verifyEmail.isLoading ? <Loading /> : null}
       </Default>
 
       {/** 모바일 회원가입 양식 */}
@@ -771,8 +1085,58 @@ function SignUp() {
                   <ExText $widths={"37px"}>이메일</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"email"} {...email} />
-                <HelperText>HelperText</HelperText>
+                <CustomEmailInput name={"email"} {...email} />
+                <EmailConfirm onClick={onEmailVerify}>
+                  <ConfirmText>중복확인</ConfirmText>
+                </EmailConfirm>
+                <IdHelper>
+                  <ErrorSvg>
+                    {!emailCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </ErrorSvg>
+                  <ErrorText>{emailText}</ErrorText>
+                </IdHelper>
               </EmailInput>
 
               <IdInput>
@@ -781,52 +1145,180 @@ function SignUp() {
                   <Star>*</Star>
                 </Explain>
                 <CustomIdInput name={"nickname"} {...nickname} />
-                <IdConfirm>
+                <IdConfirm onClick={onNicknameVerify}>
                   <ConfirmText>중복확인</ConfirmText>
                 </IdConfirm>
                 <IdHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!nickCheck ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>
-                    아이디는 최소 8자 최대16자 이내로 입력해 주십시오.
-                  </ErrorText>
+                  <ErrorText>{nicknameText}</ErrorText>
                 </IdHelper>
               </IdInput>
+
+              <NumberInput>
+                <Explain>
+                  <ExText $widths={"55px"}>전화번호</ExText>
+                  <Star>*</Star>
+                </Explain>
+                <CustomInput name={"phonenumber"} {...number} />
+                <PwHelper>
+                  <ErrorSvg>
+                    {!numberCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </ErrorSvg>
+                  <ErrorText>
+                    {numberCheck.isChecked
+                      ? "가능한 전화번호 입니다."
+                      : "정확한 전화번호를 입력해주세요"}
+                  </ErrorText>
+                </PwHelper>
+              </NumberInput>
 
               <PwInput>
                 <Explain>
                   <ExText $widths={"49px"}>비밀번호</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"password"} {...password} />
+                <CustomInput
+                  name={"password"}
+                  type={"password"}
+                  {...password}
+                />
                 <PwHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>영문+숫자 비밀번호를 입력해주세요.</ErrorText>
+                  <ErrorText>
+                    {pwCheck.isChecked
+                      ? "가능한 비밀번호 입니다."
+                      : "영문+숫자 비밀번호를 입력해주세요."}
+                  </ErrorText>
                 </PwHelper>
               </PwInput>
 
@@ -835,23 +1327,62 @@ function SignUp() {
                   <ExText $widths={"77px"}>비밀번호 확인</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <CustomInput
+                  name={"pwconfirm"}
+                  type={"password"}
+                  {...pwConfirm}
+                />
                 <ConfirmHelper>
                   <ErrorSvg>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
-                        fill="#FF2828"
-                      />
-                    </svg>
+                    {!pwConfirmCheck.isChecked ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7.00016 13.6667C3.31826 13.6667 0.333496 10.6819 0.333496 7.00004C0.333496 3.31814 3.31826 0.333374 7.00016 0.333374C10.682 0.333374 13.6668 3.31814 13.6668 7.00004C13.6668 10.6819 10.682 13.6667 7.00016 13.6667ZM6.3335 9.00004V10.3334H7.66683V9.00004H6.3335ZM6.3335 3.66671V7.66671H7.66683V3.66671H6.3335Z"
+                          fill="#FF2828"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          fill="#0CB46C"
+                        />
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="19"
+                          height="19"
+                          rx="9.5"
+                          stroke="#0CB46C"
+                        />
+                        <path
+                          d="M9.1911 12.3869L14.3781 7.19995L15.1761 7.99795L9.1911 13.9829L5.6001 10.392L6.3981 9.59397L9.1911 12.3869Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
                   </ErrorSvg>
-                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+                  <ErrorText>
+                    {pwConfirmCheck.isChecked
+                      ? "비밀번호가 확인되었습니다."
+                      : "비밀번호가 일치하지 않습니다."}
+                  </ErrorText>
                 </ConfirmHelper>
               </PwConfirm>
             </Form>
@@ -859,13 +1390,23 @@ function SignUp() {
             <TermText>약관동의</TermText>
             <TermForm>
               <TermWrapper1>
-                <CustomTerm id="option1" type="radio"></CustomTerm>
+                <RadioInput
+                  id="option1"
+                  value="1"
+                  isChecked={isAllChecked}
+                  handleRadioClick={handleAllRadioClick}
+                />
                 <Label1 for="option1">약관 전체동의</Label1>
               </TermWrapper1>
 
               <TermWrapper2>
                 <TermSet>
-                  <CustomTerm id="option2" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option2"
+                    value="2"
+                    isChecked={is2Checked}
+                    handleRadioClick={handle2RadioClick}
+                  />
                   <Label2 for="option2">이용약관 동의(필수)</Label2>
                 </TermSet>
 
@@ -874,7 +1415,12 @@ function SignUp() {
 
               <TermWrapper3>
                 <TermSet>
-                  <CustomTerm id="option3" type="radio"></CustomTerm>
+                  <RadioInput
+                    id="option3"
+                    value="3"
+                    isChecked={is3Checked}
+                    handleRadioClick={handle3RadioClick}
+                  />
                   <Label2 for="option3">개인정보취급방침 동의(필수)</Label2>
                 </TermSet>
                 <Detail>자세히보기</Detail>

@@ -126,7 +126,7 @@ const SubContent = styled.text`
   `}
 `;
 
-function ListContent({ value, author, $custom }) {
+function ListContent({ value, author, chatId, $custom }) {
   const [isDetailOpen, setDetailOpen] = useState(false);
   const onClick = () => {
     setDetailOpen(true);
@@ -143,6 +143,7 @@ function ListContent({ value, author, $custom }) {
           setDetailOpen={setDetailOpen}
           value={value}
           author={author}
+          chatId={chatId}
         />
       ) : null}
     </>
