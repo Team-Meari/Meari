@@ -9,8 +9,5 @@
       "destination": "https://shoutmeari.site/:path*/"
     }
   ],
-  "error": {
-    "code": "forbidden",
-    "message": "Not authorized"
-  }
+  "error": [{ "code": "forbidden", "message": "Not authorized" }]
 }
