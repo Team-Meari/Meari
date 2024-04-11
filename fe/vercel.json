@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://shoutmeari.site/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://shoutmeari.site/:path*/"
+    }
+  ]
+}
