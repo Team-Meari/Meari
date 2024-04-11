@@ -52,10 +52,10 @@ export const usePostAxios = (type, axiosInstance = defaultAxios) => {
           method: config.method,
           url: config.url,
           data: config.data, // 2024-02-16 일반 데이터 형식으로 표현
-          // headers: {
-          //   Authorization:
-          //     "Bearer " + window.localStorage.getItem("accessToken"),
-          // },
+          headers: {
+            Authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
+          },
         });
         console.log("response: ", response);
         return response;

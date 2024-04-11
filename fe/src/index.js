@@ -15,6 +15,8 @@ import { ModalProvider } from "./contexts/ModalProvider";
 const queryClient = new QueryClient();
 
 axios.defaults.withCredentials = true;
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
 const router = createBrowserRouter([
   {
