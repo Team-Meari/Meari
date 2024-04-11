@@ -12,7 +12,7 @@ import ModalContext from "../contexts/ModalProvider";
 
 const url = process.env.REACT_APP_URL;
 
-const apiurl = window.location.hostname === "localhost" ? url : "api/";
+const apiurl = window.location.hostname === "localhost" ? url : url;
 
 const customLoginStyles = {
   overlay: {

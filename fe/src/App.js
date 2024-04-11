@@ -22,7 +22,7 @@ import DeleteConfirm from "./modals/DeleteConfirm";
 
 const url = process.env.REACT_APP_URL;
 
-const apiurl = window.location.hostname === "localhost" ? url : "api/";
+const apiurl = window.location.hostname === "localhost" ? url : url;
 
 const Wrapper = styled.div`
   display: flex;
