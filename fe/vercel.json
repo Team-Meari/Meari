@@ -8,6 +8,5 @@
       "source": "/api/:path*/",
       "destination": "https://shoutmeari.site/:path*/"
     }
-  ],
-  "error": [{ "code": "forbidden", "message": "Not authorized" }]
+  ]
 }
