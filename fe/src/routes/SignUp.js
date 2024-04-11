@@ -864,7 +864,11 @@ function SignUp() {
                   <ExText $widths={"49px"}>비밀번호</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"password"} {...password} />
+                <CustomInput
+                  name={"password"}
+                  type={"password"}
+                  {...password}
+                />
                 <PwHelper>
                   <ErrorSvg>
                     {!pwCheck.isChecked ? (
@@ -924,7 +928,11 @@ function SignUp() {
                   <ExText $widths={"77px"}>비밀번호 확인</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <CustomInput
+                  name={"pwconfirm"}
+                  type={"password"}
+                  {...pwConfirm}
+                />
                 <ConfirmHelper>
                   <ErrorSvg>
                     {!pwConfirmCheck.isChecked ? (
@@ -1057,8 +1065,9 @@ function SignUp() {
             </Close>
           </Modal>
         ) : null}
+        {verifyEmail.isLoading ? <Loading /> : null}
       </Default>
-      {verifyEmail.isLoading ? <Loading /> : null}
+
       {/** 모바일 회원가입 양식 */}
       <Mobile>
         {isModalOpen ? (
@@ -1254,7 +1263,11 @@ function SignUp() {
                   <ExText $widths={"49px"}>비밀번호</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"password"} {...password} />
+                <CustomInput
+                  name={"password"}
+                  type={"password"}
+                  {...password}
+                />
                 <PwHelper>
                   <ErrorSvg>
                     {!pwCheck.isChecked ? (
@@ -1314,7 +1327,11 @@ function SignUp() {
                   <ExText $widths={"77px"}>비밀번호 확인</ExText>
                   <Star>*</Star>
                 </Explain>
-                <CustomInput name={"pwconfirm"} {...pwConfirm} />
+                <CustomInput
+                  name={"pwconfirm"}
+                  type={"password"}
+                  {...pwConfirm}
+                />
                 <ConfirmHelper>
                   <ErrorSvg>
                     {!pwConfirmCheck.isChecked ? (

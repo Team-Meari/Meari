@@ -1,10 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import BasicMap from "./componentes/Map";
 import Button from "./componentes/Button";
 import LogModal from "./routes/Login";
 import MeariList from "./routes/MeariList";
-import { useInput } from "./hooks/useInput";
+import { useTextArea } from "./hooks/useInput";
 import { useGetAxios } from "./hooks/useAxios";
 import { usePostAxios } from "./hooks/useAxios";
 import styled from "styled-components";
@@ -157,7 +157,7 @@ const Section = styled.div`
     position: relative;
     width: 95vw;
     height: 100vh;
-    left: 0px;
+    left: calc(50% - 95vw / 2);
     top: 0px;
 
     background: #ffffff;
@@ -318,7 +318,7 @@ const InputContainer = styled.div`
 
   position: absolute;
   width: 530px;
-  height: 95px;
+  height: auto;
   left: calc(50% - 530px / 2 + 204px);
   top: 780px;
 
@@ -342,7 +342,7 @@ const InputContainer = styled.div`
 
     position: absolute;
     width: 414px;
-    height: 80px;
+    height: auto;
     left: calc(50% - 414px / 2);
     top: 656px;
 
@@ -370,7 +370,7 @@ const InputBackGround = styled.div`
   box-sizing: border-box;
 
   width: 500px;
-  height: 65px;
+  height: auto;
 
   background: #ffffff;
   border: 1px solid #e3e3e3;
@@ -379,21 +379,23 @@ const InputBackGround = styled.div`
   @media (max-width: 768px) {
     /* input */
     width: 384px;
-    height: 50px;
+    height: auto;
   }
 `;
 const MeariInput = styled.textarea`
   box-sizing: border-box;
 
   width: 420px;
-  min-height: 35px; /* 최소 높이 설정 */
-  height: auto;
-  top: 10px;
-  margin: 15px;
+  height: 20px;
+  max-height: 58px;
+  top: 20px;
+
+  align-items: center;
+  margin: 20px;
 
   background: transparent;
   border: none;
-  border-radius: 16px;
+  //border-radius: 16px;
   outline: none;
 
   resize: none; /* 세로 방향 크기 조절만 허용 */
@@ -405,12 +407,16 @@ const MeariInput = styled.textarea`
   align-self: stretch;
   flex-grow: 0;
 
-  font-size: 16px;
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
 
   @media (max-width: 768px) {
     /* input */
     width: 284px;
-    height: 30px;
+    max-height: 30px;
   }
 `;
 
@@ -433,6 +439,7 @@ const MeariSubmit = styled(Button)`
     position: absolute;
     width: 35px;
     height: 35px;
+    top: 30px;
 
     background: #11a968;
     border-radius: 12px;
@@ -503,7 +510,8 @@ function App() {
     isErrorOpen,
     setErrorOpen,
   } = useContext(ModalContext);
-  const input = useInput("");
+  const textarea = useRef();
+  const input = useTextArea(textarea);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -636,6 +644,8 @@ function App() {
           <InputContainer $isfold={isFold}>
             <InputBackGround>
               <MeariInput
+                rows={1}
+                ref={textarea}
                 name={"mearivalue"}
                 placeholder={"메아리를 외쳐보세요!!"}
                 {...input}
@@ -720,6 +730,8 @@ function App() {
             <InputContainer $isfold={isFold}>
               <InputBackGround>
                 <MeariInput
+                  rows={1}
+                  ref={textarea}
                   name={"mearivalue"}
                   placeholder={"메아리를 외쳐보세요!!"}
                   {...input}
@@ -811,14 +823,14 @@ function App() {
                 isPw={true}
               />
             ) : null}
-            {isErrorOpen ? (
-              <DeleteConfirm
-                isErrorOpen={isErrorOpen}
-                setErrorOpen={setErrorOpen}
-              />
-            ) : null}
           </Section>
         )}
+        {isErrorOpen ? (
+          <DeleteConfirm
+            isErrorOpen={isErrorOpen}
+            setErrorOpen={setErrorOpen}
+          />
+        ) : null}
       </Mobile>
     </>
   );

@@ -313,7 +313,7 @@ function Login({ closeModal, isModalOpen }) {
           <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
           <form style={{ display: "flex", flexDirection: "column" }}>
             <EmailInput placeholder={"email"} {...id} />
-            <PwInput placeholder={"password"} {...password} />
+            <PwInput placeholder={"password"} type={"password"} {...password} />
             <LogButton
               $isfilled={
                 id.value !== "" && password.value !== "" ? true : false
@@ -363,7 +363,7 @@ function Login({ closeModal, isModalOpen }) {
           <SubTitle>메아리서비스 이용을 위해 로그인해주세요.</SubTitle>
           <form style={{ display: "flex", flexDirection: "column" }}>
             <EmailInput placeholder={"email"} {...id} />
-            <PwInput placeholder={"password"} {...password} />
+            <PwInput placeholder={"password"} type={"password"} {...password} />
             <LogButton
               $isfilled={
                 id.value !== "" && password.value !== "" ? true : false
