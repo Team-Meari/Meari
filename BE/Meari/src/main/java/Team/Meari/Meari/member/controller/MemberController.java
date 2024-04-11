@@ -23,7 +23,10 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
 
-
+    @GetMapping("/healthcheck")
+    public String healthcheck(){
+        return "OK";
+    }
     /**
      * Post 요청
      * @param memberPostReqDto

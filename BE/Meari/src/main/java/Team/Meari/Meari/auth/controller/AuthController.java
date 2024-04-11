@@ -2,10 +2,7 @@ package Team.Meari.Meari.auth.controller;
 
 import Team.Meari.Meari.auth.service.AuthService;
 import Team.Meari.Meari.global.dto.SingleResDto;
-import Team.Meari.Meari.global.security.dto.CustomMultiResDto;
-import Team.Meari.Meari.global.security.dto.LoginDto;
-import Team.Meari.Meari.global.security.dto.TokenDto;
-import Team.Meari.Meari.global.security.dto.TokenReqDto;
+import Team.Meari.Meari.global.security.dto.*;
 import Team.Meari.Meari.global.security.utils.SecurityUtils;
 import Team.Meari.Meari.member.dto.MemberResDto;
 import Team.Meari.Meari.member.entity.Member;
@@ -41,8 +38,9 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody TokenReqDto tokenReqDto) {
-        return ResponseEntity.ok(authService.reissue(tokenReqDto));
+    public ResponseEntity<CustomTokenDto> reissue(@RequestBody TokenReqDto tokenReqDto) {
+        TokenDto tokenDto = authService.reissue(tokenReqDto);
+        return new ResponseEntity<>(new CustomTokenDto(tokenDto), HttpStatus.OK);
     }
 
 //    @PostMapping("/logout")
