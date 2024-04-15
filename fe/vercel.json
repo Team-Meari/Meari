@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://40a3-58-231-208-183.ngrok-free.app/:path*"
+      "destination": "http://15.165.207.71/:path*"
     },
     {
       "source": "/api/:path*/",
-      "destination": "https://40a3-58-231-208-183.ngrok-free.app/:path*/"
+      "destination": "http://15.165.207.71/:path*/"
     }
   ]
 }
