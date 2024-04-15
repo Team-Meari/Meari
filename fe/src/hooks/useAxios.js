@@ -31,7 +31,7 @@ export const useGetAxios = (config, type, axiosInstance = defaultAxios) => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     enabled: type === "mearidata" ? true : false,
-    refetchInterval: type === "mearidata" ? 60 * 5000 : null,
+    refetchInterval: type === "mearidata" ? 60 * 10000 : null,
     retry: false,
   });
 
