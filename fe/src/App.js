@@ -320,7 +320,8 @@ const InputContainer = styled.div`
   width: 530px;
   height: auto;
   left: calc(50% - 530px / 2 + 204px);
-  top: 780px;
+  top: ${(props) => props.$height}px;
+  transition: top 0.3s ease;
 
   background: rgba(12, 180, 108, 0.3);
   border: 1px solid rgba(12, 180, 108, 0.55);
@@ -376,6 +377,7 @@ const InputBackGround = styled.div`
   border: 1px solid #e3e3e3;
   border-radius: 16px;
 
+  transition: top 0.3s ease;
   @media (max-width: 768px) {
     /* input */
     width: 384px;
@@ -387,8 +389,9 @@ const MeariInput = styled.textarea`
 
   width: 420px;
   height: 20px;
-  max-height: 58px;
+  max-height: 94px;
   top: 20px;
+  transition: top 0.3s ease;
 
   align-items: center;
   margin: 20px;
@@ -427,7 +430,7 @@ const MeariSubmit = styled(Button)`
   width: 50px;
   height: 50px;
   right: 20px;
-  top: 23px;
+  top: ${(props) => props.$btnheight}px;
 
   background: #11a968;
   border-radius: 16px;
@@ -512,6 +515,9 @@ function App() {
   } = useContext(ModalContext);
   const textarea = useRef();
   const input = useTextArea(textarea);
+  const [size, setSize] = useState(input.height);
+  const [height, setHeight] = useState(780);
+  const [btnheight, setBtnHeight] = useState(23);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -519,6 +525,19 @@ function App() {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    let current = input.height;
+    if (size < 100 && current < 100 && size > current) {
+      setHeight(height + (size - current));
+      setBtnHeight(btnheight - (size - current));
+    } else if (current < 100 && size < current) {
+      setHeight(height - (current - size));
+      setBtnHeight(btnheight + (current - size));
+    }
+    setSize(current);
+  }, [input.height]);
+
   const mearidata = useGetAxios(
     {
       url: apiurl + "chats/find-all?size=100",
@@ -641,7 +660,7 @@ function App() {
             lng={myposition?.longitude}
             mearidata={mearidata}
           />
-          <InputContainer $isfold={isFold}>
+          <InputContainer $isfold={isFold} $height={height}>
             <InputBackGround>
               <MeariInput
                 rows={1}
@@ -650,7 +669,7 @@ function App() {
                 placeholder={"메아리를 외쳐보세요!!"}
                 {...input}
               ></MeariInput>
-              <MeariSubmit onClick={onSubmitMeari}>
+              <MeariSubmit onClick={onSubmitMeari} $btnheight={btnheight}>
                 <Svg
                   width="19"
                   height="19"
