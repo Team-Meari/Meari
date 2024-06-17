@@ -553,6 +553,13 @@ function MyPage() {
   );
 
   useEffect(() => {
+    if (auth === false) {
+      alert("접근할 수 없습니다.");
+      navigate(-1);
+    }
+  }, [auth]);
+
+  useEffect(() => {
     refetch();
   }, []);
 

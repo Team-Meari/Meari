@@ -3,6 +3,7 @@ import { usePostAxios } from "../hooks/useAxios";
 import styled from "styled-components";
 import { Cancle, CancleText, OutText, SubmitOut } from "../routes/Login";
 import { Default, Mobile } from "../componentes/MediaQueries";
+import { useNavigate } from "react-router-dom";
 
 const url = process.env.REACT_APP_URL;
 const apiurl = window.location.hostname === "localhost" ? url : "api/";
@@ -102,6 +103,7 @@ export default function SignOutConfirm({
   memberId,
 }) {
   const { mutation } = usePostAxios("userdata");
+  const navigate = useNavigate();
   // 회원탈퇴 버튼 클릭 시 회원탈퇴하는 로직
   const onClick = () => {
     let result = window.confirm("정말 회원탈퇴 하시겠습니까???");
@@ -112,6 +114,7 @@ export default function SignOutConfirm({
       });
       setAuth(false);
       console.log("회원탈퇴 되었습니다.");
+      navigate(-1);
     } else {
       console.log("회원탈퇴 취소되었습니다.");
     }

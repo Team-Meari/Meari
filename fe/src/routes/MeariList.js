@@ -70,7 +70,7 @@ export const StyledPagination = styled(Pagination)`
   position: absolute;
   width: 302px;
   height: 40px;
-  left: calc(50% - 365px / 2);
+  left: calc(50% - 325px / 2);
   top: 770px;
 
   ${(props) =>
@@ -127,7 +127,7 @@ export const StyledPagination = styled(Pagination)`
   .rc-pagination-prev,
   .rc-pagination-jump-prev,
   .rc-pagination-jump-next {
-    margin-right: 8px;
+    //margin-right: 8px;
   }
 
   .rc-pagination-total-text {
@@ -182,8 +182,8 @@ export const StyledPagination = styled(Pagination)`
   .rc-pagination-total-text button {
     padding: 6px 8px;
     height: auto;
-    min-width: 32px;
-    min-height: 32px;
+    min-width: 24px;
+    min-height: 24px;
     border-radius: 8px;
     border: 1px solid transparent;
     background-color: transparent;
