@@ -19,9 +19,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        //List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+
         log.info("# Authenticated successfully !");
         log.info("# Id: {}", authentication.getName());
-        //log.info("# roles: {}", authorities.toString());
     }
 }

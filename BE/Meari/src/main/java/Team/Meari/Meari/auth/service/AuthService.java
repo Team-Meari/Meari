@@ -85,12 +85,6 @@ public class AuthService {
         return tokenDto;
     }
 
-//    @Transactional
-//    public void logout(TokenReqDto tokenReqDto) {
-//        refreshTokenRepository.findByValue(tokenReqDto.getRefreshToken())
-//                        .orElseThrow(() -> new RuntimeException("일치하지 않은 토큰 정보이거나 이미 로그아웃된 사용자입니다."));
-//        refreshTokenRepository.deleteByValue(tokenReqDto.getRefreshToken());
-//    }
     @Transactional
     public void logout() {
         refreshTokenRepository.findByKey(SecurityUtils.getCurrentEmail())

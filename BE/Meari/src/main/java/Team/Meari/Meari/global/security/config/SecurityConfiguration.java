@@ -41,9 +41,7 @@ public class SecurityConfiguration {
         http.headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors().configurationSource(corsConfigurationSource())
-
-                .and()
+                .cors().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,9 +61,6 @@ public class SecurityConfiguration {
 
                 .anyRequest().authenticated()
                 .and()
-
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll()) //모든 api 허용함
 
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenizer), UsernamePasswordAuthenticationFilter.class);
 
@@ -88,8 +83,4 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-// 순환 참조 방지를 위해 따로 클래스를 생성
-//    @Bean
-//    public PasswordEncoder passwordEncoder() { return PasswordEncoderFactories.createDelegatingPasswordEncoder(); }
 }
