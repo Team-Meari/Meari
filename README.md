@@ -53,5 +53,11 @@
 ![c159a27393b42594](https://github.com/Team-Meari/Meari/assets/73528227/d2948a20-08e1-41d3-b200-e729dc8cf566)
 - ### 메아리 메인 동작
 
+- #### 화면조작
+![초반부초반부배속메인](https://github.com/Team-Meari/Meari/assets/126738939/4c5597ec-b62b-4545-ac4e-4227c8bdedba)
+
+- #### 메아리 조작
+![초반부후반부배속메인](https://github.com/Team-Meari/Meari/assets/126738939/761e2a40-26da-44da-b37c-66f8463cb89a)
+
 - ### 모바일 반응형 
 ![95aa53cfc6801a43](https://github.com/Team-Meari/Meari/assets/73528227/1540812f-55af-4e54-8f62-e4e37ef5b0ac)
