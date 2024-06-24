@@ -18,7 +18,9 @@
 <div style="display: flex;">
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
   <img src="https://img.shields.io/badge/react.js-61DAFB?style=for-the-badge&logo=react&logoColor=black"/>
-  <img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/>
+  <img src="https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white"/>
+  <img src="https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>
+  
 </div>
 
 ### BE
@@ -29,8 +31,18 @@
   <img src="https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white"/>
   <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"/>
   <img src="https://img.shields.io/badge/springsecurity-%236DB33F.svg?style=for-the-badge&logo=SpringSecurity&logoColor=white"/>
-  <img src="https://img.shields.io/badge/amazon_ec2-%23FF9900.svg?style=for-the-badge&logo=amazon-ec2&logoColor=white"/>
+  
 </div>
+
+### InfraStructure
+
+<div style="display: flex;">
+  <img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/>
+  <img src="https://img.shields.io/badge/amazon_ec2-%23FF9900.svg?style=for-the-badge&logo=amazon-ec2&logoColor=white"/>
+  <img src="https://img.shields.io/badge/amazon_rds-527FFF.svg?style=for-the-badge&logo=amazonrds&logoColor=white"/>
+</div>
+
+
 
 ## 기능
 
