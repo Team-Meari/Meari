@@ -47,17 +47,18 @@
 ## 기능
 
 - ### 회원가입&로그인
-![e17485035586a1ab](https://github.com/Team-Meari/Meari/assets/73528227/a8e518f8-7c01-4732-a7a2-8f7332fc59cb)
+<img src="https://github.com/Team-Meari/Meari/assets/73528227/a8e518f8-7c01-4732-a7a2-8f7332fc59cb" width="512" height="250"/>
 
 - ### 마이페이지
-![c159a27393b42594](https://github.com/Team-Meari/Meari/assets/73528227/d2948a20-08e1-41d3-b200-e729dc8cf566)
+<img src="https://github.com/Team-Meari/Meari/assets/73528227/d2948a20-08e1-41d3-b200-e729dc8cf566" width="512" height="250"/>
+
 - ### 메아리 메인 동작
 
-- #### 화면조작
-![초반부초반부배속메인](https://github.com/Team-Meari/Meari/assets/126738939/4c5597ec-b62b-4545-ac4e-4227c8bdedba)
+ - #### 화면조작
+<img src="https://github.com/Team-Meari/Meari/assets/126738939/4c5597ec-b62b-4545-ac4e-4227c8bdedba" width="512" height="250"/>
 
-- #### 메아리 조작
-![초반부후반부배속메인](https://github.com/Team-Meari/Meari/assets/126738939/761e2a40-26da-44da-b37c-66f8463cb89a)
+ - #### 메아리 조작
+<img src="https://github.com/Team-Meari/Meari/assets/126738939/761e2a40-26da-44da-b37c-66f8463cb89a" width="512" height="250"/>
 
 - ### 모바일 반응형 
-![95aa53cfc6801a43](https://github.com/Team-Meari/Meari/assets/73528227/1540812f-55af-4e54-8f62-e4e37ef5b0ac)
+<img src="https://github.com/Team-Meari/Meari/assets/73528227/1540812f-55af-4e54-8f62-e4e37ef5b0ac" width="216" height="369"/>
