@@ -3,7 +3,7 @@ import Button from "../componentes/Button";
 import Modal from "react-modal";
 import { Default, Mobile } from "../componentes/MediaQueries";
 import { usePostAxios } from "../hooks/useAxios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "../componentes/Loading";
 
 const url = process.env.REACT_APP_URL;
@@ -258,6 +258,7 @@ export default function MeariDetail({
   value,
   author,
   chatId,
+  createdAt,
 }) {
   const [isLoading, setLoading] = useState(false);
   const { mutation } = usePostAxios("postdelete");
@@ -273,6 +274,7 @@ export default function MeariDetail({
     setLoading(false);
     closeModal();
   };
+
   return (
     <>
       <Default>
@@ -291,7 +293,7 @@ export default function MeariDetail({
               </SubText1>
               <SubText2>
                 <Explain>작성날짜</Explain>
-                <Detail>24.03.11</Detail>
+                <Detail>{createdAt.split("T")[0]}</Detail>
               </SubText2>
             </SubContent>
           </Wrapper>

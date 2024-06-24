@@ -52,7 +52,10 @@ export default function BasicMap({ lat, lng, mearidata }) {
               lng: item?.longitude,
             }}
           >
-            <OverlayContent content={item?.content} />
+            <OverlayContent
+              content={item?.content}
+              createdAt={item?.createdAt}
+            />
           </StyledCustomOverlayMap>
         );
       })}

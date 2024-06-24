@@ -553,6 +553,13 @@ function MyPage() {
   );
 
   useEffect(() => {
+    if (auth === false) {
+      alert("로그인이 필요합니다.");
+      navigate(-1);
+    }
+  }, [auth]);
+
+  useEffect(() => {
     refetch();
   }, []);
 

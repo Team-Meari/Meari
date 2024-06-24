@@ -25,5 +25,9 @@ body {
       //background-color: #ebebeb;
       border-radius: 10px;
     }
+    ul {
+    padding-inline-start: 0;
+  }
+    
 }
   `;
