@@ -43,7 +43,7 @@ public class JwtTokenizer {
                 .collect(Collectors.joining(","));
 
         Date now = new Date();
-        Date accessTokenExpiresIn = new Date(now.getTime() + 1000 * 60); // 1 min
+        Date accessTokenExpiresIn = new Date(now.getTime() + 1000 * 60 * 30); // 30 min
 
         // Access Token 생성
         String accessToken = Jwts.builder()
