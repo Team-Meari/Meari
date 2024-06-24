@@ -84,9 +84,9 @@ const SubText = styled.text`
   /* 아이디찾기 성공! */
 
   position: absolute;
-  width: 120px;
+  width: 150px;
   height: 16px;
-  left: calc(50% - 105px / 2 - 8px);
+  left: calc(50% - 132px / 2 - 8px);
   top: 229px;
 
   font-family: "Pretendard";
@@ -184,8 +184,8 @@ export default function DeleteConfirm({ isErrorOpen, setErrorOpen }) {
               <circle cx="49" cy="63" r="3" fill="white" />
             </svg>
           </IconWrapper>
-          <Text>test1234</Text>
-          <SubText>문제가 있어요!</SubText>
+          <Text>문제가 있어요!</Text>
+          <SubText>관리팀에 문의해 주세요</SubText>
 
           <CofirmButton onClick={onClick}>
             <CofrimText>확인</CofrimText>
@@ -240,7 +240,7 @@ export default function DeleteConfirm({ isErrorOpen, setErrorOpen }) {
               <circle cx="49" cy="63" r="3" fill="white" />
             </svg>
           </IconWrapper>
-          <Text>test1234</Text>
+          <Text>에러</Text>
           <SubText>{"문제가 있어요!"}</SubText>
           <CofirmButton onClick={onClick}>
             <CofrimText>확인</CofrimText>

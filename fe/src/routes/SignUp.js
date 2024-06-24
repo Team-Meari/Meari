@@ -602,9 +602,10 @@ function SignUp() {
         email: email.value,
         password: password.value,
         nickname: nickname.value,
+        phone: number.value,
       },
     });
-    console.log(email.value, password.value, nickname.value);
+    console.log(email.value, password.value, nickname.value, number.value);
     closeModal();
     console.log("회원가입 완료");
   };
@@ -635,7 +636,7 @@ function SignUp() {
       setNickCheck(false);
     } else {
       if (nickname.value === "") {
-        setNicknameText("아이디를 입력해주세요.");
+        setNicknameText("아이디를 8~16자 이상 입력해주세요.");
         setNickCheck(false);
       } else {
         setNicknameText("사용가능한 아이디입니다.");
@@ -918,7 +919,7 @@ function SignUp() {
                   <ErrorText>
                     {pwCheck.isChecked
                       ? "가능한 비밀번호 입니다."
-                      : "영문+숫자 비밀번호를 입력해주세요."}
+                      : "영문+숫자 비밀번호를 8~16자 입력해주세요."}
                   </ErrorText>
                 </PwHelper>
               </PwInput>
