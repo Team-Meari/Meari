@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Wrapper = styled.div`
   /* Frame 22 */
@@ -95,7 +95,7 @@ const Subtext = styled.text`
   flex-grow: 0;
 `;
 
-const Date = styled.text`
+const DateComponenet = styled.text`
   /* 24.03.11 */
 
   width: 80px;
@@ -138,18 +138,49 @@ const Minute = styled.text`
   flex-grow: 1;
 `;
 
-export default function OverlayContent({ content }) {
+export default function OverlayContent({ content, createdAt }) {
   const [isClicked, setIsClicked] = useState(false);
+  const [timeDifference, setTimeDifference] = useState("");
+
+  const calculateTimeDifference = () => {
+    const targetDate = new Date(createdAt);
+    const currentDate = new Date();
+    const differenceInMilliseconds = currentDate - targetDate;
+
+    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+    const differenceInMinutes = Math.floor(differenceInSeconds / 60);
+    const differenceInHours = Math.floor(differenceInMinutes / 60);
+    const differenceInDays = Math.floor(differenceInHours / 24);
+
+    if (differenceInDays > 0) {
+      setTimeDifference(`${differenceInDays}일 전`);
+    } else if (differenceInHours > 0) {
+      setTimeDifference(`${differenceInHours}시간 전`);
+    } else if (differenceInMinutes > 0) {
+      setTimeDifference(`${differenceInMinutes}분 전`);
+    } else {
+      setTimeDifference(`${differenceInSeconds}초 전`);
+    }
+  };
+
+  useEffect(() => {
+    calculateTimeDifference();
+    const interval = setInterval(calculateTimeDifference, 60000); // 1분마다 업데이트
+
+    return () => clearInterval(interval);
+  }, [createdAt]);
+
   const onClick = (e) => {
     setIsClicked(!isClicked);
   };
+
   return (
     <Wrapper onClick={onClick} $isClicked={isClicked}>
       <Content>
         <Text $isClicked={isClicked}>{content}</Text>
         <Subtext>
-          <Date>23.03.15</Date>
-          <Minute>3분전</Minute>
+          <DateComponenet>{createdAt.split("T")[0]}</DateComponenet>
+          <Minute>{timeDifference}</Minute>
         </Subtext>
       </Content>
     </Wrapper>

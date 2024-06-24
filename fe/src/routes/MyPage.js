@@ -554,7 +554,7 @@ function MyPage() {
 
   useEffect(() => {
     if (auth === false) {
-      alert("접근할 수 없습니다.");
+      alert("로그인이 필요합니다.");
       navigate(-1);
     }
   }, [auth]);

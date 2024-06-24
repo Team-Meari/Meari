@@ -91,7 +91,7 @@ export const StyledPagination = styled(Pagination)`
     position: absolute;
     width: 302px;
     height: 40px;
-    left: calc(50% - 365px / 2);
+    left: calc(50% - 295px / 2);
     top: ${(props) => (props.$custom ? " 665px" : "638px")};
   }
 
@@ -299,6 +299,7 @@ function MeariList({ data, $custom }) {
                 value={item?.content}
                 author={item?.nickName}
                 chatId={item?.chatId}
+                createdAt={item?.createdAt}
                 $custom={$custom}
               />
             ))

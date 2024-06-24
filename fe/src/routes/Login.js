@@ -560,7 +560,7 @@ function Logout({ closeModal, isModalOpen, setAuth }) {
           <SubmitOut onClick={onClick}>
             <OutText>로그아웃</OutText>
           </SubmitOut>
-          <Button onClick={refresh}>리프레쉬</Button>
+          {/* <Button onClick={refresh}>리프레쉬</Button> */}
         </Modal>
       </Default>
 
